@@ -1,0 +1,61 @@
+.table-demandlist {
+    white-space: nowrap;
+    table {
+      table-layout: fixed;
+    }
+    .ant-select-selection {
+      background-color: transparent;
+      border: none;
+    }
+  }
+.colstats{
+  align-items: center;
+  justify-content: space-evenly;
+  width: auto;
+  height: auto;
+  display: flex;
+  margin-top: 20px;
+  .title{
+    font-size: 20px;
+    font-weight: 500;
+  }
+  .Passingrate{
+    height: 400px;
+    width: 400px;
+  }
+  .failcol{
+    border: 1px solid #e8e8e8;
+    border-radius: 4px;
+    overflow: auto;
+    padding: 8px 24px;
+    height: 400px;
+    width: 400px;
+  }
+  
+}
+.casestats{
+  align-items: center;
+  justify-content: space-evenly;
+  width: auto;
+  height: auto;
+  display: flex;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  .title{
+    font-size: 20px;
+    font-weight: 500;
+  }
+  .Passingrate{
+    height: 400px;
+    width: 400px;
+  }
+  .failcase{
+    border: 1px solid #e8e8e8;
+    border-radius: 4px;
+    overflow: auto;
+    padding: 8px 24px;
+    height: 400px;
+    width: 400px;
+  }
+  
+}

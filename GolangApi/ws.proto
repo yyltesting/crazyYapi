@@ -1,0 +1,73 @@
+syntax = "proto3";
+
+package ws;
+
+option go_package = "gitlab.ws15.cn/golang/bspro/extra/coppyproto/ws;ws";
+
+message GroupInfo{
+  string group_id = 1;                  // 群组id
+  string group_name = 2;                // 群组名称
+  string notification = 3;              // 暂时没用
+  string introduction = 4;              // 介绍
+  string face_url = 5;                  // 封面图
+  string owner_user_id = 6;             // 群组所有者id
+  int64 created_time = 7;              // 群组创建时间
+  int32 member_count = 8;              // 群组成员数量
+  string ex = 9;                        // 额外消息
+  int32 status = 10;                    // 状态
+  string creator_user_id = 11;          // 创建者id
+  int32 group_type = 12;                // 群组类型
+  int32 need_verification = 13;         // 是否需要验证入群
+}
+
+message GroupMemberFullInfo {
+  string group_id = 1 ;             // 群组id
+  string user_id = 2 ;              // 用户id
+  int32 role_level = 3;             // 角色【1 普通用户】【2 群组拥有者】【3 群组管理员】
+  int64 join_time = 4;              // 加入时间
+  string nickname = 5;              // 昵称
+  string face_url = 6;              // 头像
+  int32 join_source = 7;            // 加入来源，暂时没用
+  string operator_user_id = 8;      // 操作员id
+  string ex = 9;                    // 额外信息
+  int64 mute_end_time = 10;         // 禁言结束时间
+  string inviter_user_id = 11;      // 邀请的用户id
+}
+
+message MsgData {
+    string send_id = 1;             // 发送用户id
+    string recv_id = 2;             // 接收用户id
+    string group_id = 3;            // 群id
+    string client_msg_id = 4;       // 客户端生成的id，用于去重，随机值，防止客户端在弱网情况下，重试造成重复消息
+    string server_msg_id = 5;       // 服务端id
+    int32 sender_platform_id = 6;   // 发送者平台id
+    string sender_nickname = 7;     // 发送者昵称
+    string sender_face_url = 8;     // 发送用户头像
+    int32 session_type = 9;         // 会话类型
+    int32 msg_from = 10;            // 消息来源
+    int32 content_type = 11;        // 消息类型
+    string content = 12;            // 消息内容
+    uint32 seq = 14;                // 消息seq，用于保证消息顺序
+    int64 send_time = 15;           // 发送时间
+    int64 create_time = 16;         // 创建时间
+    int32 status = 17;              // 状态
+    map<string, bool> options = 18;  // 相关项，如是否是历史消息、是否提醒等
+    OfflinePushInfo offline_push_info = 19;  // 离线消息信息
+    repeated string at_user_id_list = 20;  // @相关用户id
+    string msg_data_list = 21;       // 批量push消息
+    string attached_info = 22;      // 附件信息
+    string ex = 23;                 // 额外信息
+}
+
+message MsgDataList {
+    repeated MsgData msgDataList = 1;
+}
+
+// 离线消息，暂时没用
+message OfflinePushInfo{
+  string title = 1;
+  string desc = 2;
+  string ex = 3;
+  string ios_push_sound = 4;
+  bool ios_badge_count = 5;
+}

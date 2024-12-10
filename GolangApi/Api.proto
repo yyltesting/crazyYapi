@@ -1,0 +1,386 @@
+syntax = "proto3";
+
+package chat;
+
+import "bspro/extra/coppyproto/ws/ws.proto";
+
+option go_package = "gitlab.ws15.cn/golang/bspro/extra/coppyproto/chat;chat";
+
+// 【公共】结构体
+message Empty {}
+
+message OfflinePushInfo {
+    string title        = 1;
+    string desc         = 2;
+    string ex           = 3;
+    string ios_push_sound = 4;
+    bool ios_badge_count  = 5;
+}
+
+message MsgDataToMQ {
+    wsMsgData msg_data    = 1;
+}
+
+message MsgDataToDB {
+    wsMsgData msg_data    = 1;
+}
+
+message PushMsgDataToMQ {
+    wsMsgData msg_data     = 1;
+    string push_to_user_id = 2;
+}
+
+message SendMsgReq {
+    wsMsgData msg_data    = 1;
+}
+
+message SendMsgResp {
+    string server_msg_id = 1;       // 发送消息后的服务端id
+    string client_msg_id = 2;       // 发送的客户端id
+    int64 send_time     = 3;        // 服务器记录的发送时间
+}
+
+message GetMaxAndMinSeqReq {
+    string user_id = 1;
+}
+
+message GetMaxAndMinSeqResp {
+    map<string, MaxAndMinSeq> group_max_and_min_seq = 1;
+}
+
+message MaxAndMinSeq {
+    uint32 max_read_seq = 1;            // 当前最大的已读的序列号
+    uint32 min_seq = 2;                 // 最小的序列号，暂时没用
+    uint32 max_seq = 3;                 // 当前最大的序列号，最新的序列号
+}
+
+message PullMessageBySeqListReq{
+  string user_id = 1;                   // 用户id
+  repeated SeqRange seq_list = 2;       // 要拉取的会话的id和序列号信息
+}
+
+message SeqRange {
+    string conversation_id = 1;
+    uint32 start = 2;
+    uint32 end = 3;
+}
+
+message PullMessageBySeqListResp {
+    map<string, PullMsgs> msg_list = 1;     // 返回的消息
+}
+
+message PullMsgs {
+  repeated wsMsgData Msgs = 1;
+  bool isEnd = 2;                       // 是否已经是最新消息
+}
+
+message PublicUserInfo{
+  string user_id = 1;
+  string nickname = 2;
+  string face_url = 3;
+  int32 gender = 4;
+  string ex = 5;
+}
+
+message SetMsgMinSeqReq {
+    string conversation_id      = 1;
+    uint32 min_seq      = 2;
+    string op_user_id    = 3;
+}
+
+message SetSendMsgStatusReq {
+    int32 status       = 1;
+}
+
+message SetSendMsgStatusResp {
+    int32 err_code = 1;
+    string err_msg = 2;
+}
+
+message GetSendMsgStatusReq {
+}
+
+message GetSendMsgStatusResp {
+    int32 status  = 1;
+}
+
+message InteractionReq {
+    string sender_id = 1;           // 发送者id，如点赞的人
+    string recv_id = 2;             // 接收者id，如被点赞的人
+    int32 content_type = 3;         // 消息类型，如点赞、评论、回复
+    string attachd_info = 4;        // 被点赞或者评论的文章信息
+    string comment = 5;             // 评论回复的内容
+    string post_id = 6;
+    string comment_id = 7;
+    string reply_comment_id = 8;
+}
+
+message FollowReq {
+    string sender_id = 1;       // 关注的人
+    string recv_id = 2;         // 被关注的人
+}
+
+message SystemNotificationReq {
+    string title = 1;
+    string content = 2;
+    string url = 3;
+    repeated string recv_ids = 4;
+}
+
+service MsgService {
+    rpc GetMaxAndMinSeq(GetMaxAndMinSeqReq) returns (GetMaxAndMinSeqResp);
+    rpc PullMessageBySeqList(PullMessageBySeqListReq) returns (PullMessageBySeqListResp);
+    rpc SendMsg(SendMsgReq) returns (SendMsgResp);
+    rpc SetMsgMinSeq(SetMsgMinSeqReq) returns (Empty);
+    rpc SetSendMsgStatus(SetSendMsgStatusReq) returns (Empty);
+    rpc GetSendMsgStatus(GetSendMsgStatusReq) returns (GetSendMsgStatusResp);
+    rpc InteractionMsg(InteractionReq) returns(Empty);                      // 点赞、评论、回复、查看过主页等消息
+    rpc FollowMsg(FollowReq) returns(Empty);                                // 关注消息
+    rpc SystemNotification(SystemNotificationReq) returns(Empty);           // 系统消息
+}
+
+message CreateGroupReq {
+    repeated string member_list = 1;            // 创建群组时候，初始的成员
+    int32 group_type = 2;                       // 群组类型，暂定【1 普通群】【2 超级群】【11 付费普通群】【12 付费超级群】
+    string group_name = 3;                      // 群组名称
+    string notification = 4;                    // 暂时没用
+    string introduction = 5;                    // 介绍
+    string face_url = 6;                        // 头像
+    string ex = 7;                              // 额外信息，暂时没用
+}
+
+message SetGroupInfoReq {
+    string group_id = 1;
+    string group_name = 2;
+    string notification = 3;
+    string introduction = 4;
+    string face_url = 5;
+    string ex = 6;
+    int32 need_verification = 7;            // 是否需要进群验证，暂时没用
+}
+
+message JoinGroupReq {
+    string group_id = 1;                // 申请加入群组的id
+    string req_message = 2;             // 申请的消息，比如为什么加人
+    int32 join_source = 3;              // 加入来源，暂时没用
+    string inviter_user_id = 4;         // 邀请人的id
+}
+
+message QuitGroupReq {
+    string group_id = 1;            // 退出群组的id
+}
+
+message TransferGroupOwnerReq {
+    string group_id = 1;                    // 转让的群组id
+    string new_owner_user_id = 2;           // 新的超级管理员的id
+}
+
+message KickGroupMemberReq {
+    string group_id = 1;                // 踢出成员的群组id
+    repeated string kicked_user_id_list = 2;        // 成员列表
+}
+
+message GetGroupAllMemberReq {
+    string group_id = 1;            // 获取成员的群组id
+    int32 offset = 2;
+    int32 limit = 3;
+}
+
+message GetGroupAllMemberResp {
+    repeated wsGroupMemberFullInfo member_list = 1;        // 成员列表
+    uint64 members_hash = 2;                // 成员的id hash，用于快速判断成员的id有没有变动，有没有新增或者退出成员
+    string group_id = 3;
+}
+
+message InviteUserToGroupReq {
+    string group_id = 1;
+    repeated string invited_user_id_list = 2;       // 邀请的成员id列表
+    string reason = 3;          // 邀请的原因
+}
+
+message DismissGroupReq {
+    string group_id = 1;            // 解散的群组id
+}
+
+message GroupJoinReq {
+    repeated string group_ids = 1;  // 获取加入成员的申请列表
+}
+
+message JoinGroupInfo {
+    string user_id = 1;
+    string nickname = 2;
+    string face_url = 3;
+    string group_id = 4;
+    string req_message = 5;         // 申请加入的理由
+    int32 join_source = 6;          // 加入的来源
+    int64 apply_time = 7;           // 申请时间
+    int32 status = 8;               // 当前状态【0 待处理】【1 通过】【2 拒绝】
+    string req_id = 9;              // 申请id
+    string group_name = 10;          // 群组名称
+}
+
+message JoinGroupInfoList {
+    repeated JoinGroupInfo list = 1;
+}
+
+message HandleJoinGroupReq {
+    string group_id = 1;
+    string handled_msg= 2;          // 处理加入群组的消息，一般是拒绝后的理由
+    int32 result = 3;               // 结果【1 通过】【2 拒绝】
+    string req_id = 4;
+}
+
+message GroupAdminReq {
+    string group_id = 1;
+    string user_id = 2;
+}
+
+// 群通知消息开始----
+message NfDismissGroup {
+    string group_id = 1;
+}
+
+message NfGroupInfo {
+    wsGroupInfo group_info = 1;
+}
+
+message NfGroupMembers {
+    repeated wsGroupMemberFullInfo members = 1;
+    uint64 members_hash = 2;
+}
+
+message NfGroupJoinReq {
+    JoinGroupInfo info = 1;
+}
+// 群通知消息结束
+
+service GroupService {
+    rpc CreateGroup(CreateGroupReq) returns (wsGroupInfo);             // 创建群组
+    rpc DismissGroup(DismissGroupReq) returns (Empty);                  // 解散群组
+    rpc SetGroupInfo(SetGroupInfoReq) returns (Empty);                  // 编辑群组信息
+    rpc JoinGroup(JoinGroupReq) returns (Empty);                        // 用户申请加入群组
+    rpc GetJoinGroupList(GroupJoinReq) returns (JoinGroupInfoList);     // 用户申请加入群组列表
+    rpc HandleJoinGroup(HandleJoinGroupReq) returns (Empty);            // 拒绝/同意加入群组的申请
+    rpc QuitGroup(QuitGroupReq) returns (Empty);                        // 用户退出群组
+    rpc KickGroupMember(KickGroupMemberReq) returns (Empty);              // 将成员踢出群组
+    rpc TransferGroupOwner(TransferGroupOwnerReq) returns (Empty);                      // 转让群组
+    rpc GetGroupAllMemberList(GetGroupAllMemberReq) returns (GetGroupAllMemberResp);    // 获取全部群组成员列表
+    rpc SetGroupAdmin(GroupAdminReq) returns(Empty);                 // 设置群组管理员
+    rpc InviteUserToGroup(InviteUserToGroupReq) returns (Empty);        // 邀请用户加入群组
+}
+
+message ConversationInfo {
+    string owner_user_id = 1;           // 会话拥有者id
+    string conversation_id = 2;         // 会话id
+    int32 conversation_type = 3;        // 会话类型，1：私聊；2：群聊；3：超级群聊；4：通知公告类聊天；5：陌生人聊天
+    string user_id = 4;                 // 聊天对象id
+    string group_id = 5;                //
+    int32 recv_msg_opt = 6;             // 接收消息配置
+    bool is_pinned = 7;                 // 是否置顶
+    string attached_info = 8;           // 附件信息
+    string ex = 9;                      // 额外信息
+    int64 min_seq = 10;                 // 最小seq，历史消息最多只能获取到这里
+    int64 max_seq = 11;                 // 最大seq，当前已读的最大seq
+}
+
+message GetConversationsReq {
+    repeated string conversation_ids = 1;
+}
+
+message GetConversationsResp {
+    repeated ConversationInfo conversations = 1;
+}
+
+message SetConversationReq {
+    string conversation_id = 1;
+    int32 recv_msg_opt = 2;             // 暂时没用
+    bool is_pinned = 3;                 // 是否置顶
+    string attached_info = 4;           // 附件信息
+    string ex = 5;                      // 额外信息
+}
+
+message SetConversationHasReadReq {
+    string conversation_id = 1;
+}
+
+message GetUserConversationIDsHashResp {
+    uint64 hash = 1;
+}
+
+message CreateSingleConversationReq {
+    string sender_id = 1;        // 当前发送者id
+    string recv_id = 2;         // 接收者id
+}
+
+message CreateGroupConversationReq {
+    string group_id = 1;
+    repeated string user_ids = 2;
+}
+
+service ConversationService {
+    rpc GetConversations(GetConversationsReq) returns (GetConversationsResp);
+    rpc SetConversation(SetConversationReq) returns (Empty);
+    rpc SetConversationHasRead(SetConversationHasReadReq) returns(Empty);
+    rpc GetUserConversationIDsHash(Empty) returns(GetUserConversationIDsHashResp);
+    rpc CreateSingleConversation(CreateSingleConversationReq) returns(Empty);
+    rpc CreateGroupConversation(CreateGroupConversationReq) returns(Empty);
+}
+ message wsOfflinePushInfo {
+ string title = 1;
+  string desc = 2;
+  string ex = 3;
+  string ios_push_sound = 4;
+  bool ios_badge_count = 5;
+}
+ message wsMsgData {
+ string send_id = 1;             // 发送用户id
+    string recv_id = 2;             // 接收用户id
+    string group_id = 3;            // 群id
+    string client_msg_id = 4;       // 客户端生成的id，用于去重，随机值，防止客户端在弱网情况下，重试造成重复消息
+    string server_msg_id = 5;       // 服务端id
+    int32 sender_platform_id = 6;   // 发送者平台id
+    string sender_nickname = 7;     // 发送者昵称
+    string sender_face_url = 8;     // 发送用户头像
+    int32 session_type = 9;         // 会话类型
+    int32 msg_from = 10;            // 消息来源
+    int32 content_type = 11;        // 消息类型
+    string content = 12;            // 消息内容
+    uint32 seq = 14;                // 消息seq，用于保证消息顺序
+    int64 send_time = 15;           // 发送时间
+    int64 create_time = 16;         // 创建时间
+    int32 status = 17;              // 状态
+    map<string, bool> options = 18;  // 相关项，如是否是历史消息、是否提醒等
+    wsOfflinePushInfo offline_push_info = 19;  // 离线消息信息
+    repeated string at_user_id_list = 20;  // @相关用户id
+    string msg_data_list = 21;       // 批量push消息
+    string attached_info = 22;      // 附件信息
+    string ex = 23;                 // 额外信息
+}
+ message wsGroupMemberFullInfo {
+ string group_id = 1 ;             // 群组id
+  string user_id = 2 ;              // 用户id
+  int32 role_level = 3;             // 角色【1 普通用户】【2 群组拥有者】【3 群组管理员】
+  int64 join_time = 4;              // 加入时间
+  string nickname = 5;              // 昵称
+  string face_url = 6;              // 头像
+  int32 join_source = 7;            // 加入来源，暂时没用
+  string operator_user_id = 8;      // 操作员id
+  string ex = 9;                    // 额外信息
+  int64 mute_end_time = 10;         // 禁言结束时间
+  string inviter_user_id = 11;      // 邀请的用户id
+}
+ message wsGroupInfo {
+ string group_id = 1;                  // 群组id
+  string group_name = 2;                // 群组名称
+  string notification = 3;              // 暂时没用
+  string introduction = 4;              // 介绍
+  string face_url = 5;                  // 封面图
+  string owner_user_id = 6;             // 群组所有者id
+  int64 created_time = 7;              // 群组创建时间
+  int32 member_count = 8;              // 群组成员数量
+  string ex = 9;                        // 额外消息
+  int32 status = 10;                    // 状态
+  string creator_user_id = 11;          // 创建者id
+  int32 group_type = 12;                // 群组类型
+  int32 need_verification = 13;         // 是否需要验证入群
+}

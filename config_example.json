@@ -1,0 +1,26 @@
+{
+   "port": "3000",
+   "adminAccount": "admin@admin",
+   "scriptEnable": true,
+   "db": {
+      "servername": "127.0.0.1",
+      "DATABASE": "yapi",
+      "port": 27017
+   },
+   "mail": {
+      "enable": true,
+      "host": "smtp.qq.com",
+      "port": 465,
+      "from": "",
+      "secure": true,
+      "auth": {
+         "user": "",
+         "pass": ""
+      }
+   },
+   "plugins": [
+     {
+         "name": "import-swagger-customize"
+     }
+   ]
+}

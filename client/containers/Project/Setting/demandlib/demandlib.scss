@@ -1,0 +1,10 @@
+.table-demandlist {
+    white-space: nowrap;
+    table {
+      table-layout: fixed;
+    }
+    .ant-select-selection {
+      background-color: transparent;
+      border: none;
+    }
+  }
