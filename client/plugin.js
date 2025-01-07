@@ -58,6 +58,19 @@ hooks = {
     mulit: true,
     listener: []
   },
+    /**
+   * 导出集合数据
+   * @param Object exportColDataModule
+   *
+   * @info
+   * 可参考 vendors/exts/yapi-plugin-export-data插件
+   * exportColDataModule = {};
+   */
+    export_coldata: {
+      type: 'listener',
+      mulit: true,
+      listener: []
+    },
   /**
    * 接口页面 tab 钩子
    * @param InterfaceTabs

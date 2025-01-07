@@ -954,7 +954,16 @@ class interfaceColController extends baseController {
       ctx.body = yapi.commons.resReturn(null, 402, e.message);
     }
   }
-
+  async importcaseone(ctx){
+    try{
+      let data = ctx.request.body;
+      data['uid'] = this.getUid();
+      let result = await this.caseModel.save(ctx.request.body);
+      ctx.body = yapi.commons.resReturn(result);
+    }catch(e){
+      ctx.body = yapi.commons.resReturn(null, 402, e.message);
+    }
+  }
   async cloneCaseList(ctx) {
     try {
       let params = ctx.request.body;

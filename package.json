@@ -1,6 +1,6 @@
 {
   "name": "yapi-vendor",
-  "version": "2024.12.04",
+  "version": "2025.01.07",
   "description": "YAPI",
   "main": "server/app.js",
   "scripts": {
@@ -80,7 +80,7 @@
     "mockjs": "^1.1.0",
     "moment": "^2.19.3",
     "mongodb": "3.1.8",
-    "mongoose": "5.7.5",
+    "mongoose": "5.13.21",
     "mongoose-auto-increment": "5.0.1",
     "moox": "^1.0.2",
     "mysql": "^2.18.1",

@@ -37,6 +37,7 @@ const RadioGroup = Radio.Group;
 let importDataModule = {};
 let importColDataModule = {};
 const exportDataModule = {};
+const exportColDataModule = {};
 const HandleImportData = require('common/HandleImportData');
 import {fetchInterfaceColListall} from '../../../../reducer/modules/interfaceCol';
 function handleExportRouteParams(url, status, isWiki) {
@@ -46,6 +47,19 @@ function handleExportRouteParams(url, status, isWiki) {
   let urlObj = URL.parse(url, true),
     query = {};
   query = Object.assign(query, urlObj.query, { status, isWiki });
+  return URL.format({
+    pathname: urlObj.pathname,
+    query
+  });
+}
+function handleExportColJson(url,ids){
+  let colid = ids.length>0 ? ids.join(','):0;
+  if (!url) {
+    return;
+  }
+  let urlObj = URL.parse(url, true),
+    query = {};
+  query = Object.assign(query, urlObj.query, { colid });
   return URL.format({
     pathname: urlObj.pathname,
     query
@@ -79,12 +93,14 @@ class ProjectData extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      exportColModalVisible:false,
       selectCatid: '',
       menuList: [],
       importType:'interface',
       curImportType: 'swagger',
       colImportType:'har',
       curExportType: null,
+      curExportColType: null,
       showLoading: false,
       dataSync: 'merge',
       exportContent: 'all',
@@ -129,6 +145,7 @@ class ProjectData extends Component {
     plugin.emitHook('import_data', importDataModule);
     plugin.emitHook('import_col_data', importColDataModule);
     plugin.emitHook('export_data', exportDataModule, this.props.match.params.id);
+    plugin.emitHook('export_coldata', exportColDataModule, this.props.match.params.id);
     
     importDataModule.Golang = {name:"Golang",desc:"通过项目url接口文档导入"};
     await this.props.fetchInterfaceColListall(this.props.match.params.id);
@@ -157,6 +174,7 @@ class ProjectData extends Component {
       res,
       this.props.match.params.id,
       this.state.importType,
+      this.state.colImportType,
       this.state.colid,
       this.state.envid,
       this.state.addHeaders,
@@ -198,23 +216,19 @@ class ProjectData extends Component {
     if (!this.state.colImportType) {
       return message.error('请选择导入数据的方式');
     }
-    if (this.state.colid.length==0) {
+    if (this.state.colImportType!=='json'&&this.state.colid.length==0) {
       return message.error('请选择导入到的集合');
     }
     if (!this.state.envid) {
       return message.error('请选择关联的环境');
     }
-    if (this.state.colid.length>0) {
-      this.setState({ showLoading: true,importType:'col' });
-      let reader = new FileReader();
-      reader.readAsText(info.file);
-      reader.onload = async res => {
-        res = await importColDataModule[this.state.colImportType].run(res.target.result);
-        await this.handleAddInterface(res);
-      };
-    } else {
-      message.error('请选择上传的默认集合');
-    }
+    this.setState({ showLoading: true,importType:'col' });
+    let reader = new FileReader();
+    reader.readAsText(info.file);
+    reader.onload = async res => {
+      res = await importColDataModule[this.state.colImportType].run(res.target.result);
+      await this.handleAddInterface(res);
+    };
   };
   showConfirm = async res => {
     let that = this;
@@ -280,7 +294,11 @@ class ProjectData extends Component {
       isWiki: false
     });
   };
-
+  handleExportColType = val => {
+    this.setState({
+      curExportColType: val
+    });
+  };
   // 处理导入信息同步
   onChange = checked => {
     this.setState({
@@ -572,10 +590,18 @@ class ProjectData extends Component {
       this.state.curExportType &&
       exportDataModule[this.state.curExportType] &&
       exportDataModule[this.state.curExportType].route;
+    let exportColUrl =
+      this.state.curExportColType &&
+      exportColDataModule[this.state.curExportColType] &&
+      exportColDataModule[this.state.curExportColType].route;
     let exportHref = handleExportRouteParams(
       exportUrl,
       this.state.exportContent,
       this.state.isWiki
+    );
+    let exportColJson = handleExportColJson(
+      exportColUrl,
+      this.state.colid
     );
     const columns = [
       {
@@ -895,7 +921,7 @@ class ProjectData extends Component {
                 title="添加到集合"
                 visible={this.state.saveColModalVisible}
                 onOk={()=>this.setState({ saveColModalVisible: false })}
-                onCancel={()=>this.setState({ saveColModalVisible: false,addColName:'',addColDesc:'' })}
+                onCancel={()=>this.setState({ saveColModalVisible: false,addColName:'',addColDesc:'',colid:[] })}
               >
                 <p>请选择添加到的集合：</p>
                 <Table columns={columns} rowSelection={this.rowRadioSelection} dataSource={interfaceColListall}
@@ -935,7 +961,17 @@ class ProjectData extends Component {
                   </Panel>
                 </Collapse>
               </Modal>
-
+              <Modal
+                className="export-col-modal"
+                title="选择导出集合"
+                visible={this.state.exportColModalVisible}
+                onOk={()=>this.setState({ exportColModalVisible: false })}
+                onCancel={()=>this.setState({ exportColModalVisible: false,colid:[] })}
+              >
+                <p>请选择添加到的集合：</p>
+                <Table columns={columns} rowSelection={this.rowRadioSelection} dataSource={interfaceColListall}
+                  pagination={false}/>
+              </Modal>
               <div className="import-content">
                 <Spin spinning={this.state.showLoading} tip="上传中...">
                   <Dragger {...uploadMessCol}>
@@ -956,6 +992,53 @@ class ProjectData extends Component {
                     />
                   </Dragger>
                 </Spin>
+              </div>
+            </div>
+
+            <div
+              className="dataImportCon"
+              style={{
+                marginLeft: '20px',
+                display: Object.keys(exportColDataModule).length > 0 ? '' : 'none'
+              }}
+            >
+              <div>
+                <h3>集合数据导出</h3>
+              </div>
+              <div className="dataImportTile">
+                <Select placeholder="请选择导出数据的方式" onChange={this.handleExportColType}>
+                  {Object.keys(exportColDataModule).map(name => {
+                    return (
+                      <Option key={name} value={name}>
+                        {exportColDataModule[name].name}
+                      </Option>
+                    );
+                  })}
+                </Select>
+              </div>
+              <div className="dataExport" style={{marginTop:'20ox'}}>
+                <Button onClick={()=>this.setState({ exportColModalVisible: true })}>选择导出集合</Button>
+              </div>
+              <div className="export-content">
+                {this.state.curExportColType ? (
+                  <div>
+                    <p className="export-desc">{exportColDataModule[this.state.curExportColType].desc}</p>
+                    <a 
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      href={exportColJson}>
+                      <Button className="export-button" type="primary" size="large">
+                        {' '}
+                        导出{' '}
+                      </Button>
+                    </a>
+                  </div>
+                ) : (
+                  <Button disabled className="export-button" type="primary" size="large">
+                    {' '}
+                    导出{' '}
+                  </Button>
+                )}
               </div>
             </div>
           </div>

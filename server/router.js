@@ -589,6 +589,11 @@ let routerConfig = {
   ],
   col: [
     {
+      action: 'importcaseone',
+      path: 'importcaseone',
+      method: 'post'
+    },
+    {
       action: 'getReportDetail',
       path: 'getReportDetail',
       method: 'get'

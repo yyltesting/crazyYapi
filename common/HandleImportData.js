@@ -19,6 +19,7 @@ async function handle(
   res,
   projectId,
   importType,
+  colImportType,
   colid,
   envid,
   addHeaders,
@@ -282,8 +283,198 @@ async function handle(
       taskNotice(index, res.length)
     }
   };
+  const handleAddInterfaceColYapi = async info => {
+    //获取项目接口集
+    let interfaceList=[];
+    const result = await axios.get('/api/interface/list/simple?project_id='+projectId);
+    if(result.data.errcode){
+      return;
+    }else{
+      if(result.data.data&&result.data.data.length>0){
+        result.data.data.forEach(item=>{
+          interfaceList.push({path:item.path,_id:item._id});
+        })
+      }
+    }
+    let len = info.length;
+    let count = 0;
+    let failNum = 0;
+    let index = 0;
+    let colids = 0;
+    let oldPreCol = {};
+    let newPreCol = {};
+    if (len === 0) {
+      messageError(`解析数据为空`);
+      callback({ showLoading: false });
+      return;
+    }
+    //先遍历集合再遍历接口
+    async function traverse(data,pid,projectId,index) {
+      const handleColReplaceStr = (str) => {
+        let preCols = str.split(',');
+        return preCols.reduce((newStr, item) => {
+            const replaced = newPreCol[oldPreCol[item]] || '';
+            return newStr? `${newStr},${replaced}` : replaced;
+        }, '');
+      };
+      for(let j=0;j<data.length;j++){
+        colids++;
+        oldPreCol[data[j]._id] = colids;
+        let coldata = {
+          name :data[j].name,
+          case_env :envid,
+          parent_id:pid,
+          project_id:projectId,
+          colpre_script:data[j].colpre_script,
+          colafter_script:data[j].colafter_script,
+          checkHttpCodeIs200:data[j].checkHttpCodeIs200,
+          checkResponseSchema:data[j].checkResponseSchema,
+          checkResponseField:data[j].checkResponseField,
+          checkScript:data[j].checkScript,
+          pre_col:data[j].pre_col? handleColReplaceStr(data[j].pre_col):''
+        }
+        let result = await axios.post('/api/col/add_col',coldata);
+        
+        if (result.data.errcode) {
+          failNum++;
+        }else{
+          count++;
+          const newCaseList = [];
+          const oldCaseObj = {};
+          let obj = {};
+          newPreCol[colids]=result.data.data._id;
+          const handleTypeParams = (data, name) => {
+            let res = data[name];
+            // res = handleReplaceStr(res);
+            const type = Object.prototype.toString.call(res);
+            if (type === '[object Array]' && res.length) {
+              res = JSON.stringify(res);
+              try {
+                res = JSON.parse(handleReplaceStr(res));
+              } catch (e) {
+                console.log('e ->', e);
+              }
+            } else if (type === '[object String]' && data[name]) {
+              res = handleReplaceStr(res);
+            }
+            return res;
+          };
+    
+          const handleReplaceStr = str => {
+            if (str.indexOf('$') !== -1) {
+              str = str.replace(/\$\.([0-9]+)\./g, function(match, p1) {
+                p1 = p1.toString();
+                let newStr = '';
+                if(newCaseList[oldCaseObj[p1]]){
+                  newStr = `$.${newCaseList[oldCaseObj[p1]]}.`
+                }else{
+                  newStr = `$.${p1}.`
+                }
+                return newStr;
+              });
+            }
+            if (str.indexOf('records') !== -1) {
+              str = str.replace(/records\[([0-9]+)\]/g, function(match, p1) {
+                p1 = p1.toString();
+                let newStr = '';
+                if(newCaseList[oldCaseObj[p1]]){
+                  newStr = `records[${newCaseList[oldCaseObj[p1]]}]`
+                }else{
+                  newStr = `records[${p1}]`
+                }
+                return newStr;
+              });
+            }
+            return str;
+          };
+    
+          // 处理数据里面的$id;
+          const handleParams = async data => {
+            let haveInterface=false;
+            interfaceList.forEach(interfacedata => {
+              if(interfacedata.path == data.path){
+                data['interface_id']=interfacedata._id;
+                haveInterface = true;
+              }
+            });
+            if(!haveInterface){
+              //需要添加接口
+              let interfacedata = JSON.parse(JSON.stringify(data));
+              interfacedata['title']=interfacedata.casename;
+              interfacedata['method']='POST';//默认都是post
+              interfacedata['req_body_type']='json';
+              interfacedata['req_body_is_json_schema']=true;
+              interfacedata['res_body_is_json_schema']=true;
+              delete interfacedata.interface_id;
+              delete interfacedata.casename;
+              delete interfacedata.case_env;
+              delete interfacedata._id;
+              delete interfacedata.add_time;
+              delete interfacedata.up_time;
+              delete interfacedata.__v;
+              delete interfacedata.disable;
+              delete interfacedata.testcaseid;
+              delete interfaceList.col_id;
+              delete interfaceList.uid;
+              interfacedata.req_body_other = transformJsonToSchema(interfacedata.req_body_other);
+              interfacedata.res_body = transformJsonToSchema(interfacedata.res_body);
+              let addInterface = await handleAddInterfaceSimple(interfacedata);
+              interfaceList.push({path:interfacedata.path,_id:addInterface._id});
+              data['interface_id']=addInterface._id;
+            }
+            data.col_id = result.data.data._id;
+            delete data.uid;
+            delete data._id;
+            delete data.add_time;
+            delete data.up_time;
+            delete data.__v;
+            delete data.disable;
+            delete data.testcaseid;
+            data.req_headers = handleTypeParams(data,'req_headers');
+            data.req_body_other = handleTypeParams(data, 'req_body_other');
+            data.req_query = handleTypeParams(data, 'req_query');
+            data.req_params = handleTypeParams(data, 'req_params');
+            data.req_body_form = handleTypeParams(data, 'req_body_form');
+            data.test_script = handleTypeParams(data,'test_script');
+            return data;
+          };
+          if(data[j].caseList&&data[j].caseList.length>0){
+            for (let i = 0; i < data[j].caseList.length; i++) {
+              obj = data[j].caseList[i];
+              // 将被克隆的id和位置绑定
+              oldCaseObj[obj._id] = i;
+              let caseData =await handleParams(obj);
+              let newCase = await axios.post('/api/col/importcaseone',caseData);
+              newCaseList.push(newCase.data.data._id);
+            }
+          }
+        }
+        // count++;
+        index++;
+        // 判断是否有嵌套的 children
+        if (data[j].children && data[j].children.length > 0) {
+          // 递归遍历 children
+          await traverse(data[j].children,result.data.data._id,projectId,index);
+        }
+            
+      }
+    }
+    if(colid==0){
+      await traverse(info,-1,projectId,index);
+    }else{
+      await traverse(info,colid,projectId,index);
+    }
+    
+    callback({ showLoading: false });
+    messageSuccess(`成功导入集合 ${count} 个,出错 ${failNum} 个`);
+  }
+
   if(importType=='col'){
-    return await handleAddInterfaceCol(res);
+    if(colImportType=='json'){
+      return await handleAddInterfaceColYapi(res);
+    }else{
+      return await handleAddInterfaceCol(res);
+    }
   }else{
     return await handleAddInterface(res);
   }

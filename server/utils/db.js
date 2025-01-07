@@ -19,7 +19,7 @@ function connect(callback) {
   mongoose.set('useCreateIndex', true);
 
   let config = yapi.WEBCONFIG;
-  let options = {useNewUrlParser: true, useCreateIndex: true,useUnifiedTopology: true,autoReconnect: true,poolSize: 20};//新增连接池方式
+  let options = {useNewUrlParser: true, useCreateIndex: true,useUnifiedTopology: true,poolSize: 20};//新增连接池方式
 
   if (config.db.user) {
     options.user = config.db.user;
@@ -38,17 +38,26 @@ function connect(callback) {
       connectString = connectString + `?authSource=${config.db.authSource}`;
     }
   }
-
-  let db = mongoose.connect(
-    connectString,
-    options,
-    function(err) {
-      yapi.commons.log('connecturl: ' + connectString);
-      if (err) {
-        yapi.commons.log(err + ', mongodb connect failed', 'error');
+  let db = mongoose.connection;
+  mongoose.connect(
+      connectString,
+      options,
+      function(err) {
+        if (err) {
+          yapi.commons.log(err + ', mongodb Authentication failed', 'error');
+        }
       }
-    }
-  );
+    );
+  // let db = mongoose.connect(
+  //   connectString,
+  //   options,
+  //   function(err) {
+  //     yapi.commons.log('connecturl: ' + connectString);
+  //     if (err) {
+  //       yapi.commons.log(err + ', mongodb connect failed', 'error');
+  //     }
+  //   }
+  // );
 
   db.then(
     function() {

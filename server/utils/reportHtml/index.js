@@ -124,16 +124,21 @@ function requestHtml(url, headers, params) {
   return html;
 }
 function escapeHtml(str) {
-  return str.replace(/[&<>"']/g, function (char) {
-    switch (char) {
-      case '&': return '&amp;';
-      case '<': return '&lt;';
-      case '>': return '&gt;';
-      case '"': return '&quot;';
-      case "'": return '&#39;';
-      default: return char;
-    }
-  });
+  if(str){
+    return str.replace(/[&<>"']/g, function (char) {
+      switch (char) {
+        case '&': return '&amp;';
+        case '<': return '&lt;';
+        case '>': return '&gt;';
+        case '"': return '&quot;';
+        case "'": return '&#39;';
+        default: return char;
+      }
+    });
+  }else{
+    return str;
+  }
+
 }
 function reponseHtml(res_header, res_body) {
   res_header = json_format(res_header, null, '   ');

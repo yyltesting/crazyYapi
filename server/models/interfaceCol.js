@@ -171,6 +171,14 @@ class interfaceCol extends baseModel {
       .select('own status name pre_col case_env uid project_id parent_id desc add_time up_time, index')
       .exec();
   }
+  listforexport(project_id) {
+    return this.model
+      .find({
+        project_id: project_id
+      })
+      .select('name pre_col project_id parent_id desc colpre_script colafter_script checkScript checkHttpCodeIs200 checkResponseSchema checkResponseField index')
+      .exec();
+  }
   getchild(parent_id){
     return this.model
     .count({

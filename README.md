@@ -33,7 +33,6 @@
     node server/app.js 启动服务
 
 ####  二次开发注意事项
-    若服务部署在外网使用需要升级Mongoose版本5.13.20以上，Mongoose 5.7.5版本存在Mongoose原型污染链导致的远程代码执行漏洞 https://github.com/YMFE/yapi/issues/2724
     若服务部署在外网因为vm沙箱不安全，建议使用VM2升级至3.9.16或使用server/utils/sandbox.js替换sandbox(可能引起一些错误)
 
 ### 分支升级说明--举例
@@ -151,6 +150,9 @@
 
 ### 服务器日志快捷查看：
 ![avatar](readmeRes/服务器日志查看.gif)
+
+### 集合数据导出与导入：
+![avatar](readmeRes/集合数据导出与导入.png)
 
 ### crazy-yapi  作者
 * yyl  791482765@qq.com

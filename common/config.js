@@ -33,6 +33,10 @@ module.exports = {
     name: 'import-col-har'
   },{
     name: 'interface-oauth2-token'
+  },{
+    name: 'export-col-json'
+  },{
+    name: 'import-col-yapi-json'
   }
   // {
   //   name: 'test'

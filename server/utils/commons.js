@@ -674,7 +674,57 @@ exports.getCol = async function getCol(project_id, islist, mycatid, ids) {
   result = islist ? result : this.translateDataToTree(result, mycatid);
   return result;
 };
+//导出工程集合需要详细数据源
+exports.getColforexport = async function getCol(project_id, islist, mycatid, ids) {
+  const caseInst = yapi.getInst(interfaceCaseModel);
+  const colInst = yapi.getInst(interfaceColModel);
+  const interfaceInst = yapi.getInst(interfaceModel);
 
+  let result;
+  if (ids) {
+    result = await colInst.getinfo(ids);
+  } else {
+    result = await colInst.listforexport(project_id);
+  }
+
+  result = result.sort((a, b) => a.index - b.index);
+
+  let caselist = await caseInst.listall(project_id,'all');
+  let caseData = caselist.reduce((acc, item) => {
+    let key = item.col_id;
+    if (!acc[key]) {
+      acc[key] = [];
+    }
+    acc[key].push(item);
+    return acc;
+  }, {});
+
+  let interfaceDataMap = new Map();
+  let interfacelist = await interfaceInst.getPathbypid(project_id);
+  interfacelist.forEach(item => {
+    interfaceDataMap.set(item._id, item.path);
+  });
+
+  result = await Promise.all(result.map(async col => {
+    col = col.toObject();
+    col.parent_id = col.parent_id === undefined ? -1 : col.parent_id;
+    let colid = String(col._id);
+    let caseList = caseData[colid] || [];
+
+    if (caseList.length > 0) {
+      caseList = caseList.map(item => {
+        item = item.toObject();
+        item.path = interfaceDataMap.get(item.interface_id);
+        return item;
+      }).sort((a, b) => a.index - b.index);
+      col.caseList = caseList;
+    }
+    return col;
+  }));
+
+  result = islist ? result : this.translateDataToTree(result, mycatid);
+  return result;
+};
 
 
 exports.validateParams = (schema2, params) => {
