@@ -19,6 +19,7 @@ const prodWebpackConfig = merge(baseWebpackConfig, {
         parallel: true,
         terserOptions: {
           ecma: 6,
+          warnings: false,
         },
       }),
       new OptimizeCSSAssetsPlugin({}),

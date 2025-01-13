@@ -6,6 +6,7 @@ const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CaseSensitivePathsPlugin = require("case-sensitive-paths-webpack-plugin");
 const devMode = process.env.NODE_ENV !== "production";
+var package = require('../package.json');
 const resolve = (dir) => path.resolve(__dirname, "../", dir);
 
 var commonLib = require("../common/plugin.js");
@@ -50,6 +51,7 @@ module.exports = {
     path: resolve("static/prd"),
   },
   module: {
+    // noParse : /node_modules\/jsondiffpatch\/public\/build\/.*js|exceljs|mysql|ioredis/,
     rules: [
       {
         test: /\.(js|jsx)$/,
@@ -127,6 +129,10 @@ module.exports = {
     new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /zh-cn/),
     new HtmlWebpackPlugin({
       template: resolve("./static/index.html"),
+    }),
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+      'process.env.version': JSON.stringify(package.version)
     }),
   ],
   optimization: {
