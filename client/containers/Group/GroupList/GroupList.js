@@ -16,7 +16,7 @@ import {
   setGroupList,
   fetchGroupMsg
 } from '../../../reducer/modules/group.js';
-import _ from 'underscore';
+import _ from 'loadsh';
 
 import './GroupList.scss';
 

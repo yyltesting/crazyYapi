@@ -2,7 +2,7 @@ import React, { PureComponent as Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Icon, Input, AutoComplete, Tooltip } from 'antd';
-import _ from 'underscore';
+import _ from 'loadsh';
 import './Search.scss';
 import { withRouter } from 'react-router';
 import axios from 'axios';

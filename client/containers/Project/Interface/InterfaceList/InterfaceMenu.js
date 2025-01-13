@@ -1,7 +1,7 @@
 import React, {PureComponent as Component} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import _ from 'underscore';
+import _ from 'loadsh';
 import {
   deleteInterfaceCatData,
   deleteInterfaceData,

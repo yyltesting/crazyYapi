@@ -1,4 +1,4 @@
-const _ = require('underscore')
+const _ = require('loadsh')
 
 const handleDescription = (description) => {
   if (!description) {

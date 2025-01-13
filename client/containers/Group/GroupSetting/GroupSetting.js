@@ -13,7 +13,7 @@ import {
 } from '../../../reducer/modules/group.js';
 const { TextArea } = Input;
 import { trim } from '../../../common.js';
-import _ from 'underscore';
+import _ from 'loadsh';
 import './GroupSetting.scss';
 const confirm = Modal.confirm;
 

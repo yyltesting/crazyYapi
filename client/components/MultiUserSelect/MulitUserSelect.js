@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import axios from 'axios';
-import _ from 'underscore';
+import _ from 'loadsh';
 import { Select } from 'antd';
 import PropTypes from "prop-types";
 

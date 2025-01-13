@@ -1,6 +1,6 @@
 const { isJson5, json_parse, handleJson, joinPath, safeArray } = require('./utils');
 const constants = require('../client/constants/variable.js');
-const _ = require('underscore');
+const _ = require('loadsh');
 const URL = require('url');
 const utils = require('./power-string.js').utils;
 const HTTP_METHOD = constants.HTTP_METHOD;

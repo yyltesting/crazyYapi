@@ -1,5 +1,5 @@
 const schema = require('./shema-transformTo-table.js');
-const _ = require('underscore');
+const _ = require('loadsh');
 
 const json_parse = function(json) {
   try {

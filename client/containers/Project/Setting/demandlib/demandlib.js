@@ -4,12 +4,13 @@ import {getProject} from '../../../../reducer/modules/project.js';
 import {demandlist} from '../../../../reducer/modules/demand.js'
 import {connect} from 'react-redux';
 import axios from 'axios';
-import {message,Modal,Table,Button,Layout,Select,Tooltip,Icon} from 'antd';
+import {message,Modal,Table,Button,Layout,Select,Tooltip,Icon,Input} from 'antd';
 import { withRouter } from 'react-router';
 import './demandlib.scss';
 import Adddemand from '../../Interface/InterfaceList/Adddemand.js';
 import Caselib  from '../Caselib/Caselib.js';
 const { Content } = Layout;
+const {TextArea} = Input;
 const Option = Select.Option;
 
 
@@ -75,7 +76,17 @@ export class demandlib extends React.Component {
       editid:number,
       editdata:{},
       addcaseid:number,
-      addcase:false
+      addcase:false,
+      demandDesc:'',
+      aiCreateCaseid:number,
+      aiCreateCaseModel:false,
+      promptDesc:`你现在是一个专业的测试人员，可以按照需求文档来编写测试用例，下面我会给你需求文档后请输出测试用例,测试用例以json的方式给我。用例的要求：
+1. 用例分为模块model、子模块submodel、标题title、预设条件preconditions、步骤step、预期结果expect、备注remarks、优先级priority、状态status 九个部分
+2. 用例需要包含通常的功能用例、非功能用例；功能用例，按需求点输出；非功能用例，需要考虑安全、异常、兼容等
+3. 用例的输出格式用json格式，在json格式中,每条用例为一个对象，以json数组对象的方式给到我所有的用例
+4. status的值都为undone,所有字段值类型都为string
+5. 生成的主key名为test_cases
+6. 输出前请检查格式要求和内容要求是否满足。`
     };
   }
   async componentWillMount() {
@@ -94,6 +105,34 @@ export class demandlib extends React.Component {
         add:true
       }
     )
+  }
+  aiCreateCaselib = ()=>{
+    let data = {
+      demandDesc :  this.state.demandDesc,
+      promptDesc:  this.state.promptDesc,
+      demandid: this.state.aiCreateCaseid
+    }
+    axios.post('/api/openai/creatcaselib', data).then(res => {
+      if (res.data.errcode !== 0) {
+        return message.error(`${res.data.errmsg}, 生成出错`);
+      }
+      message.success('生成完成');
+    });
+    message.success('正在生成用例');
+    this.setState({aiCreateCaseModel:false,aiCreateCaseid:0})
+  }
+  onChangeDemandDesc = ({ target: { value } }) => {
+    this.setState({ demandDesc:value });
+  };
+  onChangePromptDesc = ({ target: { value } }) => {
+    this.setState({ promptDesc:value });
+  };
+  aiCreateCaseModel=(id,intro)=>{
+    this.setState({
+      aiCreateCaseModel:true,
+      aiCreateCaseid:id,
+      demandDesc:intro
+    })
   }
   Opencaselib = (id) =>{
     console.log(this.props);
@@ -227,6 +266,14 @@ render() {
         return (
           // <Button style={{marginLeft: '25px'}} onClick={this.Openexl} className='openlib' type='primary' >用例库</Button>
           <span className='options'>
+            <Tooltip title="AI生成">
+              <Icon
+                type="codepen-circle"
+                className="interface-delete-icon"
+                style={{display:'block',float: 'left',marginRight:'20px'}}
+                onClick={()=>this.aiCreateCaseModel(id,record.intro)}
+              />
+            </Tooltip>
             <Tooltip title="添加用例">
               <Icon
                 type="plus"
@@ -278,6 +325,31 @@ render() {
           </div>
         </Content>
       </Layout>
+      {this.state.aiCreateCaseModel && (
+        //添加
+        <Modal
+          title="需求详细描述，需求文档"
+          visible={this.state.aiCreateCaseModel}
+          onCancel={() => this.setState({ aiCreateCaseModel: false,aiCreateCaseid:0,demandDesc:'' })}
+          onOk={this.aiCreateCaselib}
+          className="aicreatecasemodal"
+          width={'1000px'}
+        >
+          <TextArea
+            value={this.state.promptDesc}
+            onChange={this.onChangePromptDesc}
+            placeholder="模板描述prompt"
+            autoSize={{ minRows: 10, maxRows: 50 }}
+          />
+          <TextArea
+            value={this.state.demandDesc}
+            onChange={this.onChangeDemandDesc}
+            placeholder="需求文档描述"
+            autoSize={{ minRows: 20, maxRows: 50 }}
+            style={{margin: '10px 0 0 0'}}
+          />
+        </Modal>
+        )}
       {this.state.add && (
         //添加
         <Modal

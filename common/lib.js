@@ -1,4 +1,3 @@
-const _ = require('underscore');
 
 function isObj(object) {
   return (

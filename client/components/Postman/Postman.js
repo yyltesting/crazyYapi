@@ -21,7 +21,7 @@ import {
 import ReactFileReader from "react-file-reader";
 import constants from '../../constants/variable.js';
 import AceEditor from 'client/components/AceEditor/AceEditor';
-import _ from 'underscore';
+import _ from 'loadsh';
 import {deepCopyJson, isJson, json5_parse} from '../../common.js';
 import axios from 'axios';
 import ModalPostman from '../ModalPostman/index.js';
@@ -275,6 +275,7 @@ export default class Run extends Component {
     await this.setState(
       {
         ...this.state,
+        req_body_other_schema:req_body_other,
         test_res_header: null,
         test_res_body: null,
         ...data,

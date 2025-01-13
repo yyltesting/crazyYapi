@@ -24,7 +24,7 @@ import * as dnd from 'reactabular-dnd';
 import * as resolve from 'table-resolver';
 import axios from 'axios';
 import CaseReport from './CaseReport.js';
-import _ from 'underscore';
+import _ from 'loadsh';
 import produce from 'immer';
 import {InsertCodeMap} from 'client/components/Postman/Postman.js';
 import ColRequest from './ColRequest';

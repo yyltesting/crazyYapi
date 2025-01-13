@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Row, Icon, Input, Select, Tooltip } from 'antd';
-import _ from 'underscore';
+import _ from 'loadsh';
 const Option = Select.Option;
 
 // 深拷贝

@@ -9,7 +9,7 @@ import { formatTime } from 'client/common.js';
 import constants from 'client/constants/variable.js';
 import CaseDesModal from './CaseDesModal';
 import { json5_parse } from '../../../client/common';
-import _ from 'underscore';
+import _ from 'loadsh';
 
 @connect(
   state => {

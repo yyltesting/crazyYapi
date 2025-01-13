@@ -1,4 +1,4 @@
-const _ = require('underscore')
+const _ = require('loadsh')
 const { handleDescription } = require('./description')
 
 const handleReqBodyType = (body, header) => {

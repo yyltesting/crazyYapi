@@ -132,8 +132,12 @@ app.use(async (ctx, next) => {
   }
   await next();
 });
+if(process.argv[2] === 'dev' ){
+  app.use(koaStatic(yapi.path.join(yapi.WEBROOT, 'static'), { index: indexFile, gzip: true }));
+}else{
+  app.use(koaStatic(yapi.path.join(yapi.WEBROOT, 'static'), { index: './prd/'+indexFile, gzip: true }));
+}
 
-app.use(koaStatic(yapi.path.join(yapi.WEBROOT, 'static'), { index: indexFile, gzip: true }));
 
 app.listen(yapi.WEBCONFIG.port,'0.0.0.0');
 commons.log(

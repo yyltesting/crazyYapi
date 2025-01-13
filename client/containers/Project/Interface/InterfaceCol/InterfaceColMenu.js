@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import {withRouter} from 'react-router';
 import produce from 'immer';
 import PropTypes from 'prop-types';
-import _ from 'underscore';
+import _ from 'loadsh';
 import {
   fetchCaseData,
   fetchCaseList,

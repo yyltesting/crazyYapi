@@ -1,8 +1,8 @@
 const path = require('path');
 const fs = require('fs-extra');
 const nodemailer = require('nodemailer');
-const config = require('../../config.json');//测试本地
-// const config = require('../config.json');//服务器
+// const config = require('../../config.json');//测试本地
+const config = require('../config.json');//服务器
 
 let insts = new Map();
 let mail;

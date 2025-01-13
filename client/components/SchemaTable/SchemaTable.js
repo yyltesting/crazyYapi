@@ -3,7 +3,7 @@ import { Table } from 'antd';
 import json5 from 'json5';
 import PropTypes from 'prop-types';
 import { schemaTransformToTable } from '../../../common/shema-transformTo-table.js';
-import _ from 'underscore';
+import _ from 'loadsh';
 import './index.scss';
 
 const messageMap = {

@@ -1,7 +1,7 @@
 import React, { PureComponent as Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import _ from 'underscore';
+import _ from 'loadsh';
 import constants from '../../../../constants/variable.js';
 import { handlePath, nameLengthLimit } from '../../../../common.js';
 import { changeEditStatus } from '../../../../reducer/modules/interface.js';

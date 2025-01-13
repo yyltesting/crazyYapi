@@ -8,7 +8,11 @@ function model(model, schema) {
   }
 
   schema.set('autoIndex', false);
-
+  // schema.set(  
+  //   '_id',{
+  //   type: mongoose.Schema.Types.ObjectId,
+  //   default: () => new mongoose.Types.ObjectId()
+  // })
   return mongoose.model(model, schema, model);
 }
 

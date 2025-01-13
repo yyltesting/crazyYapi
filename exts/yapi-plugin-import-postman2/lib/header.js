@@ -1,4 +1,4 @@
-const _ = require('underscore')
+const _ = require('loadsh')
 const { queryString } = require('./base')
 const { handleDescription } = require('./description')
 

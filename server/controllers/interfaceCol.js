@@ -735,7 +735,7 @@ class interfaceColController extends baseController {
         //     typeid: params.project_id
         //   });
         // });
-        this.projectModel.up(params.project_id, { up_time: new Date().getTime() }).then();
+        // this.projectModel.up(params.project_id, { up_time: new Date().getTime() }).then();
         ctx.body = yapi.commons.resReturn(result);
       }else{
         for(let item of params.col_id){

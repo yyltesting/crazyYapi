@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Tabs, Layout } from 'antd';
 import { Route, Switch, matchPath } from 'react-router-dom';
 import { connect } from 'react-redux';
-// import _ from 'underscore';
+// import _ from 'loadsh';
 const { Content, Sider } = Layout;
 
 import './interface.scss';

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { Form, Input, Button,Select } from 'antd';
 import {  nameLengthLimit } from '../../../../common.js'
 
-
+const TextArea = Input.TextArea;
 const FormItem = Form.Item;
 const Option = Select.Option;
 function hasErrors(fieldsError) {
@@ -72,7 +72,7 @@ class Adddemand extends Component {
             }],
             initialValue: this.props.catdata ? this.props.catdata.intro || null : null
           })(
-            <Input placeholder="简介"/>
+            <TextArea placeholder="描述" autoSize={{ minRows: 3, maxRows: 5 }}/>
             )}
         </FormItem>
         <FormItem

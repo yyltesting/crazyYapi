@@ -1,4 +1,4 @@
-const _ = require('underscore')
+const _ = require('loadsh')
 import URL from 'url'
 const { queryHeaderParam } = require('./header')
 

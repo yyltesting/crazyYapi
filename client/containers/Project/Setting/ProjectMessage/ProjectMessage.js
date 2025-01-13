@@ -36,7 +36,7 @@ import constants from '../../../../constants/variable.js';
 const confirm = Modal.confirm;
 import { nameLengthLimit, entries, trim, htmlFilter } from '../../../../common';
 import '../Setting.scss';
-import _ from 'underscore';
+import _ from 'loadsh';
 import ProjectTag from './ProjectTag.js';
 // layout
 const formItemLayout = {

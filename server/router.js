@@ -7,6 +7,7 @@ const testController = require('./controllers/test.js');
 const demandController = require('./controllers/demand.js');
 const caselibController = require('./controllers/caselib.js');
 const utilsController = require('./controllers/utils.js');
+const openaiController = require('./controllers/openapi.js')
 
 const yapi = require('./yapi.js');
 const projectController = require('./controllers/project.js');
@@ -65,10 +66,31 @@ let INTERFACE_CONFIG = {
   utils:{
     prefix: '/utils/',
     controller: utilsController
+  },
+  openai:{
+    prefix:'/openai/',
+    controller:openaiController
   }
 };
 
 let routerConfig = {
+  openai:[
+    {
+      action:'chat',
+      path:'chat',
+      method:'post'
+    },
+    {
+      action:'creatCaselib',
+      path:'creatcaselib',
+      method:'post'
+    },
+    {
+      action:'creatCase',
+      path:'creatcase',
+      method:'post'
+    }
+  ],
   caselib:[
     {
       action: 'add',

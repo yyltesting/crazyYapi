@@ -3,11 +3,11 @@
 ### 分支部署说明
 
 #### 环境要求
-* nodejs（7.6+) 推荐v12.20.1
+* nodejs（v18以上，推荐18.20.5）
 * mongodb（2.6+）  https://docs.mongodb.com/manual/tutorial/install-mongodb-on-red-hat/
 * git
-* forever
-* ykit
+* webpack webpack-server webpack-cli -g全局（开发需要）
+* ydoc （开发需要）
 * chrome  开启跨域 设置教程见：http://crazy-yapi.camdy.cn/doc/documents/chromeCORS.html
 
 ####  crazy-yapi 未部署过yapi，初次部署
@@ -17,10 +17,10 @@
     git clone --depth=1  https://gitlab.ws15.cn/yinyl/crazy-api.git vendors
     cp vendors/config_example.json ./config.json //复制完成后请修改相关配置（先在mongodb中创建好数据库和账户，根据实际值修改config.json）
     cd vendors
-    npm install  --registry https://registry.npm.taobao.org
-    ykit pack -m   //用于修改代码后二次开发，大概60秒左右 编译过程中 如果显示 [Bundler] 1908/1912 build modules 不动了，按一下回车
+    npm install --production --registry https://registry.npmmirror.com（开发的话需全部install）
     npm run install-server //安装程序会初始化数据库索引和管理员账号，管理员账号名可在 config.json 配置
-    forever start -o out.log -e err.log server/app.js  //启动服务器后，请访问 127.0.0.1:{config.json配置的端口}，初次运行会有个编译的过程，请耐心等候
+    node server/app.js
+    请耐心等候
 
 ####  crazy-yapi 使用原有yapi数据库部署
 
@@ -29,20 +29,11 @@
     git clone --depth=1  https://gitlab.ws15.cn/yinyl/crazy-api.git vendors
     cp vendors/config_example.json ./config.json //复制完成后请修改相关配置（先在mongodb中创建好数据库和账户，根据实际值修改config.json和原有yapi值一样）
     cd vendors
-    npm install --production --registry https://registry.npm.taobao.org
+    npm install --production --registry https://registry.npmmirror.com
     node server/app.js 启动服务
 
 ####  二次开发注意事项
     若服务部署在外网因为vm沙箱不安全，建议使用VM2升级至3.9.16或使用server/utils/sandbox.js替换sandbox(可能引起一些错误)
-
-### 分支升级说明--举例
-1. 停止服务：forever stopall
-2. cd /opt/yapi/vendors/
-3. 添加 分支仓库（**若已经添加，无需重复添加**） git remote add yehaoapi https://gitlab.ws15.cn/yinyl/crazy-api.git
-4. 拉取新代码 git pull yehaoapi master
-5. npm install  --registry https://registry.npm.taobao.org
-6. 打包 ykit pack -m
-7. 启动服务 forever start -o out.log -e err.log server/app.js
 
 ## 特性功能演示：
 
@@ -153,6 +144,10 @@
 
 ### 集合数据导出与导入：
 ![avatar](readmeRes/集合数据导出与导入.png)
+
+### AI生成测试用例库与单接口测试用例：
+![avatar](readmeRes/AI生成用例库.png)
+![avatar](readmeRes/AI生成接口用例.png)
 
 ### crazy-yapi  作者
 * yyl  791482765@qq.com
