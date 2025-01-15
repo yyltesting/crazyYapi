@@ -1,6 +1,8 @@
 import './ProjectCard.scss';
 import React, { PureComponent as Component } from 'react';
-import { Card, Icon, Tooltip, Modal, Alert, Input, message } from 'antd';
+import { Icon as LegacyIcon } from '@ant-design/compatible';
+import { CopyOutlined } from '@ant-design/icons';
+import { Card, Tooltip, Modal, Alert, Input, message } from 'antd';
 import { connect } from 'react-redux';
 import { delFollow, addFollow } from '../../reducer/modules/follow';
 import PropTypes from 'prop-types';
@@ -140,7 +142,7 @@ class ProjectCard extends Component {
             this.props.history.push('/project/' + (projectData.projectid || projectData._id))
           }
         >
-          <Icon
+          <LegacyIcon
             type={projectData.icon || 'star-o'}
             className="ui-logo"
             style={{
@@ -158,7 +160,7 @@ class ProjectCard extends Component {
             placement="rightTop"
             title={projectData.follow || inFollowPage ? '取消关注' : '添加关注'}
           >
-            <Icon
+            <LegacyIcon
               type={projectData.follow || inFollowPage ? 'star' : 'star-o'}
               className={'icon ' + (projectData.follow || inFollowPage ? 'active' : '')}
             />
@@ -167,7 +169,7 @@ class ProjectCard extends Component {
         {isShow && (
           <div className="copy-btns" onClick={this.showConfirm}>
             <Tooltip placement="rightTop" title="复制项目">
-              <Icon type="copy" className="icon" />
+              <CopyOutlined className="icon" />
             </Tooltip>
           </div>
         )}

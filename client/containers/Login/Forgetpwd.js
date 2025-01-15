@@ -1,6 +1,9 @@
 import React, { PureComponent as Component } from 'react';
 import PropTypes from 'prop-types';
-import { Form, Button, Input, Icon, message,Row,Col} from 'antd';
+import { LockOutlined, SecurityScanOutlined, UserOutlined } from '@ant-design/icons';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Button, Input, message, Row, Col } from 'antd';
 import axios from 'axios';
 import {encodeAes} from '../../common.js'
 const FormItem = Form.Item;
@@ -178,7 +181,7 @@ class Forgetpwd extends Component {
           {getFieldDecorator('email', { rules: [emailRule] })(
             <Input
               style={changeHeight}
-              prefix={<Icon type="user" style={{ fontSize: 13 }} />}
+              prefix={<UserOutlined style={{ fontSize: 13 }} />}
               placeholder="Email"
               onChange={this.Setemail(Event)} 
             />
@@ -194,7 +197,7 @@ class Forgetpwd extends Component {
               })(
                 <Input
                   style={changeHeight}
-                  prefix={<Icon type="security-scan" style={{ fontSize: 13 }} />}
+                  prefix={<SecurityScanOutlined style={{ fontSize: 13 }} />}
                   type="vcode"
                   placeholder="vcode"
                   onChange={this.Setvcode(Event)} 
@@ -224,7 +227,7 @@ class Forgetpwd extends Component {
           })(
             <Input
               style={changeHeight}
-              prefix={<Icon type="lock" style={{ fontSize: 13 }} />}
+              prefix={<LockOutlined style={{ fontSize: 13 }} />}
               type="password"
               placeholder="Password"
               onChange={this.Setpassword(Event)}

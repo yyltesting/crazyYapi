@@ -1,8 +1,8 @@
 import './Footer.scss';
 import React, { PureComponent as Component } from 'react';
 import PropTypes from 'prop-types';
+import { Icon as LegacyIcon } from '@ant-design/compatible';
 import { Row, Col,message} from 'antd';
-import { Icon } from 'antd';
 const {
   getsocket,
   cleansocket
@@ -84,7 +84,7 @@ class FootItem extends Component {
     return (
       <Col span={6}>
         <h4 className="title">
-          {this.props.iconType ? <Icon type={this.props.iconType} className="icon" /> : ''}
+          {this.props.iconType ? <LegacyIcon type={this.props.iconType} className="icon" /> : ''}
           {this.props.title}
         </h4>
         {this.props.linkList.map(function(item, i) {

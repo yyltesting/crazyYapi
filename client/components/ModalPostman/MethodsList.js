@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Row, Icon, Input, Select, Tooltip } from 'antd';
+import { DownOutlined } from '@ant-design/icons';
+import { Row, Input, Select, Tooltip } from 'antd';
 import _ from 'loadsh';
 const Option = Select.Option;
 
@@ -212,7 +213,7 @@ class MethodsList extends Component {
         })}
         {moreFlag && (
           <div className="show-more" onClick={this.showMore}>
-            <Icon type="down" />
+            <DownOutlined />
             <span style={{ paddingLeft: '4px' }}>更多</span>
           </div>
         )}

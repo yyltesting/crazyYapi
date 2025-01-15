@@ -1,10 +1,20 @@
 import React, { PureComponent as Component } from 'react';
+
 import {
-  Form,
+  CheckOutlined,
+  ExclamationCircleOutlined,
+  LockOutlined,
+  QuestionCircleOutlined,
+  SaveOutlined,
+  UnlockOutlined,
+} from '@ant-design/icons';
+
+import { Form, Icon as LegacyIcon } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import {
   Input,
   Switch,
   Select,
-  Icon,
   Tooltip,
   Button,
   Row,
@@ -14,7 +24,7 @@ import {
   Radio,
   Alert,
   Modal,
-  Popover
+  Popover,
 } from 'antd';
 import PropTypes from 'prop-types';
 import {
@@ -266,7 +276,7 @@ class ProjectMessage extends Component {
               value={item[0]}
               style={{ backgroundColor: item[1], color: '#fff', fontWeight: 'bold' }}
             >
-              {item[0] === projectMsg.color ? <Icon type="check" /> : null}
+              {item[0] === projectMsg.color ? <CheckOutlined /> : null}
             </RadioButton>
           );
         })}
@@ -277,7 +287,7 @@ class ProjectMessage extends Component {
         {constants.PROJECT_ICON.map(item => {
           return (
             <RadioButton key={item} value={item} style={{ fontWeight: 'bold' }}>
-              <Icon type={item} />
+              <LegacyIcon type={item} />
             </RadioButton>
           );
         })}
@@ -296,7 +306,7 @@ class ProjectMessage extends Component {
                 trigger="click"
                 overlayClassName="change-project-container"
               >
-                <Icon
+                <LegacyIcon
                   type={projectMsg.icon || 'star-o'}
                   className="ui-logo"
                   style={{
@@ -350,7 +360,7 @@ class ProjectMessage extends Component {
                 <span>
                   接口基本路径&nbsp;
                   <Tooltip title="基本路径为空表示根路径">
-                    <Icon type="question-circle-o" />
+                    <QuestionCircleOutlined />
                   </Tooltip>
                 </span>
               }
@@ -372,7 +382,7 @@ class ProjectMessage extends Component {
                 <span>
                   MOCK地址&nbsp;
                   <Tooltip title="具体使用方法请查看文档">
-                    <Icon type="question-circle-o" />
+                    <QuestionCircleOutlined />
                   </Tooltip>
                 </span>
               }
@@ -397,7 +407,7 @@ class ProjectMessage extends Component {
                 <span>
                   tag 信息&nbsp;
                   <Tooltip title="定义 tag 信息，过滤接口">
-                    <Icon type="question-circle-o" />
+                    <QuestionCircleOutlined />
                   </Tooltip>
                 </span>
               }
@@ -411,7 +421,7 @@ class ProjectMessage extends Component {
                 <span>
                   mock严格模式&nbsp;
                   <Tooltip title="开启后 mock 请求会对 query，body form 的必须字段和 json schema 进行校验">
-                    <Icon type="question-circle-o" />
+                    <QuestionCircleOutlined />
                   </Tooltip>
                 </span>
               }
@@ -427,7 +437,7 @@ class ProjectMessage extends Component {
                 <span>
                   开启json5&nbsp;
                   <Tooltip title="开启后可在接口 body 和返回值中写 json 字段">
-                    <Icon type="question-circle-o" />
+                    <QuestionCircleOutlined />
                   </Tooltip>
                 </span>
               }
@@ -455,12 +465,12 @@ class ProjectMessage extends Component {
               })(
                 <RadioGroup>
                   <Radio value="private" className="radio">
-                    <Icon type="lock" />私有<br />
+                    <LockOutlined />私有<br />
                     <span className="radio-desc">只有组长和项目开发者可以索引并查看项目信息</span>
                   </Radio>
                   <br />
                   {projectMsg.role === 'admin' && <Radio value="public" className="radio">
-                    <Icon type="unlock" />公开<br />
+                    <UnlockOutlined />公开<br />
                     <span className="radio-desc">任何人都可以索引并查看项目信息</span>
                   </Radio>}
                   
@@ -472,7 +482,7 @@ class ProjectMessage extends Component {
           <div className="btnwrap-changeproject">
             <Button
               className="m-btn btn-save"
-              icon="save"
+              icon={<SaveOutlined />}
               type="primary"
               size="large"
               onClick={this.handleOk}
@@ -486,10 +496,10 @@ class ProjectMessage extends Component {
             <div className="danger-container">
               <div className="title">
                 <h2 className="content">
-                  <Icon type="exclamation-circle-o" /> 危险操作
+                  <ExclamationCircleOutlined /> 危险操作
                 </h2>
                 <Button onClick={this.toggleDangerOptions}>
-                  查 看<Icon type={this.state.showDangerOptions ? 'up' : 'down'} />
+                  查 看<LegacyIcon type={this.state.showDangerOptions ? 'up' : 'down'} />
                 </Button>
               </div>
               {this.state.showDangerOptions ? (

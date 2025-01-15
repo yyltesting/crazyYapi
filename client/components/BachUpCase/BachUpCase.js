@@ -2,16 +2,8 @@ import React, { PureComponent as Component } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import AceEditor from 'client/components/AceEditor/AceEditor';
-import {
-    Select,
-    Input,
-    Tooltip,
-    Row,
-    Col,
-    Icon,
-    message,
-    Modal
-} from 'antd';
+import { QuestionCircleOutlined } from '@ant-design/icons';
+import { Select, Input, Tooltip, Row, Col, message, Modal } from 'antd';
 const Option = Select.Option;
 
 class BachUpCase extends Component {
@@ -188,7 +180,7 @@ class BachUpCase extends Component {
                 <Row className="sync-item" style={{ lineHeight: '35px' }}>
                   <Col className="sync-item" span={4}>
                     <label>关联接口id:&nbsp;<Tooltip title={'关联接口id'}>
-                      <Icon type="question-circle-o" style={{ width: '10px' }} />
+                      <QuestionCircleOutlined style={{ width: '10px' }} />
                     </Tooltip></label>
                   </Col>
                   <Col className="sync-item" style={{ marginRight: '10px', padding: '5px',width:'500px' }} span={6}>
@@ -212,7 +204,7 @@ class BachUpCase extends Component {
               <Row className="sync-item" style={{ lineHeight: '35px' }}>
                 <Col className="sync-item" span={4}>
                   <label>运行环境:&nbsp;<Tooltip title={'关联环境id'}>
-                    <Icon type="question-circle-o" style={{ width: '10px' }} />
+                    <QuestionCircleOutlined style={{ width: '10px' }} />
                   </Tooltip></label>
                 </Col>
                 <Col className="sync-item" style={{ marginRight: '10px', padding: '5px',width:'500px' }} span={6}>
@@ -232,7 +224,7 @@ class BachUpCase extends Component {
                 <Row className="sync-item" style={{ lineHeight: '35px' }}>
                   <Col className="sync-item" span={4}>
                     <label>更新header参数值:&nbsp;<Tooltip title={'更新用例的header值,以json的形式书写'}>
-                      <Icon type="question-circle-o" style={{ width: '10px' }} />
+                      <QuestionCircleOutlined style={{ width: '10px' }} />
                     </Tooltip></label>
                   </Col>
                   <Col className="sync-item" style={{ marginRight: '10px', padding: '5px',width:'500px' }} span={6}>
@@ -247,7 +239,7 @@ class BachUpCase extends Component {
                 <Row className="sync-item" style={{ lineHeight: '35px' }}>
                   <Col className="sync-item" span={4}>
                     <label>替换jsonbody参数名:&nbsp;<Tooltip title={'替换用例的参数名称，仅支持第一层json参数名'}>
-                      <Icon type="question-circle-o" style={{ width: '10px' }} />
+                      <QuestionCircleOutlined style={{ width: '10px' }} />
                     </Tooltip></label>
                   </Col>
                   <Col className="sync-item" style={{ marginRight: '10px', padding: '5px' }} span={6}>
@@ -261,7 +253,7 @@ class BachUpCase extends Component {
                 <Row className="sync-item" style={{ lineHeight: '35px' }}>
                   <Col className="sync-item" span={4}>
                     <label>新增jsonbody参数:&nbsp;<Tooltip title={'新增body参数'}>
-                      <Icon type="question-circle-o" style={{ width: '10px' }} />
+                      <QuestionCircleOutlined style={{ width: '10px' }} />
                     </Tooltip></label>
                   </Col>
                   <Col className="sync-item" style={{ marginRight: '10px', padding: '5px' }} span={6}>
@@ -281,7 +273,7 @@ class BachUpCase extends Component {
                 <Row className="sync-item" style={{ lineHeight: '35px' }}>
                   <Col className="sync-item" span={4}>
                     <label>删除jsonbody参数:&nbsp;<Tooltip title={'删除body参数'}>
-                      <Icon type="question-circle-o" style={{ width: '10px' }} />
+                      <QuestionCircleOutlined style={{ width: '10px' }} />
                     </Tooltip></label>
                   </Col>
                   <Col className="sync-item" style={{ marginRight: '10px', padding: '5px' }} span={6}>
@@ -292,7 +284,7 @@ class BachUpCase extends Component {
                 <Row className="sync-item" style={{ lineHeight: '35px' }}>
                   <Col className="sync-item" span={4}>
                     <label>更新jsonbody参数值:&nbsp;<Tooltip title={'替换用例的参数值,以json的形式书写'}>
-                      <Icon type="question-circle-o" style={{ width: '10px' }} />
+                      <QuestionCircleOutlined style={{ width: '10px' }} />
                     </Tooltip></label>
                   </Col>
                   <Col className="sync-item" style={{ marginRight: '10px', padding: '5px',width:'500px' }} span={6}>
@@ -308,7 +300,7 @@ class BachUpCase extends Component {
                 <Row className="sync-item" style={{ lineHeight: '35px' }}>
                   <Col className="sync-item" span={4}>
                     <label>替换jsonbody字符串:&nbsp;<Tooltip title={'替换用例的字符串'}>
-                      <Icon type="question-circle-o" style={{ width: '10px' }} />
+                      <QuestionCircleOutlined style={{ width: '10px' }} />
                     </Tooltip></label>
                   </Col>
                   <Col className="sync-item" style={{ marginRight: '10px', padding: '5px' }} span={6}>
@@ -324,7 +316,7 @@ class BachUpCase extends Component {
               <Row className="sync-item" style={{ lineHeight: '35px' }}>
                 <Col className="sync-item" span={4}>
                   <label>用例断言替换字符串:&nbsp;<Tooltip title={'替换用例的断言字符串'}>
-                    <Icon type="question-circle-o" style={{ width: '10px' }} />
+                    <QuestionCircleOutlined style={{ width: '10px' }} />
                   </Tooltip></label>
                 </Col>
                 <Col className="sync-item" style={{ marginRight: '10px', padding: '5px' }} span={6}>
@@ -338,7 +330,7 @@ class BachUpCase extends Component {
               <Row className="sync-item" style={{ lineHeight: '35px' }}>
                 <Col className="sync-item" span={4}>
                   <label>前置JS处理器:&nbsp;<Tooltip title={'替换前置JS处理器字符串'}>
-                    <Icon type="question-circle-o" style={{ width: '10px' }} />
+                    <QuestionCircleOutlined style={{ width: '10px' }} />
                   </Tooltip></label>
                 </Col>
                 <Col className="sync-item" style={{ marginRight: '10px', padding: '5px' }} span={6}>
@@ -352,7 +344,7 @@ class BachUpCase extends Component {
               <Row className="sync-item" style={{ lineHeight: '35px' }}>
                 <Col className="sync-item" span={4}>
                   <label>后置JS处理器:&nbsp;<Tooltip title={'替换后置JS处理器字符串'}>
-                    <Icon type="question-circle-o" style={{ width: '10px' }} />
+                    <QuestionCircleOutlined style={{ width: '10px' }} />
                   </Tooltip></label>
                 </Col>
                 <Col className="sync-item" style={{ marginRight: '10px', padding: '5px' }} span={6}>
@@ -365,7 +357,7 @@ class BachUpCase extends Component {
               <Row className='sync-item' style={{ lineHeight: '35px' }}>
                 <Col className="sync-item" span={4}>
                   <label>需要更新的用例:&nbsp;<Tooltip title={'指定需要更新的用例id'}>
-                    <Icon type="question-circle-o" style={{ width: '10px' }} />
+                    <QuestionCircleOutlined style={{ width: '10px' }} />
                   </Tooltip></label>
                 </Col>
                 <Col className="sync-item" span={6} >
@@ -384,7 +376,7 @@ class BachUpCase extends Component {
             </div>
           </Modal>
         </div>
-    )
+      );
     }
 }
 export default BachUpCase;

@@ -4,8 +4,36 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import { Link } from 'react-router-dom';
 import {findMeInTree3} from '../../../../common.js';
+
+import {
+  CheckCircleOutlined,
+  ContainerOutlined,
+  ExclamationCircleOutlined,
+  InfoCircleOutlined,
+  QuestionCircleOutlined,
+} from '@ant-design/icons';
+
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+
 //import constants from '../../../../constants/variable.js'
-import {Tooltip, Icon, Input, Button, Row, Col, Spin, Modal, message, Select, Switch, Checkbox,notification,Collapse,Form,List,Radio} from 'antd';
+import {
+  Tooltip,
+  Input,
+  Button,
+  Row,
+  Col,
+  Spin,
+  Modal,
+  message,
+  Select,
+  Switch,
+  Checkbox,
+  notification,
+  Collapse,
+  List,
+  Radio,
+} from 'antd';
 import {
   fetchInterfaceColList,
   fetchCaseList,
@@ -1796,12 +1824,10 @@ executeTestsloop = async () => {
                   return (
                     <div>
                       <Tooltip title="Pass">
-                        <Icon
+                        <CheckCircleOutlined
                           style={{
                             color: '#00a854'
-                          }}
-                          type="check-circle"
-                        />
+                          }} />
                       </Tooltip>
                     </div>
                   );
@@ -1809,12 +1835,10 @@ executeTestsloop = async () => {
                   return (
                     <div>
                       <Tooltip title="请求异常">
-                        <Icon
-                          type="info-circle"
+                        <InfoCircleOutlined
                           style={{
                             color: '#f04134'
-                          }}
-                        />
+                          }} />
                       </Tooltip>
                     </div>
                   );
@@ -1822,24 +1846,20 @@ executeTestsloop = async () => {
                   return (
                     <div>
                       <Tooltip title="验证失败">
-                        <Icon
-                          type="exclamation-circle"
+                        <ExclamationCircleOutlined
                           style={{
                             color: '#ffbf00'
-                          }}
-                        />
+                          }} />
                       </Tooltip>
                     </div>
                   );
                 default:
                   return (
                     <div>
-                      <Icon
+                      <CheckCircleOutlined
                         style={{
                           color: '#aaa'
-                        }}
-                        type="check-circle"
-                      />
+                        }} />
                     </div>
                   );
               }
@@ -2025,7 +2045,7 @@ executeTestsloop = async () => {
               <Col className="col-log" style={{width:'200px'}} span={6}>
                 选择环境
                 <Tooltip title="日志所在的环境配置">
-                  <Icon type="question-circle-o" />
+                  <QuestionCircleOutlined />
                 </Tooltip>
                 &nbsp;：
               </Col>
@@ -2043,7 +2063,7 @@ executeTestsloop = async () => {
             <Row className='setting-log' style={{marginTop : 20}}>
               <Col className="col-log"  style={{width:'200px'}} span={6}>
                 服务名<Tooltip title={'选择需要查看的服务'}>
-                  <Icon type="question-circle-o"/>
+                  <QuestionCircleOutlined />
                 </Tooltip>
                 &nbsp;：
               </Col>
@@ -2072,7 +2092,7 @@ executeTestsloop = async () => {
             <Row className="setting-item">
               <Col className="col-item" span={4}>
                 <label>检查HttpCode:&nbsp;<Tooltip title={'检查 http code 是否为 200'}>
-                  <Icon type="question-circle-o" style={{ width: '10px' }} />
+                  <QuestionCircleOutlined style={{ width: '10px' }} />
                 </Tooltip></label>
               </Col>
               <Col className="col-item"  span={18}>
@@ -2091,7 +2111,7 @@ executeTestsloop = async () => {
             <Row className="setting-item">
               <Col className="col-item"  span={4}>
                 <label>检查返回json:&nbsp;<Tooltip title={'检查接口返回数据字段值，比如检查 code 是不是等于 0'}>
-                  <Icon type="question-circle-o" style={{ width: '10px' }} />
+                  <QuestionCircleOutlined style={{ width: '10px' }} />
                 </Tooltip></label>
               </Col>
               <Col  className="col-item" span={6}>
@@ -2108,7 +2128,7 @@ executeTestsloop = async () => {
             <Row className="setting-item">
               <Col className="col-item" span={4}>
                 <label>检查返回数据结构:&nbsp;<Tooltip title={'只有 response 基于 json-schema 方式定义，该检查才会生效'}>
-                  <Icon type="question-circle-o" style={{ width: '10px' }} />
+                  <QuestionCircleOutlined style={{ width: '10px' }} />
                 </Tooltip></label>
               </Col>
               <Col className="col-item"  span={18}>
@@ -2127,7 +2147,7 @@ executeTestsloop = async () => {
             <Row className="setting-item">
               <Col className="col-item  " span={4}>
                 <label>全局测试脚本:&nbsp;<Tooltip title={'在跑自动化测试时，优先调用全局脚本，只有全局脚本通过测试，才会开始跑case自定义的测试脚本'}>
-                  <Icon type="question-circle-o" style={{ width: '10px' }} />
+                  <QuestionCircleOutlined style={{ width: '10px' }} />
                 </Tooltip></label>
               </Col>
               <Col className="col-item"  span={14}>
@@ -2188,7 +2208,7 @@ executeTestsloop = async () => {
             <Row className="setting-loop">
               <Col className="col-loop"  style={{width:'200px'}} span={4}>
                 <label>循环测试:&nbsp;<Tooltip title={'设置循环测试的次数'}>
-                  <Icon type="question-circle-o" style={{ width: '10px' }} />
+                  <QuestionCircleOutlined style={{ width: '10px' }} />
                 </Tooltip></label>
               </Col>
               <Col  className="col-loop" span={5}>
@@ -2208,7 +2228,7 @@ executeTestsloop = async () => {
             <Row className='run-once-only-case' style={{marginTop : 20}}>
               <Col className="cases"  style={{width:'200px'}} span={6}>
                 <label>仅一次运行的用例:&nbsp;<Tooltip title={'设置只运行一次的用例ID'}>
-                  <Icon type="question-circle-o" style={{ width: '10px' }} />
+                  <QuestionCircleOutlined style={{ width: '10px' }} />
                 </Tooltip></label>
               </Col>
               <Col  className="cases" span={7} >
@@ -2299,7 +2319,7 @@ executeTestsloop = async () => {
                 href="/doc/documents/case.html"
               >
                 <Tooltip title="点击查看文档">
-                  <Icon type="question-circle-o" />
+                  <QuestionCircleOutlined />
                 </Tooltip>
               </a>
             </h2>
@@ -2398,13 +2418,13 @@ executeTestsloop = async () => {
             {this.getSummaryText()}
             &nbsp; 
             <Button 
-              icon='container'
+              icon={<ContainerOutlined />}
               onClick={this.viewLog}> 
               服务器日志
             </Button>  
             &nbsp; 
             <Button 
-              icon='container'
+              icon={<ContainerOutlined />}
               onClick={this.viewreportLog}> 
               报告记录
             </Button>  
@@ -2459,7 +2479,7 @@ executeTestsloop = async () => {
               <Col span={3} className="label" style={{ paddingTop: '16px' }}>
                 选择环境
                 <Tooltip title="默认使用测试用例选择的环境">
-                  <Icon type="question-circle-o" />
+                  <QuestionCircleOutlined />
                 </Tooltip>
                 &nbsp;：
               </Col>
@@ -2491,12 +2511,10 @@ executeTestsloop = async () => {
               <Col span={3} style={{ width: '90px'}}>
                 邮件通知
                 <Tooltip title={'测试不通过时，会给项目组成员发送邮件'}>
-                  <Icon
-                    type="question-circle-o"
+                  <QuestionCircleOutlined
                     style={{
                       width: '10px'
-                    }}
-                  />
+                    }} />
                 </Tooltip>
                 &nbsp;：
               </Col>
@@ -2512,12 +2530,10 @@ executeTestsloop = async () => {
               <Col span={3} style={{ width: '90px' }}>
                 下载数据
                 <Tooltip title={'开启后，测试数据将被下载到本地'}>
-                  <Icon
-                    type="question-circle-o"
+                  <QuestionCircleOutlined
                     style={{
                       width: '10px'
-                    }}
-                  />
+                    }} />
                 </Tooltip>
                 &nbsp;：
               </Col>
@@ -2532,12 +2548,10 @@ executeTestsloop = async () => {
               <Col span={3} style={{ width: '90px'}}>
                 含子集合
                 <Tooltip title={'开启后，将同时执行子集合所有用例'}>
-                  <Icon
-                    type="question-circle-o"
+                  <QuestionCircleOutlined
                     style={{
                       width: '10px'
-                    }}
-                  />
+                    }} />
                 </Tooltip>
                 &nbsp;：
               </Col>
@@ -2554,12 +2568,10 @@ executeTestsloop = async () => {
               <Col span={3} style={{ width: '100px'}}>
                 子集合驱动
                 <Tooltip title={'开启后，请求配置将调用子集合配置'}>
-                  <Icon
-                    type="question-circle-o"
+                  <QuestionCircleOutlined
                     style={{
                       width: '10px'
-                    }}
-                  />
+                    }} />
                 </Tooltip>
                 &nbsp;：
               </Col>
@@ -2575,12 +2587,10 @@ executeTestsloop = async () => {
               <Col span={3} style={{ width: '100px'}}>
                 失败中断
                 <Tooltip title={'开启后，失败将停止运行'}>
-                  <Icon
-                    type="question-circle-o"
+                  <QuestionCircleOutlined
                     style={{
                       width: '10px'
-                    }}
-                  />
+                    }} />
                 </Tooltip>
                 &nbsp;：
               </Col>
@@ -2597,12 +2607,10 @@ executeTestsloop = async () => {
               <Col span={3} style={{ width: '100px'}}>
                 服务端日志
                 <Tooltip title={'开启后，运行后会打开日志记录'}>
-                  <Icon
-                    type="question-circle-o"
+                  <QuestionCircleOutlined
                     style={{
                       width: '10px'
-                    }}
-                  />
+                    }} />
                 </Tooltip>
                 &nbsp;：
               </Col>
@@ -2619,8 +2627,7 @@ executeTestsloop = async () => {
                   <Col span={3} style={{ width: '120px',marginLeft:'20px' }}>
                     服务端日志uri
                     <Tooltip title={'服务端日志关联env'}>
-                      <Icon
-                        type="question-circle-o"
+                      <QuestionCircleOutlined
                         style={{
                           width: '10px'
                         }} />
@@ -2640,8 +2647,7 @@ executeTestsloop = async () => {
                   <Col span={3} style={{ width: '100px',marginLeft:'20px'  }}>
                     日志服务名
                     <Tooltip title={'服务端日志服务名'}>
-                      <Icon
-                        type="question-circle-o"
+                      <QuestionCircleOutlined
                         style={{
                           width: '10px'
                         }} />

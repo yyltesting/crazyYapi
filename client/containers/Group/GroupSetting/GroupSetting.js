@@ -1,7 +1,9 @@
 import React, { PureComponent as Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Input, Button, message, Icon, Card, Alert, Modal, Switch, Row, Col, Tooltip } from 'antd';
+import { ExclamationCircleOutlined, QuestionCircleOutlined, SaveOutlined } from '@ant-design/icons';
+import { Icon as LegacyIcon } from '@ant-design/compatible';
+import { Input, Button, message, Card, Alert, Modal, Switch, Row, Col, Tooltip } from 'antd';
 import { fetchNewsData } from '../../../reducer/modules/news.js';
 import {
   changeGroupMsg,
@@ -237,7 +239,7 @@ class GroupSetting extends Component {
           <Col span={4} className="label">
             接口自定义字段&nbsp;
             <Tooltip title={'可以在接口中添加 额外字段 数据'}>
-              <Icon type="question-circle-o" style={{ width: '10px' }} />
+              <QuestionCircleOutlined style={{ width: '10px' }} />
             </Tooltip> ：
           </Col>
           <Col span={12} style={{ position: 'relative' }}>
@@ -268,7 +270,7 @@ class GroupSetting extends Component {
         </Row>
         <Row type="flex" justify="center" className="row save">
           <Col span={4} className="save-button">
-            <Button className="m-btn btn-save" icon="save" type="primary" onClick={this.editGroup}>
+            <Button className="m-btn btn-save" icon={<SaveOutlined />} type="primary" onClick={this.editGroup}>
               保 存
             </Button>
           </Col>
@@ -278,10 +280,10 @@ class GroupSetting extends Component {
           <Row type="flex" justify="center" className="danger-container">
             <Col span={24} className="title">
               <h2 className="content">
-                <Icon type="exclamation-circle-o" /> 危险操作
+                <ExclamationCircleOutlined /> 危险操作
               </h2>
               <Button onClick={this.toggleDangerOptions}>
-                查 看<Icon type={this.state.showDangerOptions ? 'up' : 'down'} />
+                查 看<LegacyIcon type={this.state.showDangerOptions ? 'up' : 'down'} />
               </Button>
             </Col>
             {this.state.showDangerOptions ? (

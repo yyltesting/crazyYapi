@@ -1,6 +1,8 @@
 import React, { PureComponent as Component } from 'react'
 import PropTypes from 'prop-types'
-import { Form, Input, Cascader, Button,Select } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Input, Cascader, Button, Select } from 'antd';
 
 import constants from '../../../../constants/variable.js'
 import { handleApiPath, nameLengthLimit } from '../../../../common.js'

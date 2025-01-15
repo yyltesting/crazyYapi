@@ -1,7 +1,9 @@
 import React, { PureComponent as Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Form, Button, message } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Button, message } from 'antd';
 const FormItem = Form.Item;
 import './project-request.scss';
 import AceEditor from 'client/components/AceEditor/AceEditor';

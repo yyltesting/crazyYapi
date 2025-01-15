@@ -1,4 +1,5 @@
 import React, { PureComponent as Component } from 'react';
+import { EditOutlined } from '@ant-design/icons';
 import { Row, Col, Input, Button, Select, message, Upload, Tooltip } from 'antd';
 import axios from 'axios';
 import { formatTime } from '../../common.js';
@@ -15,7 +16,7 @@ const EditButton = props => {
     }
     return (
       <Button
-        icon="edit"
+        icon={<EditOutlined />}
         onClick={() => {
           onClick(name, true);
         }}
@@ -27,7 +28,7 @@ const EditButton = props => {
     // 管理员
     return (
       <Button
-        icon="edit"
+        icon={<EditOutlined />}
         onClick={() => {
           onClick(name, true);
         }}
@@ -347,7 +348,7 @@ class Profile extends Component {
       if (userType) {
         btn = (
           <Button
-            icon="edit"
+            icon={<EditOutlined />}
             onClick={() => {
               this.handleEdit('secureEdit', true);
             }}

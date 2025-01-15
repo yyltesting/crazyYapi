@@ -1,7 +1,10 @@
 import React, { PureComponent as Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Modal, Form, Input, Icon, Tooltip, Select, message, Button, Row, Col } from 'antd';
+import { MinusCircleOutlined, PlusOutlined, QuestionCircleOutlined } from '@ant-design/icons';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Modal, Input, Tooltip, Select, message, Button, Row, Col } from 'antd';
 import {
   updateProject,
   fetchProjectList,
@@ -275,13 +278,11 @@ class UpDateModal extends Component {
           <Col span={2}>
             {/* 新增的项中，只有最后一项有删除按钮 */}
             {(envs.length > 0 && k._id) || envs.length == index + 1 ? (
-              <Icon
+              <MinusCircleOutlined
                 className="dynamic-delete-button"
-                type="minus-circle-o"
                 onClick={() => {
                   return this.remove(k._id ? k._id : k);
-                }}
-              />
+                }} />
             ) : null}
           </Col>
         </Row>
@@ -313,7 +314,7 @@ class UpDateModal extends Component {
               <span>
                 线上域名&nbsp;
                 <Tooltip title="将根据配置的线上域名访问mock数据">
-                  <Icon type="question-circle-o" />
+                  <QuestionCircleOutlined />
                 </Tooltip>
               </span>
             }
@@ -344,7 +345,7 @@ class UpDateModal extends Component {
               <span>
                 基本路径&nbsp;
                 <Tooltip title="基本路径为空表示根路径">
-                  <Icon type="question-circle-o" />
+                  <QuestionCircleOutlined />
                 </Tooltip>
               </span>
             }
@@ -375,7 +376,7 @@ class UpDateModal extends Component {
           {formItems}
           <FormItem {...formItemLayoutWithOutLabel}>
             <Button type="dashed" onClick={this.add} style={{ width: '60%' }}>
-              <Icon type="plus" /> 添加环境配置
+              <PlusOutlined /> 添加环境配置
             </Button>
           </FormItem>
         </Form>

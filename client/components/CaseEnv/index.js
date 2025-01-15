@@ -2,7 +2,8 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Select, Row, Col, Collapse, Icon, Tooltip } from 'antd';
+import { QuestionCircleOutlined } from '@ant-design/icons';
+import { Select, Row, Col, Collapse, Tooltip } from 'antd';
 const Option = Select.Option;
 const Panel = Collapse.Panel;
 import './index.scss';
@@ -42,7 +43,7 @@ export default class CaseEnv extends React.Component {
               选择测试用例环境
               <Tooltip title="默认使用测试用例选择的环境">
                 {' '}
-                <Icon type="question-circle-o" />{' '}
+                <QuestionCircleOutlined />{' '}
               </Tooltip>
             </span>
           }

@@ -106,7 +106,14 @@ module.exports = {
             },
           },
           "css-loader",
-          "less-loader",
+          {
+            loader: "less-loader",
+            options: {
+              lessOptions: {
+                javascriptEnabled: true, // 这里启用 JavaScript 支持
+              },
+            },
+          },
         ],
       },
       {

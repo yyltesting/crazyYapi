@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import './ProjectToken.scss';
 import { getToken, updateToken } from '../../../../reducer/modules/project';
 import { connect } from 'react-redux';
-import { Icon, Tooltip, message, Modal } from 'antd';
+import { CopyOutlined, ReloadOutlined } from '@ant-design/icons';
+import { Tooltip, message, Modal } from 'antd';
 import copy from 'copy-to-clipboard';
 const confirm = Modal.confirm;
 
@@ -63,11 +64,11 @@ class ProjectToken extends Component {
             token: <span className="token-message">{this.props.token}</span>
           </span>
           <Tooltip title="复制">
-            <Icon className="token-btn" type="copy" onClick={this.copyToken} />
+            <CopyOutlined className="token-btn" onClick={this.copyToken} />
           </Tooltip>
           {this.props.curProjectRole === 'admin' || this.props.curProjectRole === 'owner' ? (
             <Tooltip title="刷新">
-              <Icon className="token-btn" type="reload" onClick={this.updateToken} />
+              <ReloadOutlined className="token-btn" onClick={this.updateToken} />
             </Tooltip>
           ) : null}
         </div>

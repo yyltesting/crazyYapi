@@ -2,6 +2,7 @@ import React from 'react';
 import mockEditor from './mockEditor';
 import PropTypes from 'prop-types';
 import './AceEditor.scss';
+import { EditOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
 
 const ModeMap = {
@@ -84,7 +85,7 @@ class AceEditor extends React.PureComponent {
             this.editorElement = editor;
           }}
         />
-        <Button onClick={this.toggleFullScreen} icon="edit">全屏编辑</Button>
+        <Button onClick={this.toggleFullScreen} icon={<EditOutlined />}>全屏编辑</Button>
       </div>
     );
   }

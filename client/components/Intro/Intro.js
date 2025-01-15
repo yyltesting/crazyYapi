@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Icon } from 'antd';
+import { Icon as LegacyIcon } from '@ant-design/compatible';
 import './Intro.scss';
 import { OverPack } from 'rc-scroll-anim';
 import TweenOne from 'rc-tween-one';
@@ -9,7 +9,7 @@ import QueueAnim from 'rc-queue-anim';
 const IntroPart = props => (
   <li className="switch-content">
     <div className="icon-switch">
-      <Icon type={props.iconType} />
+      <LegacyIcon type={props.iconType} />
     </div>
     <div className="text-switch">
       <p>

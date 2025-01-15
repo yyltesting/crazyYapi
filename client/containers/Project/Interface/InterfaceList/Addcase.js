@@ -1,6 +1,8 @@
 import React, { PureComponent as Component } from 'react'
 import PropTypes from 'prop-types'
-import { Form, Input, Button,Select } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Input, Button, Select } from 'antd';
 import {  nameLengthLimit } from '../../../../common.js'
 const { TextArea } = Input;
 

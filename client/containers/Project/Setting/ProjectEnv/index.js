@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import './index.scss';
-import { Icon, Layout, Tooltip, message, Row, Popconfirm } from 'antd';
+import { DeleteOutlined, PlusOutlined, QuestionCircleOutlined } from '@ant-design/icons';
+import { Layout, Tooltip, message, Row, Popconfirm } from 'antd';
 const { Content, Sider } = Layout;
 import ProjectEnvContent from './ProjectEnvContent.js';
 import { connect } from 'react-redux';
@@ -175,13 +176,11 @@ class ProjectEnv extends Component {
               okText="确定"
               cancelText="取消"
             >
-              <Icon
-                type="delete"
+              <DeleteOutlined
                 className="interface-delete-icon"
                 style={{
                   display: this.state.delIcon == index && env.length - 1 !== 0 ? 'block' : 'none'
-                }}
-              />
+                }} />
             </Popconfirm>
           </span>
         </Row>
@@ -197,11 +196,11 @@ class ProjectEnv extends Component {
                 <div className="env-icon-style">
                   <h3>
                     环境列表&nbsp;<Tooltip placement="top" title="在这里添加项目的环境配置">
-                      <Icon type="question-circle-o" />
+                      <QuestionCircleOutlined />
                     </Tooltip>
                   </h3>
                   <Tooltip title="添加环境变量">
-                    <Icon type="plus" onClick={() => this.addParams('env')} />
+                    <PlusOutlined onClick={() => this.addParams('env')} />
                   </Tooltip>
                 </div>
               </Row>

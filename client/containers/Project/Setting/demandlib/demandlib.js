@@ -4,7 +4,8 @@ import {getProject} from '../../../../reducer/modules/project.js';
 import {demandlist} from '../../../../reducer/modules/demand.js'
 import {connect} from 'react-redux';
 import axios from 'axios';
-import {message,Modal,Table,Button,Layout,Select,Tooltip,Icon,Input} from 'antd';
+import { CodepenCircleOutlined, DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
+import { message, Modal, Table, Button, Layout, Select, Tooltip, Input } from 'antd';
 import { withRouter } from 'react-router';
 import './demandlib.scss';
 import Adddemand from '../../Interface/InterfaceList/Adddemand.js';
@@ -268,36 +269,28 @@ render() {
           // <Button style={{marginLeft: '25px'}} onClick={this.Openexl} className='openlib' type='primary' >用例库</Button>
           <span className='options'>
             <Tooltip title="AI生成">
-              <Icon
-                type="codepen-circle"
+              <CodepenCircleOutlined
                 className="interface-delete-icon"
                 style={{display:'block',float: 'left',marginRight:'20px'}}
-                onClick={()=>this.aiCreateCaseModel(id,record.intro)}
-              />
+                onClick={()=>this.aiCreateCaseModel(id,record.intro)} />
             </Tooltip>
             <Tooltip title="添加用例">
-              <Icon
-                type="plus"
+              <PlusOutlined
                 className="interface-delete-icon"
                 style={{display:'block',float: 'left',marginRight:'20px'}}
-                onClick={()=>this.Opencaselib(id)}
-              />
+                onClick={()=>this.Opencaselib(id)} />
             </Tooltip>
             <Tooltip title="编辑">
-              <Icon
-                type="edit"
+              <EditOutlined
                 className="interface-edit-icon"
                 style={{display:'block',float: 'left',marginRight:'20px'}}
-                onClick={()=>this.Openeditdemand(id,record)}
-              />
+                onClick={()=>this.Openeditdemand(id,record)} />
             </Tooltip>
             <Tooltip title="删除">
-              <Icon
-                type="delete"
+              <DeleteOutlined
                 className="interface-delete-icon"
                 style={{display:'block',float: 'left',marginRight:'20px'}}
-                onClick={() => this.Deletedemand(id)}
-              />
+                onClick={() => this.Deletedemand(id)} />
             </Tooltip>
           </span>
         );

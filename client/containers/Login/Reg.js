@@ -1,7 +1,10 @@
 import React, { PureComponent as Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Form, Button, Input, Icon, message } from 'antd';
+import { LockOutlined, MailOutlined, UserOutlined } from '@ant-design/icons';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Button, Input, message } from 'antd';
 import { regActions } from '../../reducer/modules/user';
 import { withRouter } from 'react-router';
 import {encodeAes} from '../../common.js'
@@ -95,7 +98,7 @@ class Reg extends Component {
           })(
             <Input
               style={changeHeight}
-              prefix={<Icon type="user" style={{ fontSize: 13 }} />}
+              prefix={<UserOutlined style={{ fontSize: 13 }} />}
               placeholder="Username"
             />
           )}
@@ -114,7 +117,7 @@ class Reg extends Component {
           })(
             <Input
               style={changeHeight}
-              prefix={<Icon type="mail" style={{ fontSize: 13 }} />}
+              prefix={<MailOutlined style={{ fontSize: 13 }} />}
               placeholder="Email"
             />
           )}
@@ -135,7 +138,7 @@ class Reg extends Component {
           })(
             <Input
               style={changeHeight}
-              prefix={<Icon type="lock" style={{ fontSize: 13 }} />}
+              prefix={<LockOutlined style={{ fontSize: 13 }} />}
               type="password"
               placeholder="Password"
             />
@@ -157,7 +160,7 @@ class Reg extends Component {
           })(
             <Input
               style={changeHeight}
-              prefix={<Icon type="lock" style={{ fontSize: 13 }} />}
+              prefix={<LockOutlined style={{ fontSize: 13 }} />}
               type="password"
               placeholder="Confirm Password"
             />

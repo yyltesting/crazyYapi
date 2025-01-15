@@ -1,7 +1,10 @@
 import React, { PureComponent as Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Form, Button, Input, Icon, message, Radio } from 'antd';
+import { LockOutlined, UserOutlined } from '@ant-design/icons';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Button, Input, message, Radio } from 'antd';
 import { loginActions, loginLdapActions } from '../../reducer/modules/user';
 import { withRouter } from 'react-router';
 import {encodeAes} from '../../common.js'
@@ -109,7 +112,7 @@ class Login extends Component {
           {getFieldDecorator('email', { rules: [emailRule] })(
             <Input
               style={changeHeight}
-              prefix={<Icon type="user" style={{ fontSize: 13 }} />}
+              prefix={<UserOutlined style={{ fontSize: 13 }} />}
               placeholder="Email"
             />
           )}
@@ -122,7 +125,7 @@ class Login extends Component {
           })(
             <Input
               style={changeHeight}
-              prefix={<Icon type="lock" style={{ fontSize: 13 }} />}
+              prefix={<LockOutlined style={{ fontSize: 13 }} />}
               type="password"
               placeholder="Password"
             />

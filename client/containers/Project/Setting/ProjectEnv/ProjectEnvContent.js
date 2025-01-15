@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import './index.scss';
-import { Icon, Row, Col, Form, Input, Select, Button, AutoComplete, Tooltip, message } from 'antd';
+import { DeleteOutlined, QuestionCircleOutlined, SaveOutlined, SwapOutlined } from '@ant-design/icons';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Row, Col, Input, Select, Button, AutoComplete, Tooltip, message } from 'antd';
 const FormItem = Form.Item;
 const Option = Select.Option;
 import constants from 'client/constants/variable.js';
@@ -434,14 +437,12 @@ class ProjectEnvContent extends Component {
           </Col>
           <Col span={2} className={index === headerLength ? ' env-last-row' : null}>
             {/* 新增的项中，只有最后一项没有有删除按钮 */}
-            <Icon
+            <DeleteOutlined
               className="dynamic-delete-button delete"
-              type="delete"
               onClick={e => {
                 e.stopPropagation();
                 this.delHeader(index, 'header');
-              }}
-            />
+              }} />
           </Col>
         </Row>
       );
@@ -475,14 +476,12 @@ class ProjectEnvContent extends Component {
           </Col>
           <Col span={2} className={index === length ? ' env-last-row' : null}>
             {/* 新增的项中，只有最后一项没有有删除按钮 */}
-            <Icon
+            <DeleteOutlined
               className="dynamic-delete-button delete"
-              type="delete"
               onClick={e => {
                 e.stopPropagation();
                 this.delHeader(index, name);
-              }}
-            />
+              }} />
           </Col>
         </Row>
       );
@@ -530,14 +529,12 @@ class ProjectEnvContent extends Component {
           </Col>
           <Col span={2} className={index === length ? ' env-last-row' : null}>
             {/* 新增的项中，只有最后一项没有有删除按钮 */}
-            <Icon
+            <DeleteOutlined
               className="dynamic-delete-button delete"
-              type="delete"
               onClick={e => {
                 e.stopPropagation();
                 this.delHeader(index, name);
-              }}
-            />
+              }} />
           </Col>
         </Row>
       );
@@ -643,7 +640,7 @@ class ProjectEnvContent extends Component {
               style={{ marginLeft: 8 }}
             >
               <Tooltip title="点击查看文档">
-                <Icon type="question-circle-o" style={{fontSize: '13px'}}/>
+                <QuestionCircleOutlined style={{fontSize: '13px'}} />
               </Tooltip>
             </a>
           </h3>
@@ -663,7 +660,7 @@ class ProjectEnvContent extends Component {
             <Tooltip title="点击mysql连接，请先保存再操作。。。">
               <Button
                 className="m-btn btn-mysqltest"
-                icon="swap"
+                icon={<SwapOutlined />}
                 type="primary"
                 shape="circle"
                 loading={this.state.mysqlloading}
@@ -682,7 +679,7 @@ class ProjectEnvContent extends Component {
             <Tooltip title="点击redis连接，请先保存再操作。。。">
               <Button
                 className="m-btn btn-redistest"
-                icon="swap"
+                icon={<SwapOutlined />}
                 type="primary"
                 shape="circle"
                 loading={this.state.redisloading}
@@ -701,7 +698,7 @@ class ProjectEnvContent extends Component {
             <Tooltip title="点击ES连接，请先保存再操作。。。">
               <Button
                 className="m-btn btn-estest"
-                icon="swap"
+                icon={<SwapOutlined />}
                 type="primary"
                 shape="circle"
                 loading={this.state.esloading}
@@ -720,7 +717,7 @@ class ProjectEnvContent extends Component {
             <Tooltip title="点击初始化firebase，请先保存再操作。。。">
               <Button
                 className="m-btn btn-firebasetest"
-                icon="swap"
+                icon={<SwapOutlined />}
                 type="primary"
                 shape="circle"
                 loading={this.state.firebaseloading}
@@ -743,7 +740,7 @@ class ProjectEnvContent extends Component {
         <div className="btnwrap-changeproject">
           <Button
             className="m-btn btn-save"
-            icon="save"
+            icon={<SaveOutlined />}
             type="primary"
             size="large"
             onClick={this.handleOk}

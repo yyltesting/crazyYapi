@@ -2,7 +2,8 @@ import './Home.scss';
 import React, { PureComponent as Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { Row, Col, Button, Icon, Card } from 'antd';
+import { ApiOutlined, AppstoreOutlined, DatabaseOutlined, TeamOutlined } from '@ant-design/icons';
+import { Row, Col, Button, Card } from 'antd';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import LogoSVG from '../../components/LogoSVG/index.js';
@@ -75,19 +76,19 @@ const HomeGuest = () => (
         </span>
         <Row key="feat-motion-row">
           <Col span={8} className="section-item" key="feat-wrapper-1">
-            <Icon type="appstore-o" className="img" />
+            <AppstoreOutlined className="img" />
             <h4 className="title">项目管理</h4>
             <span className="desc">提供基本的项目分组，项目管理，接口管理功能</span>
           </Col>
           <Col span={8} className="section-item" key="feat-wrapper-2">
-            <Icon type="api" className="img" />
+            <ApiOutlined className="img" />
             <h4 className="title">接口管理</h4>
             <span className="desc">
               友好的接口文档，基于websocket的多人协作接口编辑功能和类postman测试工具，让多人协作成倍提升开发效率
             </span>
           </Col>
           <Col span={8} className="section-item" key="feat-wrapper-3">
-            <Icon type="database" className="img" />
+            <DatabaseOutlined className="img" />
             <h4 className="title">MockServer</h4>
             <span className="desc">基于Mockjs，使用简单功能强大</span>
           </Col>
@@ -305,7 +306,7 @@ const HomeGuest = () => (
             </Card>
           </Col>
           <Col lg={17} xs={14} className="section-card manage-word">
-            <Icon type="team" className="icon" />
+            <TeamOutlined className="icon" />
             <h3 className="title">扁平化管理模式</h3>
             <p className="desc">
               接口管理的逻辑较为复杂，操作频率高，层层审批将严重拖慢生产效率，因此传统的金字塔管理模式并不适用。

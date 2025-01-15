@@ -1,7 +1,7 @@
 import React, { PureComponent as Component } from 'react';
+import { ArrowDownOutlined, InboxOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import {
   Upload,
-  Icon,
   message,
   Select,
   Tooltip,
@@ -15,7 +15,7 @@ import {
   Col,
   Collapse,
   Row,
-  Table
+  Table,
 } from 'antd';
 import ReactFileReader from "react-file-reader";
 import PropTypes from 'prop-types';
@@ -626,7 +626,7 @@ class ProjectData extends Component {
                     href="/doc/documents/data.html"
                   >
                     <Tooltip title="点击查看文档">
-                      <Icon type="question-circle-o" />
+                      <QuestionCircleOutlined />
                     </Tooltip>
                   </a>
                 </h3>
@@ -687,7 +687,7 @@ class ProjectData extends Component {
                       </div>
                     }
                   >
-                    <Icon type="question-circle-o" />
+                    <QuestionCircleOutlined />
                   </Tooltip>{' '}
                 </span>
                 {this.state.curImportType !== 'Golang' ? (
@@ -709,7 +709,7 @@ class ProjectData extends Component {
                   <span className="label">
                     开启url导入&nbsp;
                     <Tooltip title="swagger url 导入">
-                      <Icon type="question-circle-o" />
+                      <QuestionCircleOutlined />
                     </Tooltip>{' '}
                     &nbsp;&nbsp;
                   </span>
@@ -737,7 +737,7 @@ class ProjectData extends Component {
                   <Spin spinning={this.state.showLoading} tip="上传中...">
                     <Dragger {...uploadMess}>
                       <p className="ant-upload-drag-icon">
-                        <Icon type="inbox" />
+                        <InboxOutlined />
                       </p>
                       <p className="ant-upload-text">点击或者拖拽文件到上传区域</p>
                       <p
@@ -766,7 +766,7 @@ class ProjectData extends Component {
                       />
                     </Tooltip>
                     <Tooltip title='点击获取API路由以及分类'>
-                      <Button className="getApi" type="primary" shape="circle" icon="arrow-down" onClick={this.getApi}/>
+                      <Button className="getApi" type="primary" shape="circle" icon={<ArrowDownOutlined />} onClick={this.getApi}/>
                     </Tooltip>
                   </div>
                   <Select
@@ -855,7 +855,7 @@ class ProjectData extends Component {
                     >
                       添加wiki&nbsp;
                       <Tooltip title="开启后 html 和 markdown 数据导出会带上wiki数据">
-                        <Icon type="question-circle-o" />
+                        <QuestionCircleOutlined />
                       </Tooltip>{' '}
                     </Checkbox>
                   </div>
@@ -878,7 +878,7 @@ class ProjectData extends Component {
                     href="/doc/documents/data.html"
                   >
                     <Tooltip title="点击查看文档">
-                      <Icon type="question-circle-o" />
+                      <QuestionCircleOutlined />
                     </Tooltip>
                   </a>
                 </h3>
@@ -976,7 +976,7 @@ class ProjectData extends Component {
                 <Spin spinning={this.state.showLoading} tip="上传中...">
                   <Dragger {...uploadMessCol}>
                     <p className="ant-upload-drag-icon">
-                      <Icon type="inbox" />
+                      <InboxOutlined />
                     </p>
                     <p className="ant-upload-text">点击或者拖拽文件到上传区域</p>
                     <p

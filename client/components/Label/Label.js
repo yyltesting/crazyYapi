@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Icon, Input, Tooltip } from 'antd';
+import { CheckOutlined, CloseOutlined, EditOutlined } from '@ant-design/icons';
+import { Input, Tooltip } from 'antd';
 import PropTypes from 'prop-types';
 import './Label.scss';
 
@@ -39,22 +40,20 @@ export default class Label extends Component {
                 <p>
                   简介：{this.props.desc} &nbsp;&nbsp;
                   <Tooltip title="编辑简介">
-                    <Icon onClick={this.toggle} className="interface-delete-icon" type="edit" />
+                    <EditOutlined onClick={this.toggle} className="interface-delete-icon" />
                   </Tooltip>
                 </p>
               </div>
             ) : (
               <div className="label-input-wrapper">
                 <Input onChange={this.handleChange} defaultValue={this.props.desc} size="small" />
-                <Icon
+                <CheckOutlined
                   className="interface-delete-icon"
                   onClick={() => {
                     this.props.onChange(this.state.inputValue);
                     this.toggle();
-                  }}
-                  type="check"
-                />
-                <Icon className="interface-delete-icon" onClick={this.toggle} type="close" />
+                  }} />
+                <CloseOutlined className="interface-delete-icon" onClick={this.toggle} />
               </div>
             )}
           </div>

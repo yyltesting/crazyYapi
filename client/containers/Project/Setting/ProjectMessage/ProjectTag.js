@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Icon, Row, Col, Input } from 'antd';
+import { DeleteOutlined } from '@ant-design/icons';
+import { Row, Col, Input } from 'antd';
 import './ProjectTag.scss';
 
 
@@ -90,14 +91,12 @@ class ProjectTag extends Component {
           </Col>
           <Col span={2} className={index === length ? ' tag-last-row' : null}>
             {/* 新增的项中，只有最后一项没有有删除按钮 */}
-            <Icon
+            <DeleteOutlined
               className="dynamic-delete-button delete"
-              type="delete"
               onClick={e => {
                 e.stopPropagation();
                 this.delHeader(index, name);
-              }}
-            />
+              }} />
           </Col>
         </Row>
       );

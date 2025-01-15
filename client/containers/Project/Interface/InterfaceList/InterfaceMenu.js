@@ -13,7 +13,18 @@ import {
 } from '../../../../reducer/modules/interface.js';
 import {fetchProjectList, getProject} from '../../../../reducer/modules/project.js';
 import MoveInterface from './MoveInterface';
-import {Button, Icon, Input, message, Modal, Tooltip, Tree} from 'antd';
+
+import {
+  CopyOutlined,
+  DeleteOutlined,
+  EditOutlined,
+  FolderOpenOutlined,
+  FolderOutlined,
+  PlusOutlined,
+  ScanOutlined,
+} from '@ant-design/icons';
+
+import { Button, Input, message, Modal, Tooltip, Tree } from 'antd';
 import AddInterfaceForm from './AddInterfaceForm';
 import AddInterfaceCatForm from './AddInterfaceCatForm';
 import axios from 'axios';
@@ -688,24 +699,21 @@ class InterfaceMenu extends Component {
                 className="interface-item"
                 to={'/project/' + matchParams.id + '/interface/api/cat_' + item._id}
               >
-                <Icon type="folder-open" style={{marginRight: 5}}/>
+                <FolderOpenOutlined style={{marginRight: 5}} />
                 {item.title}
               </Link>
               <div className="btns">
                 <Tooltip title="删除分类">
-                  <Icon
-                    type="delete"
+                  <DeleteOutlined
                     className="interface-delete-icon"
                     onClick={e => {
                       e.stopPropagation();
                       this.showDelCatConfirm(item._id);
                     }}
-                    style={{display: this.state.delIcon == item._id ? 'block' : 'none'}}
-                  />
+                    style={{display: this.state.delIcon == item._id ? 'block' : 'none'}} />
                 </Tooltip>
                 <Tooltip title="添加子分类">
-                  <Icon
-                    type="plus"
+                  <PlusOutlined
                     className="interface-delete-icon"
                     style={{display: this.state.delIcon == item._id ? 'block' : 'none'}}
                     onClick={e => {
@@ -715,12 +723,10 @@ class InterfaceMenu extends Component {
                       this.setState({
                         curCatdata: item
                       });
-                    }}
-                  />
+                    }} />
                 </Tooltip>
                 <Tooltip title="修改分类">
-                  <Icon
-                    type="edit"
+                  <EditOutlined
                     className="interface-delete-icon"
                     style={{display: this.state.delIcon == item._id ? 'block' : 'none'}}
                     onClick={e => {
@@ -730,12 +736,10 @@ class InterfaceMenu extends Component {
                       this.setState({
                         curCatdata: item
                       });
-                    }}
-                  />
+                    }} />
                 </Tooltip>
                 <Tooltip title="添加接口">
-                  <Icon
-                    type="plus"
+                  <PlusOutlined
                     className="interface-delete-icon"
                     style={{display: this.state.delIcon == item._id ? 'block' : 'none'}}
                     onClick={e => {
@@ -744,8 +748,7 @@ class InterfaceMenu extends Component {
                       this.setState({
                         curCatid: item._id
                       });
-                    }}
-                  />
+                    }} />
                 </Tooltip>
               </div>
 
@@ -759,7 +762,7 @@ class InterfaceMenu extends Component {
           {item.children ? item.children.filter(me => (me.in === true || typeof me.in === "undefined")).map(itemCatCreate) : ''}
           {item.list.map(itemInterfaceCreate)}
         </TreeNode>
-      )
+      );
 
     };
 
@@ -782,37 +785,31 @@ class InterfaceMenu extends Component {
               </Link>
               <div className="btns">
                 <Tooltip title="删除接口">
-                  <Icon
-                    type="delete"
+                  <DeleteOutlined
                     className="interface-delete-icon"
                     onClick={e => {
                       e.stopPropagation();
                       this.showConfirm(item);
                     }}
-                    style={{display: this.state.delIcon == item._id ? 'block' : 'none'}}
-                  />
+                    style={{display: this.state.delIcon == item._id ? 'block' : 'none'}} />
                 </Tooltip>
                 <Tooltip title="复制接口">
-                  <Icon
-                    type="copy"
+                  <CopyOutlined
                     className="interface-delete-icon"
                     onClick={e => {
                       e.stopPropagation();
                       this.copyInterface(item._id);
                     }}
-                    style={{display: this.state.delIcon == item._id ? 'block' : 'none'}}
-                  />
+                    style={{display: this.state.delIcon == item._id ? 'block' : 'none'}} />
                 </Tooltip>
                 <Tooltip title="移动接口">
-                  <Icon
-                    type="scan"
+                  <ScanOutlined
                     className="interface-delete-icon"
                     onClick={e => {
                       e.stopPropagation();
                       this.showMoveInterfaceModal(item._id);
                     }}
-                    style={{display: this.state.delIcon == item._id ? 'block' : 'none'}}
-                  />
+                    style={{display: this.state.delIcon == item._id ? 'block' : 'none'}} />
                 </Tooltip>
               </div>
               {/*<Dropdown overlay={menu(item)} trigger={['click']} onClick={e => e.stopPropagation()}>
@@ -822,7 +819,6 @@ class InterfaceMenu extends Component {
           }
           key={'' + item._id}
         />
-
       );
     };
 
@@ -854,7 +850,7 @@ class InterfaceMenu extends Component {
                   <Link
                     to={'/project/' + matchParams.id + '/interface/api'}
                   >
-                    <Icon type="folder" style={{marginRight: 5}}/>
+                    <FolderOutlined style={{marginRight: 5}} />
                     全部接口
                   </Link>
                 }
@@ -879,8 +875,6 @@ class InterfaceMenu extends Component {
           />
         </Modal>
       </div>
-
-
     );
   }
 }

@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Form, Switch, Button, Icon, Tooltip, message } from 'antd';
+import { QuestionCircleOutlined } from '@ant-design/icons';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Switch, Button, Tooltip, message } from 'antd';
 import AceEditor from '../../../../components/AceEditor/AceEditor';
 const FormItem = Form.Item;
 import { updateProjectMock, getProject } from '../../../../reducer/modules/project';
@@ -103,7 +106,7 @@ export default class ProjectMock extends Component {
                   href="https://yapi.ymfe.org/documents/project.html#%E5%85%A8%E5%B1%80mock"
                 >
                   <Tooltip title="点击查看文档">
-                    <Icon type="question-circle-o" />
+                    <QuestionCircleOutlined />
                   </Tooltip>
                 </a>
               </span>

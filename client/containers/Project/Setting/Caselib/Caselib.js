@@ -5,7 +5,8 @@ import {connect} from 'react-redux';
 import * as XLSX from 'xlsx';
 import axios from 'axios';
 import ExcelJs from "exceljs";
-import {message,Modal,Table,Button,Upload,Select,Icon,Layout,Tooltip,Input} from 'antd';
+import { CopyOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { message, Modal, Table, Button, Upload, Select, Layout, Tooltip, Input } from 'antd';
 import './Caselib.scss';
 import Addcase from '../../Interface/InterfaceList/Addcase.js';
 const { Dragger } = Upload;
@@ -753,25 +754,19 @@ render() {
         return (
           // <Button style={{marginLeft: '25px'}} onClick={this.Openexl} className='openlib' type='primary' >用例库</Button>
           <span className='options'>
-            <Icon
-              type="edit"
+            <EditOutlined
               className="interface-edit-icon"
               style={{display:'block',float: 'left',marginRight:'20px'}}
-              onClick={()=>this.Openeditcase(id,record)}
-            />
-            <Icon
-              type="delete"
+              onClick={()=>this.Openeditcase(id,record)} />
+            <DeleteOutlined
               className="interface-delete-icon"
               style={{display:'block',float: 'left',marginRight:'20px'}}
-              onClick={() => this.Deletecase(id)}
-            />
+              onClick={() => this.Deletecase(id)} />
             <Tooltip title="克隆用例">
-              <Icon
-                type="copy"
+              <CopyOutlined
                 className="interface-copy-icon"
                 onClick={()=>this.Copycase(record)}
-                style={{ display: 'block' ,float: 'left',marginRight:'20px'}}
-              />
+                style={{ display: 'block' ,float: 'left',marginRight:'20px'}} />
             </Tooltip>
           </span>
         );
