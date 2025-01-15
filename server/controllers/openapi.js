@@ -1,6 +1,6 @@
 const baseController = require('./base.js');
 const caselibModel = require('../models/caselib.js');
-const caseModel = require('../models/interfaceCase.js')
+const caseModel = require('../models/interfaceCase.js');
 const yapi = require('../yapi.js');
 const OpenAI = require('openai');
 
@@ -64,8 +64,9 @@ class openaiController extends baseController {
             let result = await this.openai.chat.completions.create({
                 model: this.openai.model,
                 store: true,
-                temperature:0.5,//生成结果随机性
-                top_p:0.8,//随机性概率，前80%
+                temperature:0.3,//生成结果随机性
+                top_p:1,//随机性概率，前80%
+                max_tokens:4000,
                 response_format: { type: "json_object" },
                 messages: [
                     {"role": "system", "content": prompt},
@@ -73,6 +74,34 @@ class openaiController extends baseController {
                 ],
             });
             let rawContent = result.choices[0].message.content.trim();
+            let rawContentdata = yapi.commons.safeParse(rawContent);
+            if(!rawContentdata.success){
+                return ctx.body = yapi.commons.resReturn(null, 402, '请分批生成');
+            }
+            // let isEnd = false;
+            // while(!isEnd){
+            //     let rawContentdata = yapi.commons.safeParse(rawContent);
+            //     if(!rawContentdata.success){
+            //         let resultaddContent = await this.openai.chat.completions.create({
+            //             model: this.openai.model,
+            //             store: true,
+            //             temperature:0.3,//生成结果随机性
+            //             top_p:1,//随机性概率，前80%
+            //             max_tokens:4000,
+            //             response_format: { type: "json_object" },
+            //             messages: [
+            //                 {"role": "system", "content": prompt},
+            //                 {"role": "user", "content": "接着上一次的内容，继续生成测试用例。"}
+            //             ],
+            //         });
+            //         rawContent = rawContent + resultaddContent.choices[0].message.content.trim();
+            //         console.log(rawContent)
+            //     }else{
+            //         // let casedata = yapi.commons.safeParse(JSON.parse(rawContent).test_cases);
+            //         isEnd =true;
+            //         console.log('生成完成。。。')
+            //     }
+            // }
             // 转换为JSON对象
             let casedata = JSON.parse(rawContent).test_cases;
             if(casedata&&casedata.length>0){
@@ -156,7 +185,8 @@ class openaiController extends baseController {
         下面我会给你接口参数模板后请输出测试用例,测试用例以json的方式给我。用例的要求：
         1. 根据入参条件生成多个用例，主要从等价类、边界值、判定表等用例设计方法进行设计,包含正确入参错误入参等
         2. 生成的主key名为test_cases，每个用例的名称key为case且为中文,参数的key为parameters
-        3. 输出前请检查格式要求和内容要求是否满足。`;
+        3. 生成的用例名称尽量详细一点
+        4. 输出前请检查格式要求和内容要求是否满足。`;
         let message;
         switch (params.req_body_type)
         {
@@ -174,8 +204,9 @@ class openaiController extends baseController {
             let result = await this.openai.chat.completions.create({
                 model: this.openai.model,
                 store: true,
-                temperature:0.5,//生成结果随机性
-                top_p:0.8,//随机性概率，前80%
+                temperature:0.3,//生成结果随机性
+                top_p:1,//随机性概率，前80%
+                max_tokens:4000,
                 response_format: { type: "json_object" },
                 messages: [
                     {"role": "system", "content": prompt},
@@ -184,6 +215,10 @@ class openaiController extends baseController {
                 ],
             });
             let rawContent = result.choices[0].message.content.trim();
+            let rawContentdata = yapi.commons.safeParse(rawContent);
+            if(!rawContentdata.success){
+                return ctx.body = yapi.commons.resReturn(null, 402, '请分批生成');
+            }
             // 转换为JSON对象
             let casedata = JSON.parse(rawContent).test_cases;
             if(casedata&&casedata.length>0){

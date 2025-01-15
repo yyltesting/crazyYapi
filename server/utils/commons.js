@@ -60,6 +60,33 @@ const defaultOptions = {
 // 以2MB的大小分片文件
 // const filePath = 'your_file_path'; // 本地文件路径
 // const chunkSize = 2 * 1024 * 1024; // 分片大小，2MB
+//判断对象的所有值是否为空
+exports.isAnyValueEmpty=function(obj) {
+  for (const key in obj) {
+      if (obj[key] === null || obj[key] === undefined || obj[key] === '') {
+          return true; // 存在空值
+      }
+  }
+  return false; // 所有值都不为空
+}
+//判断字符串转为数组对象是否被截断
+exports.safeParse=function(rawContent) {
+  try {
+    // 尝试解析
+    const json = JSON.parse(rawContent);
+    return { success: true, data: json };
+} catch (error) {
+    console.error("JSON parsing error:", error.message);
+    // 判断是否可能是截断问题
+    if (rawContent.trim().endsWith("}") || rawContent.trim().endsWith("]")) {
+        console.error("JSON 可能存在语法错误，但不一定是截断");
+    } else {
+        console.error("JSON 可能被截断");
+    }
+
+    return { success: false, data: rawContent, error: "Parsing failed" };
+}
+}
 exports.splitFile = function(filePath, chunkSize) {
   const buffer = Buffer.alloc(chunkSize);
   let bytesRead = 0;
