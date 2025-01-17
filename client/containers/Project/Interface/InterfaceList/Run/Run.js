@@ -116,7 +116,7 @@ export default class Run extends Component {
     data.path = currProject.basepath + currInterface.path;
     return (
       <div>
-        <div style={{marginLeft:'10px'}}>
+        <div style={{marginLeft:'10px',marginTop:'10px'}}>
           <Tooltip title ="AI生成用例">      
             <Button type="primary"   onClick={this.aiCreatCase}>生成用例</Button>
           </Tooltip> 

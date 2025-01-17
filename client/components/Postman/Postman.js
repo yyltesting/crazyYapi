@@ -1299,13 +1299,13 @@ export default class Run extends Component {
         </div>
         {this.props.type === 'case' ? (
           <div className="case-setting">
-            <Row className="setting-case">
-              <Col className="setting-case" span={4} style={{ width: '10%'}}>
+            <Row className="setting-case" gutter={10}>
+              <Col className="setting-case"  style={{ width: '12%'}}>
                 <label>是否禁用用例:&nbsp;<Tooltip title={'更新后禁用该用例'} >
                   <QuestionCircleOutlined style={{ width: '10px'}} />
                 </Tooltip></label>
               </Col>
-              <Col className="setting-case"  span={18}>
+              <Col className="setting-case" >
                 <Switch onChange={e=>{
                   let {disable} = this.state.disable;
                     this.setState({
@@ -1320,13 +1320,13 @@ export default class Run extends Component {
 
         {this.props.type === 'case' ? (
           <div className="case-setting">
-            <Row className="setting-case-relation">
-              <Col className="setting-case-relation" span={4} style={{ width: '10%'}}>
+            <Row className="setting-case-relation" gutter={10}>
+              <Col className="setting-case-relation" style={{ width: '12%'}}>
                 <label>关联用例库KEY:&nbsp;<Tooltip title={'更新后关联该用例'} >
                   <QuestionCircleOutlined style={{ width: '10px'}} />
                 </Tooltip></label>
               </Col>
-              <Col className="setting-case-relation"  span={18}>
+              <Col className="setting-case-relation" >
                 <Input  
                   onChange={this.relationcase} 
                   value={this.state.testcaseid} 
@@ -1633,7 +1633,7 @@ export default class Run extends Component {
               >
                 {this.state.resStatusCode + '  ' + this.state.resStatusText}
               </h2>
-              <div>
+              <div style={{ margin: '10px' }}>
                 请通过按键【F12】/【插件】 进入开发者工具，在console中查看原始请求数据和响应
               </div>
               <div className='container'>

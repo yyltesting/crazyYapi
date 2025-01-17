@@ -16,6 +16,12 @@
     //   padding: 0 5px;
     //   width: auto !important;
     // }
+    .ant-tree-switcher{
+      display: flex;
+      align-items: center; /* 垂直居中 */
+      justify-content: center;
+      // line-height: normal;
+    }
     .cat_switch_hidden {
       .ant-tree-switcher {
         visibility: hidden;

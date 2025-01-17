@@ -171,7 +171,7 @@ class Content extends Component {
       >
         {Object.keys(InterfaceTabs).map(key => {
           let item = InterfaceTabs[key];
-          return <TabPane tab={item.name} key={key} />;
+          return <TabPane tab={item.name} key={key}/>;
         })}
       </Tabs>
     );
@@ -192,23 +192,21 @@ class Content extends Component {
         />
         {tabs}
         {tabContent}
-        {this.state.visible && (
-          <Modal
-            title="你即将离开编辑页面"
-            visible={this.state.visible}
-            onCancel={this.handleCancel}
-            footer={[
-              <Button key="back" onClick={this.handleCancel}>
-                取 消
-              </Button>,
-              <Button key="submit" onClick={this.handleOk}>
-                确 定
-              </Button>
-            ]}
-          >
-            <p>离开页面会丢失当前编辑的内容，确定要离开吗？</p>
-          </Modal>
-        )}
+        <Modal
+          title="你即将离开编辑页面"
+          open={this.state.visible}
+          onCancel={this.handleCancel}
+          footer={[
+            <Button key="back" onClick={this.handleCancel}>
+              取 消
+            </Button>,
+            <Button key="submit" onClick={this.handleOk}>
+              确 定
+            </Button>
+          ]}
+        >
+          <p>离开页面会丢失当前编辑的内容，确定要离开吗？</p>
+        </Modal>
       </div>
     );
   }

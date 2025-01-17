@@ -51,17 +51,27 @@
     min-height: 300px;
     margin: 10px;
   }
-
+  .key-script{
+    min-height: 30px;
+    margin: 10px;
+  }
   .response-tab{    
     margin-top: 20px;
     margin-bottom: 20px;
     .ant-tabs-nav{
+      display: flex;
+      justify-content: space-between;
       background: #f7f7f7;
       border-radius: 0 0 4px 4px;      
       border: 1px solid #d9d9d9;
       width: 100%;
     }
-
+    .ant-tabs-tab {
+      margin: 0; /* 移除默认间距 */
+      text-align: center;
+      width: 100px;
+      // margin-bottom: 10px;
+    }
     .header, .body{
       padding-left: 10px;
       margin-bottom: 10px;
@@ -155,12 +165,12 @@
     display: flex;
     align-items: center;
     margin: 0 0 5px 0;
+    height: 46px;
     .key {
+      height: 46px;
       flex-basis: 220px;
-      height: 100%;
     }
     .value {
-      height: 100%;
       flex-grow: 1;
     }
     .eq-symbol {

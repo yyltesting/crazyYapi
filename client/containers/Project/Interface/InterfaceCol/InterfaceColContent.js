@@ -2631,7 +2631,7 @@ executeTestsloop = async () => {
                     <Tooltip title={'服务端日志关联env'}>
                       <QuestionCircleOutlined
                         style={{
-                          width: '10px'
+                          width: '15px'
                         }} />
                     </Tooltip>
                     &nbsp;：
@@ -2651,7 +2651,7 @@ executeTestsloop = async () => {
                     <Tooltip title={'服务端日志服务名'}>
                       <QuestionCircleOutlined
                         style={{
-                          width: '10px'
+                          width: '15px'
                         }} />
                     </Tooltip>
                     &nbsp;：

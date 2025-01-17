@@ -6,7 +6,7 @@
 * nodejs（v18以上，推荐18.20.5）
 * mongodb（2.6+）  https://docs.mongodb.com/manual/tutorial/install-mongodb-on-red-hat/
 * git
-* webpack webpack-server webpack-cli -g全局（开发需要）
+* webpack webpack-dev-server webpack-cli -g全局（开发需要）
 * ydoc （开发需要）
 * chrome  开启跨域 设置教程见：http://crazy-yapi.camdy.cn/doc/documents/chromeCORS.html
 
