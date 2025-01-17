@@ -1044,13 +1044,11 @@ class InterfaceEditForm extends Component {
           </Tooltip>  
           <div className="panel-sub">
             <FormItem className={'interface-edit-item ' + this.state.hideTabs.req.query}>
-              <Row type="flex" justify="space-around">
-                <Col span={12}>
+              <Row justify="space-around" gutter={[16,16]}>
+                <Col span={24}>
                   <Button size="small" type="primary" onClick={() => this.addParams('req_query')}>
                     添加Query参数
                   </Button>
-                </Col>
-                <Col span={12}>
                   <div className="bulk-import" onClick={() => this.showBulk('req_query')}>
                     批量添加
                   </div>
@@ -1058,8 +1056,8 @@ class InterfaceEditForm extends Component {
               </Row>
             </FormItem>
 
-            <Row className={'interface-edit-item ' + this.state.hideTabs.req.query}>
-              <Col>
+            <Row className={'interface-edit-item ' + this.state.hideTabs.req.query} gutter={[16,16]}>
+              <Col span={24}>
                 <EasyDragSort
                   data={() => this.props.form.getFieldValue('req_query')}
                   onChange={this.handleDragMove('req_query')}
@@ -1087,8 +1085,8 @@ class InterfaceEditForm extends Component {
               </Tooltip>
             </FormItem>
 
-            <Row className={'interface-edit-item ' + this.state.hideTabs.req.headers}>
-              <Col>
+            <Row className={'interface-edit-item ' + this.state.hideTabs.req.headers} gutter={[16,16]}>
+              <Col span={24}>
                 <EasyDragSort
                   data={() => this.props.form.getFieldValue('req_headers')}
                   onChange={this.handleDragMove('req_headers')}
@@ -1120,8 +1118,9 @@ class InterfaceEditForm extends Component {
                       ? this.state.hideTabs.req.body
                       : 'hide')
                   }
+                  gutter={[16, 16]}
                 >
-                  <Col style={{ minHeight: '50px' }}>
+                  <Col style={{ minHeight: '50px' }} span={24}>
                     <Row type="flex" justify="space-around">
                       <Col span={12} className="interface-edit-item">
                         <Button
@@ -1138,6 +1137,8 @@ class InterfaceEditForm extends Component {
                         </div>
                       </Col>
                     </Row>
+                  </Col>
+                  <Col span={24}>
                     <EasyDragSort
                       data={() => this.props.form.getFieldValue('req_body_form')}
                       onChange={this.handleDragMove('req_body_form')}
@@ -1157,26 +1158,29 @@ class InterfaceEditForm extends Component {
                   ? this.state.hideTabs.req.body
                   : 'hide')
               }
+              gutter={[16, 16]}
             >
-              <span>
-                JSON-SCHEMA:&nbsp;
-                {!projectMsg.is_json5 && (
-                  <Tooltip title="项目 -> 设置 开启 json5">
-                    <QuestionCircleOutlined />{' '}
-                  </Tooltip>
-                )}
-              </span>
-              {getFieldDecorator('req_body_is_json_schema', {
-                valuePropName: 'checked',
-                initialValue: this.state.req_body_is_json_schema || !projectMsg.is_json5
-              })(
-                <Switch
-                  checkedChildren="开"
-                  unCheckedChildren="关"
-                  disabled={!projectMsg.is_json5}
-                />
-              )}   
-              <Col style={{ marginTop: '5px' }} className="interface-edit-json-info">
+              <Col span={24}>
+                <span>
+                  JSON-SCHEMA:&nbsp;
+                  {!projectMsg.is_json5 && (
+                    <Tooltip title="项目 -> 设置 开启 json5">
+                      <QuestionCircleOutlined />{' '}
+                    </Tooltip>
+                  )}
+                </span>
+                {getFieldDecorator('req_body_is_json_schema', {
+                  valuePropName: 'checked',
+                  initialValue: this.state.req_body_is_json_schema || !projectMsg.is_json5
+                })(
+                  <Switch
+                    checkedChildren="开"
+                    unCheckedChildren="关"
+                    disabled={!projectMsg.is_json5}
+                  />
+                )}   
+              </Col>
+              <Col className="interface-edit-json-info" span={24}>
                 {!this.props.form.getFieldValue('req_body_is_json_schema') ? (
                   <span>
                     基于 Json5, 参数描述信息用注释的方式实现{' '}
@@ -1201,7 +1205,7 @@ class InterfaceEditForm extends Component {
                   />
                 )}
               </Col>
-              <Col>
+              <Col span={24}>
                 {!this.props.form.getFieldValue('req_body_is_json_schema') && (
                   <AceEditor
                     className="interface-editor"
@@ -1215,8 +1219,8 @@ class InterfaceEditForm extends Component {
 
             {this.props.form.getFieldValue('req_body_type') === 'file' &&
             this.state.hideTabs.req.body !== 'hide' ? (
-              <Row className="interface-edit-item">
-                <Col className="interface-edit-item-other-body">
+              <Row className="interface-edit-item" gutter={[16, 16]}>
+                <Col className="interface-edit-item-other-body" span={24}>
                   {getFieldDecorator('req_body_other', {
                     initialValue: this.state.req_body_other
                   })(<TextArea placeholder="" autoSize={true} />)}
@@ -1225,8 +1229,8 @@ class InterfaceEditForm extends Component {
             ) : null}
             {this.props.form.getFieldValue('req_body_type') === 'raw' &&
             this.state.hideTabs.req.body !== 'hide' ? (
-              <Row>
-                <Col>
+              <Row gutter={[16,16]}>
+                <Col span={24}>
                   {getFieldDecorator('req_body_other', {
                     initialValue: this.state.req_body_other
                   })(<TextArea placeholder="" autoSize={{ minRows: 8 }} />)}

@@ -2271,7 +2271,7 @@ executeTestsloop = async () => {
         >
           <Collapse bordered={true} style={{ width: '80%', margin: '20px auto' }}>
             {this.state.currCaseList.map(item => (
-              <Panel header={`${item.title} ${item._id}`} key={item._id}>
+              <Panel header={`${item.casename} ${item._id}`} key={item._id}>
                 <div className="project-request">
                   <Form>
                     {item.req_body_type=='json'&&(
@@ -2475,7 +2475,7 @@ executeTestsloop = async () => {
             className="autoTestsModal"
             footer={null}
           >
-            <Row type="flex" justify="space-around" className="row" align="top">
+            <Row justify="space-around" className="row" align="top">
               <Col span={3} className="label" style={{ paddingTop: '16px' }}>
                 选择环境
                 <Tooltip title="默认使用测试用例选择的环境">
@@ -2493,118 +2493,120 @@ executeTestsloop = async () => {
                 />
               </Col>
             </Row>
-            <Row type="flex" justify="space-around" className="row" align="middle">
-              <Col span={3} style={{ width: '70px'}}>
-                输出格式：
-              </Col>
-              <Col span={3} style={{ width: '70px' }}>
-                <Select value={this.state.mode} onChange={this.modeChange}>
-                  <Option key="html" value="html">
-                    html
-                  </Option>
-                  <Option key="json" value="json">
-                    json
-                  </Option>
-                </Select>
-              </Col>
+            <Row justify="start" className="row" align="middle" style={{ paddingTop: '16px' }}>
+              <Col>
+                <Col span={3}>
+                  输出格式：
+                </Col>
+                <Col span={3}>
+                  <Select value={this.state.mode} onChange={this.modeChange}>
+                    <Option key="html" value="html">
+                      html
+                    </Option>
+                    <Option key="json" value="json">
+                      json
+                    </Option>
+                  </Select>
+                </Col>
 
-              <Col span={3} style={{ width: '90px'}}>
-                邮件通知
-                <Tooltip title={'测试不通过时，会给项目组成员发送邮件'}>
-                  <QuestionCircleOutlined
-                    style={{
-                      width: '10px'
-                    }} />
-                </Tooltip>
-                &nbsp;：
-              </Col>
-              <Col span={3} style={{ width: '45px'}}>
-                <Switch
-                  checked={this.state.email}
-                  checkedChildren="开"
-                  unCheckedChildren="关"
-                  onChange={this.emailChange}
-                />
-              </Col>
+                <Col span={3}>
+                  邮件通知
+                  <Tooltip title={'测试不通过时，会给项目组成员发送邮件'}>
+                    <QuestionCircleOutlined
+                      style={{
+                        width: '10px'
+                      }} />
+                  </Tooltip>
+                  &nbsp;：
+                </Col>
+                <Col span={3}>
+                  <Switch
+                    checked={this.state.email}
+                    checkedChildren="开"
+                    unCheckedChildren="关"
+                    onChange={this.emailChange}
+                  />
+                </Col>
 
-              <Col span={3} style={{ width: '90px' }}>
-                下载数据
-                <Tooltip title={'开启后，测试数据将被下载到本地'}>
-                  <QuestionCircleOutlined
-                    style={{
-                      width: '10px'
-                    }} />
-                </Tooltip>
-                &nbsp;：
-              </Col>
-              <Col span={3} style={{ width: '45px'}}>
-                <Switch
-                  checked={this.state.download}
-                  checkedChildren="开"
-                  unCheckedChildren="关"
-                  onChange={this.downloadChange}
-                />
-              </Col>
-              <Col span={3} style={{ width: '90px'}}>
-                含子集合
-                <Tooltip title={'开启后，将同时执行子集合所有用例'}>
-                  <QuestionCircleOutlined
-                    style={{
-                      width: '10px'
-                    }} />
-                </Tooltip>
-                &nbsp;：
-              </Col>
-              <Col span={3} style={{ width: '45px' }}>
-                <Switch
-                  checked={this.state.descendants}
-                  data-allchilds={allChilds}
-                  checkedChildren="开"
-                  unCheckedChildren="关"
-                  onChange={this.descendants}
-                />
-              </Col>
-              
-              <Col span={3} style={{ width: '100px'}}>
-                子集合驱动
-                <Tooltip title={'开启后，请求配置将调用子集合配置'}>
-                  <QuestionCircleOutlined
-                    style={{
-                      width: '10px'
-                    }} />
-                </Tooltip>
-                &nbsp;：
-              </Col>
-              <Col span={3} style={{ width: '45px'}}>
-                <Switch
-                  checked={this.state.subset}
-                  checkedChildren="开"
-                  unCheckedChildren="关"
-                  onChange={this.subsetChange}
-                />
-              </Col>
+                <Col span={3}>
+                  下载数据
+                  <Tooltip title={'开启后，测试数据将被下载到本地'}>
+                    <QuestionCircleOutlined
+                      style={{
+                        width: '10px'
+                      }} />
+                  </Tooltip>
+                  &nbsp;：
+                </Col>
+                <Col span={3}>
+                  <Switch
+                    checked={this.state.download}
+                    checkedChildren="开"
+                    unCheckedChildren="关"
+                    onChange={this.downloadChange}
+                  />
+                </Col>
+                <Col span={3}>
+                  含子集合
+                  <Tooltip title={'开启后，将同时执行子集合所有用例'}>
+                    <QuestionCircleOutlined
+                      style={{
+                        width: '10px'
+                      }} />
+                  </Tooltip>
+                  &nbsp;：
+                </Col>
+                <Col span={3}>
+                  <Switch
+                    checked={this.state.descendants}
+                    data-allchilds={allChilds}
+                    checkedChildren="开"
+                    unCheckedChildren="关"
+                    onChange={this.descendants}
+                  />
+                </Col>
+                
+                <Col span={3}>
+                  子集合驱动
+                  <Tooltip title={'开启后，请求配置将调用子集合配置'}>
+                    <QuestionCircleOutlined
+                      style={{
+                        width: '10px'
+                      }} />
+                  </Tooltip>
+                  &nbsp;：
+                </Col>
+                <Col span={3}>
+                  <Switch
+                    checked={this.state.subset}
+                    checkedChildren="开"
+                    unCheckedChildren="关"
+                    onChange={this.subsetChange}
+                  />
+                </Col>
 
-              <Col span={3} style={{ width: '100px'}}>
-                失败中断
-                <Tooltip title={'开启后，失败将停止运行'}>
-                  <QuestionCircleOutlined
-                    style={{
-                      width: '10px'
-                    }} />
-                </Tooltip>
-                &nbsp;：
-              </Col>
-              <Col span={3} style={{ width: '45px'}}>
-                <Switch
-                  checked={this.state.failedinterrupt}
-                  checkedChildren="开"
-                  unCheckedChildren="关"
-                  onChange={this.Failedinterrupt}
-                />
+                <Col span={3}>
+                  失败中断
+                  <Tooltip title={'开启后，失败将停止运行'}>
+                    <QuestionCircleOutlined
+                      style={{
+                        width: '10px'
+                      }} />
+                  </Tooltip>
+                  &nbsp;：
+                </Col>
+                <Col span={3}>
+                  <Switch
+                    checked={this.state.failedinterrupt}
+                    checkedChildren="开"
+                    unCheckedChildren="关"
+                    onChange={this.Failedinterrupt}
+                  />
+                </Col>
               </Col>
             </Row>
-            <Row>
-              <Col span={3} style={{ width: '100px'}}>
+            <Row justify="start" className="row" align="middle" style={{ paddingTop: '16px' }}>
+              <Col span={3}>
                 服务端日志
                 <Tooltip title={'开启后，运行后会打开日志记录'}>
                   <QuestionCircleOutlined
@@ -2614,7 +2616,7 @@ executeTestsloop = async () => {
                 </Tooltip>
                 &nbsp;：
               </Col>
-              <Col span={3} style={{ width: '45px'}}>
+              <Col span={3}>
                 <Switch
                   checked={this.state.serverlog}
                   checkedChildren="开"

@@ -1,4 +1,71 @@
 .tree-wrappper{
   min-height: 500px;
   overflow-y: scroll;
+  scroll-behavior: smooth;
+  .interface-list { 
+    display: flex;
+    width: 100%;  
+    // line-height: 25px;
+    .ant-tree-node-content-wrapper {
+      width: calc(100% - 28px);
+    }
+    // .btn-http {
+    //   height: 23px;
+    //   font-size: 10px;
+    //   margin-right: 7px;
+    //   padding: 0 5px;
+    //   width: auto !important;
+    // }
+    .cat_switch_hidden {
+      .ant-tree-switcher {
+        visibility: hidden;
+      }
+    }
+    a {
+      color: rgba(13, 27, 62, 0.65);
+    }
+    .container{
+      width: 100%;
+      height: 40px;
+      display: flex;
+      justify-content: space-between;
+      overflow: hidden;
+      gap: 5px;                   // 设置按钮之间的间距
+      .btns {
+        display: flex;              // 确保按钮区域正确布局
+        align-items: center;        // 垂直居中按钮
+        // display: none;
+        .interface-icon {
+          display: none;
+        }
+        .interfacecat-icon {
+          display: none;
+        }
+      }
+    }
+  
+    .container:hover {
+      width: 100%;
+      height: 40px;
+      display: flex;
+      justify-content: space-between;
+      overflow: hidden; 
+      .btns {
+        display: flex;
+        align-items: center;        // 垂直居中按钮
+        gap: 5px; 
+        color: #2395f1;
+        // display: block;
+        .interface-icon {
+          display: block;
+        }
+        .interfacecat-icon {
+          display: block;
+        }
+      }
+    }
+    .item-all-interface{
+      width: 100%;
+    }
+  }
 }

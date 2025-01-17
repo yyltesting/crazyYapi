@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { Layout, Timeline, Icon, Spin, Row, Button, Popconfirm, message } from "antd";
+import { ClockCircleOutlined, DeleteOutlined, ReloadOutlined } from '@ant-design/icons';
+import { Layout, Timeline, Spin, Row, Button, Popconfirm, message } from "antd";
 const { Content } = Layout;
 import axios from 'axios';
 import { formatTime } from 'client/common.js';
@@ -65,7 +66,7 @@ export default class Result extends Component {
       let color = item.status === "成功" ? "green" : "red";
       let names = item.col_names.length > 3 ? item.col_names.slice(0, 3).join(", ") + "等" : item.col_names.join(", ");
       return (
-        <Timeline.Item key={index} color={color} dot={<Icon type="clock-circle-o" style={{ fontSize: '16px' }} />}>
+        <Timeline.Item key={index} color={color} dot={<ClockCircleOutlined style={{ fontSize: '16px' }} />}>
           {formatTime(item.add_time)}
           <p>{`成功执行包括${names}在内的用例，${item.data.message.msg}。任务执行总计${item.data.runTime}。查看`}<a target="_blank" href={"/api/open/plugin/test/result?id=" + item._id}>
             详细测试报告
@@ -83,7 +84,7 @@ export default class Result extends Component {
                       minHeight: 280
                     }}>
           <Row className="operations">
-            <Button type="primary" icon="reload" size="small" onClick={this.freshResult}>
+            <Button type="primary" icon={<ReloadOutlined />} size="small" onClick={this.freshResult}>
               刷新
             </Button>
             <Popconfirm
@@ -95,7 +96,7 @@ export default class Result extends Component {
               okText="确定"
               cancelText="取消"
             >
-              <Button type="primary" icon="delete" size="small">
+              <Button type="primary" icon={<DeleteOutlined />} size="small">
               清空
               </Button>
             </Popconfirm>

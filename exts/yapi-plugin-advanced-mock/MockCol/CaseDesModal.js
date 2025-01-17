@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
 import {
-  Form,
   Select,
   InputNumber,
   Switch,
@@ -10,9 +12,8 @@ import {
   Row,
   Input,
   Button,
-  Icon,
   AutoComplete,
-  Modal
+  Modal,
 } from 'antd';
 const Option = Select.Option;
 const FormItem = Form.Item;
@@ -274,11 +275,9 @@ class CaseDesForm extends Component {
               </Col>
               <Col span={4}>
                 {values.length > 1 ? (
-                  <Icon
+                  <MinusCircleOutlined
                     className="dynamic-delete-button"
-                    type="minus-circle-o"
-                    onClick={() => this.removeValues('paramsArr', index)}
-                  />
+                    onClick={() => this.removeValues('paramsArr', index)} />
                 ) : null}
               </Col>
             </Row>
@@ -318,11 +317,9 @@ class CaseDesForm extends Component {
               </Col>
               <Col span={4}>
                 {values.length > 1 ? (
-                  <Icon
+                  <MinusCircleOutlined
                     className="dynamic-delete-button"
-                    type="minus-circle-o"
-                    onClick={() => this.removeValues('headers', index)}
-                  />
+                    onClick={() => this.removeValues('headers', index)} />
                 ) : null}
               </Col>
             </Row>
@@ -407,7 +404,7 @@ class CaseDesForm extends Component {
               onClick={() => this.addValues('paramsArr')}
               style={{ width: '100%' }}
             >
-              <Icon type="plus" /> 添加参数
+              <PlusOutlined /> 添加参数
             </Button>
           </FormItem>
           <FormItem
@@ -459,7 +456,7 @@ class CaseDesForm extends Component {
               onClick={() => this.addValues('headers')}
               style={{ width: '100%' }}
             >
-              <Icon type="plus" /> 添加 HTTP 头
+              <PlusOutlined /> 添加 HTTP 头
             </Button>
           </FormItem>
           <FormItem {...formItemLayout} wrapperCol={{ span: 17 }} label="Body" required>

@@ -1,5 +1,19 @@
 import React, { Component } from "react";
-import { Row, Col, Form, Select, Icon, Button, Input, message, Tooltip,Switch } from "antd";
+
+import {
+  CheckCircleOutlined,
+  CloseCircleOutlined,
+  DeleteOutlined,
+  LoadingOutlined,
+  PlusOutlined,
+  QuestionCircleOutlined,
+  SaveOutlined,
+} from '@ant-design/icons';
+
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+
+import { Row, Col, Select, Button, Input, message, Tooltip, Switch } from "antd";
 const Option = Select.Option;
 import axios from 'axios';
 import PropTypes from 'prop-types';
@@ -158,22 +172,24 @@ class larkRobotView extends Component {
       let testButton = null;
       switch (obj.state) {
         case 'testing':
-          testButton = <Icon type="loading"/>;
+          testButton = <LoadingOutlined />;
           break;
         case 'success':
-          testButton = <Icon type="check-circle-o" style={{color: '#00CC33'}}/>;
+          testButton = <CheckCircleOutlined style={{color: '#00CC33'}} />;
           break;
         case 'error':
           testButton = (
             <Tooltip title="点击推送测试消息">
-              <Icon type="close-circle-o" onClick={(e) => this.test(obj.id, e)} style={{cursor: 'pointer', color: '#FF0033'}}/>
+              <CloseCircleOutlined
+                onClick={(e) => this.test(obj.id, e)}
+                style={{cursor: 'pointer', color: '#FF0033'}} />
             </Tooltip>
           );
           break;
         default:
           testButton = (
             <Tooltip title="点击推送测试消息">
-              <Icon type="question-circle-o" onClick={(e) => this.test(obj.id, e)} style={{cursor: 'pointer'}}/>
+              <QuestionCircleOutlined onClick={(e) => this.test(obj.id, e)} style={{cursor: 'pointer'}} />
             </Tooltip>
           );
           break;
@@ -223,11 +239,10 @@ class larkRobotView extends Component {
                 )}
             </Col>
             <Col span={8} style={{display: 'flex', alignItems: 'center'}}>
-              <Button icon="delete" onClick={(e)=>this.deleteHook(obj.id,e)}>删除</Button>
+              <Button icon={<DeleteOutlined />} onClick={(e)=>this.deleteHook(obj.id,e)}>删除</Button>
             </Col>
           </Row>
         </Form.Item>
-        
       );
     });
 
@@ -237,15 +252,15 @@ class larkRobotView extends Component {
           {formItems}
           <Form.Item {...formItemLayoutWithOutLabel}>
             <Button type="dashed" onClick={this.add}>
-              <Icon type="plus" /> 添加机器人
+              <PlusOutlined /> 添加机器人
             </Button>
           </Form.Item>
           <Form.Item {...formItemLayoutWithOutLabel}>
             <Button type="primary" htmlType="submit" size="large" disabled={this.state.loading ? true : false}>
               {this.state.loading ? (
-                <Icon type="loading"/>
+                <LoadingOutlined />
               ) : (
-                <Icon type="save"/>
+                <SaveOutlined />
               )
               }
               {this.state.loading ? '保存中...' : '保存'}

@@ -155,7 +155,7 @@ class ProjectList extends Component {
 
     const OwnerSpace = () => {
       return projectData.length ? (
-        <div>
+        <div style={{width:'100%'}}>
           <NoFollow />
           <Follow />
         </div>

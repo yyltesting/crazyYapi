@@ -363,6 +363,7 @@ class InterfaceList extends Component {
               className="select path"
               onChange={catid => this.changeInterfaceCat(record._id, catid)}
               treeData={this.props.catList}
+              bordered={false}
             />
           );
         }
@@ -379,6 +380,7 @@ class InterfaceList extends Component {
               value={key + '-' + text}
               className="select"
               onChange={this.changeInterfaceStatus}
+              bordered={false}
             >
               <Option value={key + '-done'}>
                 <span className="tag-status done">已发布</span>

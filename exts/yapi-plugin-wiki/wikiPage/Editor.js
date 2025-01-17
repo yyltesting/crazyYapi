@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { UploadOutlined } from '@ant-design/icons';
 import { Button, Checkbox } from 'antd';
 import Editor from 'common/tui-editor/dist/tui-editor-Editor-all.min.js';
 require('common/tui-editor/dist/tui-editor.min.css'); // editor ui
@@ -44,7 +45,7 @@ class WikiEditor extends Component {
         />
         <div className="wiki-title wiki-up">
           <Button
-            icon="upload"
+            icon={<UploadOutlined />}
             type="primary"
             className="upload-btn"
             disabled={isConflict}

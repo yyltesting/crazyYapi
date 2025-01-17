@@ -2,7 +2,10 @@ import React, { Component } from "react";
 import { connect } from 'react-redux';
 import PropTypes from "prop-types";
 import axios from "axios";
-import { Form, Button, Input, Icon, Row, Layout, Switch, message } from "antd";
+import { Form, Icon as LegacyIcon } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { MailOutlined } from '@ant-design/icons';
+import { Button, Input, Row, Layout, Switch, message } from "antd";
 const FormItem = Form.Item;
 import { setBreadcrumb } from 'client/reducer/modules/user';
 
@@ -112,7 +115,7 @@ export default class AddUser extends Component {
                 })(
                   <Input
                     style={changeHeight}
-                    prefix={<Icon type="username" style={{ fontSize: 13 }} />}
+                    prefix={<LegacyIcon type="username" style={{ fontSize: 13 }} />}
                     placeholder="用户名"
                   />
                 )}
@@ -129,7 +132,7 @@ export default class AddUser extends Component {
                 })(
                   <Input
                     style={changeHeight}
-                    prefix={<Icon type="mail" style={{ fontSize: 13 }} />}
+                    prefix={<MailOutlined style={{ fontSize: 13 }} />}
                     placeholder="邮箱"
                   />
                 )}

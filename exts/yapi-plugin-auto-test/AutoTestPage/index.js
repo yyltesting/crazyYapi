@@ -1,6 +1,15 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { Tabs, Icon, Layout, Tooltip, Row, Popconfirm, message } from "antd";
+
+import {
+  DeleteOutlined,
+  LineChartOutlined,
+  PlusOutlined,
+  QuestionCircleOutlined,
+  ScheduleOutlined,
+} from '@ant-design/icons';
+
+import { Tabs, Layout, Tooltip, Row, Popconfirm, message } from "antd";
 const { Content, Sider } = Layout;
 import { connect } from "react-redux";
 import axios from 'axios';
@@ -176,13 +185,11 @@ export default class Plan extends Component {
               okText="确定"
               cancelText="取消"
             >
-              <Icon
-                type="delete"
+              <DeleteOutlined
                 className="interface-delete-icon"
                 style={{
                   display: this.state.delIcon == index ? "block" : "none"
-                }}
-              />
+                }} />
             </Popconfirm>
           </span>
         </Row>
@@ -197,11 +204,11 @@ export default class Plan extends Component {
               <div className="test-icon-style">
                 <h3>
                   计划列表&nbsp;<Tooltip placement="top" title="在这里添加自动测试计划">
-                    <Icon type="question-circle-o" />
+                    <QuestionCircleOutlined />
                   </Tooltip>
                 </h3>
                 <Tooltip title="添加自动测试计划">
-                  <Icon type="plus" onClick={() => this.addParams()} />
+                  <PlusOutlined onClick={() => this.addParams()} />
                 </Tooltip>
               </div>
             </Row>
@@ -217,7 +224,7 @@ export default class Plan extends Component {
               <Tabs tabPosition="top">
                 <Tabs.TabPane tab={
                   <span>
-                    <Icon type="schedule" />
+                    <ScheduleOutlined />
                     测试计划
                   </span>
                   }
@@ -233,7 +240,7 @@ export default class Plan extends Component {
                 </Tabs.TabPane>
                 <Tabs.TabPane tab={
                   <span>
-                    <Icon type="line-chart" />
+                    <LineChartOutlined />
                     测试结果
                   </span>
                   }

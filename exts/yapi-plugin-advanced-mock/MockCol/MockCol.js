@@ -3,7 +3,8 @@ import { connect } from 'react-redux';
 import axios from 'axios';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
-import { Table, Button, message, Popconfirm, Tooltip, Icon } from 'antd';
+import { QuestionCircleOutlined } from '@ant-design/icons';
+import { Table, Button, message, Popconfirm, Tooltip } from 'antd';
 import { fetchMockCol } from 'client/reducer/modules/mockCol';
 import { formatTime } from 'client/common.js';
 import constants from 'client/constants/variable.js';
@@ -248,7 +249,7 @@ export default class MockCol extends Component {
             style={{ marginLeft: 8 }}
           >
             <Tooltip title="点击查看文档">
-              <Icon type="question-circle-o" />
+              <QuestionCircleOutlined />
             </Tooltip>
           </a>
         </div>

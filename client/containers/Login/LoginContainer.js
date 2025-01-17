@@ -15,7 +15,7 @@ class LoginContainer extends Component {
         </div>
         <div className="main-one login-container">
           <div className="container">
-            <Row type="flex" justify="center">
+            <Row justify="center" align="middle" >
               <Col xs={20} sm={16} md={12} lg={8} className="container-login">
                 <Card className="card-login">
                   <h2 className="login-title">YAPI</h2>

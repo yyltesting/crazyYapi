@@ -2,7 +2,10 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { formatTime } from 'client/common.js';
-import { Form, Switch, Button, Icon, Tooltip, message, Input, Select } from 'antd';
+import { QuestionCircleOutlined, SaveOutlined } from '@ant-design/icons';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Switch, Button, Tooltip, message, Input, Select } from 'antd';
 import {handleSwaggerUrlData} from 'client/reducer/modules/project';
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -164,7 +167,7 @@ export default class ProjectInterfaceSync extends Component {
                     </div>
                   }
                 >
-                  <Icon type="question-circle-o" />
+                  <QuestionCircleOutlined />
                 </Tooltip>{' '}
               </span>
             }>
@@ -215,7 +218,7 @@ export default class ProjectInterfaceSync extends Component {
             </FormItem>
           </div>
           <FormItem {...tailFormItemLayout}>
-            <Button type="primary" htmlType="submit" icon="save" size="large" onClick={this.handleSubmit}>
+            <Button type="primary" htmlType="submit" icon={<SaveOutlined />} size="large" onClick={this.handleSubmit}>
               保存
             </Button>
           </FormItem>

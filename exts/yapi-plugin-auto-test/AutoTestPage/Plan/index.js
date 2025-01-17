@@ -1,7 +1,10 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { formatTime } from "client/common.js";
-import { Form, Switch, Button, Input, Icon, Tooltip, Checkbox, InputNumber } from "antd";
+import { PlayCircleOutlined, QuestionCircleOutlined, SaveOutlined } from '@ant-design/icons';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Switch, Button, Input, Tooltip, Checkbox, InputNumber } from "antd";
 const FormItem = Form.Item;
 
 import "./index.scss"
@@ -133,7 +136,7 @@ export default class Add extends Component {
 
             {planMsg._id ? (<Button
               type="primary"
-              icon="play-circle"
+              icon={<PlayCircleOutlined />}
               className="run-once"
               onClick={this.runPlan}
             >
@@ -178,7 +181,7 @@ export default class Add extends Component {
                 <span>
                   自动测试URL&nbsp;
                   <Tooltip title="复制测试集合服务端测试的URL">
-                    <Icon type="question-circle-o" />
+                    <QuestionCircleOutlined />
                   </Tooltip>
                 </span>
               }>
@@ -210,7 +213,7 @@ export default class Add extends Component {
               <span>
                 保留测试结果数，-1为不限&nbsp;
                 <Tooltip title="配置影响每个测试计划保留的测试结果数，设置为-1表示不限，下次执行生效">
-                  <Icon type="question-circle-o" />
+                  <QuestionCircleOutlined />
                 </Tooltip>
               </span>
             }>
@@ -242,7 +245,7 @@ export default class Add extends Component {
               <span>
                 失败后重复执行次数&nbsp;
                 <Tooltip title="当执行完成之后如果存在失败的情况会自动重新执行">
-                  <Icon type="question-circle-o" />
+                  <QuestionCircleOutlined />
                 </Tooltip>
               </span>
             }>
@@ -289,7 +292,7 @@ export default class Add extends Component {
             </FormItem>
           </div>
           <FormItem {...tailFormItemLayout}>
-            <Button type="primary" htmlType="submit" icon="save" size="large" onClick={this.handleSubmit}>
+            <Button type="primary" htmlType="submit" icon={<SaveOutlined />} size="large" onClick={this.handleSubmit}>
               保存
             </Button>
           </FormItem>

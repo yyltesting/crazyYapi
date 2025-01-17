@@ -204,10 +204,35 @@ em {
 
 
 
-// 页面级底部固定 需要添加padding以保证页面底部不被覆盖
-// .has-affix-footer {
-//   padding-bottom: .92rem;
-// }
+.anticon{
+  display: inline-block;
+}
+
+/* 去掉所有常见组件的上下间距 */
+.ant-row,
+.ant-col,
+.ant-form-item,
+.ant-btn,
+.ant-tabs,
+.ant-tabs-tab,
+.ant-tabs-nav,
+.ant-layout-sider,
+.ant-layout
+.ant-card,
+.ant-card-body,
+.ant-card-head,
+.ant-collapse,
+.ant-collapse-header,
+.ant-collapse-item,
+.ant-space {
+  margin-bottom: 0 !important;
+}
+
+
+.ant-menu-item::after {
+  content: none !important;
+}
+
 
 .popover-index {
   max-width: 3.2rem;

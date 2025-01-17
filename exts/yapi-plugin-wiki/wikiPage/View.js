@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { EditOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
 import { Link } from 'react-router-dom';
 
@@ -8,7 +9,7 @@ const WikiView = props => {
   return (
     <div className="wiki-view-content">
       <div className="wiki-title">
-        <Button icon="edit" onClick={onEditor} disabled={!editorEable}>
+        <Button icon={<EditOutlined />} onClick={onEditor} disabled={!editorEable}>
           编辑
         </Button>
         {username && (

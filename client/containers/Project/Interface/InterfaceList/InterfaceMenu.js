@@ -689,23 +689,25 @@ class InterfaceMenu extends Component {
     const itemCatCreate = item => {
       return (
         <TreeNode
+          style={{ width: '100%' }}
           title={
             <div
-              className="container-title"
+              className="container"
               onMouseEnter={() => this.enterItem(item._id)}
               onMouseLeave={this.leaveItem}
             >
-              <Link
-                className="interface-item"
-                to={'/project/' + matchParams.id + '/interface/api/cat_' + item._id}
-              >
-                <FolderOpenOutlined style={{marginRight: 5}} />
-                {item.title}
-              </Link>
+              <div className="container-title">
+                <Link
+                  to={'/project/' + matchParams.id + '/interface/api/cat_' + item._id}
+                >
+                  <FolderOpenOutlined style={{marginRight: 5}} />
+                  {item.title}
+                </Link>
+              </div>
               <div className="btns">
                 <Tooltip title="删除分类">
                   <DeleteOutlined
-                    className="interface-delete-icon"
+                    className="interfacecat-icon"
                     onClick={e => {
                       e.stopPropagation();
                       this.showDelCatConfirm(item._id);
@@ -714,7 +716,7 @@ class InterfaceMenu extends Component {
                 </Tooltip>
                 <Tooltip title="添加子分类">
                   <PlusOutlined
-                    className="interface-delete-icon"
+                    className="interfacecat-icon"
                     style={{display: this.state.delIcon == item._id ? 'block' : 'none'}}
                     onClick={e => {
                       e.stopPropagation();
@@ -727,7 +729,7 @@ class InterfaceMenu extends Component {
                 </Tooltip>
                 <Tooltip title="修改分类">
                   <EditOutlined
-                    className="interface-delete-icon"
+                    className="interfacecat-icon"
                     style={{display: this.state.delIcon == item._id ? 'block' : 'none'}}
                     onClick={e => {
                       e.stopPropagation();
@@ -740,7 +742,7 @@ class InterfaceMenu extends Component {
                 </Tooltip>
                 <Tooltip title="添加接口">
                   <PlusOutlined
-                    className="interface-delete-icon"
+                    className="interfacecat-icon"
                     style={{display: this.state.delIcon == item._id ? 'block' : 'none'}}
                     onClick={e => {
                       e.stopPropagation();
@@ -769,24 +771,27 @@ class InterfaceMenu extends Component {
     const itemInterfaceCreate = item => {
       return (
         <TreeNode
+          style={{ width: '100%' }}
           title={
             <div
-              className="container-title"
+              className="container"
               onMouseEnter={() => this.enterItem(item._id)}
               onMouseLeave={this.leaveItem}
             >
-              <Link
-                className="interface-item"
-                to={'/project/' + matchParams.id + '/interface/api/' + item._id}
-              >
-                <span className={"tag-status "+item.status}>
-                  {item.title}
-                </span>
-              </Link>
+              <div className="container-title">
+                <Link
+                  className="interface-item"
+                  to={'/project/' + matchParams.id + '/interface/api/' + item._id}
+                >
+                  <span className={"tag-status "+item.status}>
+                    {item.title}
+                  </span>
+                </Link>
+              </div>
               <div className="btns">
                 <Tooltip title="删除接口">
                   <DeleteOutlined
-                    className="interface-delete-icon"
+                    className="interface-icon"
                     onClick={e => {
                       e.stopPropagation();
                       this.showConfirm(item);
@@ -795,7 +800,7 @@ class InterfaceMenu extends Component {
                 </Tooltip>
                 <Tooltip title="复制接口">
                   <CopyOutlined
-                    className="interface-delete-icon"
+                    className="interface-icon"
                     onClick={e => {
                       e.stopPropagation();
                       this.copyInterface(item._id);
@@ -804,7 +809,7 @@ class InterfaceMenu extends Component {
                 </Tooltip>
                 <Tooltip title="移动接口">
                   <ScanOutlined
-                    className="interface-delete-icon"
+                    className="interface-icon"
                     onClick={e => {
                       e.stopPropagation();
                       this.showMoveInterfaceModal(item._id);
@@ -833,15 +838,16 @@ class InterfaceMenu extends Component {
         {menuList.length > 0 ? (
           <div
             className="tree-wrappper"
-            style={{maxHeight: parseInt(document.body.clientHeight) - headHeight + 'px'}}
+            style={{maxHeight: parseInt(document.body.clientHeight) - headHeight + 'px',marginTop:10}}
           >
             <Tree
+              style={{ width: '100%' }}
               className="interface-list"
               selectedKeys={this.state.selectedKey}
               expandedKeys={this.state.expandedKeys}
               onSelect={this.onSelect}
               onExpand={this.onExpand}
-              draggable
+              draggable={{icon:false}}
               onDrop={this.onDrop}
             >
               <TreeNode

@@ -1540,16 +1540,18 @@ export default class InterfaceColMenu extends Component {
           isLeaf={true}
           title={
             <div
-              className="menu-title"
+              className="menu"
               // onMouseEnter={() => this.enterItem(interfaceCase._id)}
               // onMouseLeave={this.leaveItem}
               title={interfaceCase._id+interfaceCase.path}
             >
-              <span >{interfaceCase.casename}</span>
+              <div className="menu-title">
+                <span >{interfaceCase.casename}</span>
+              </div>
               <div className="btns">
                 <Tooltip title="删除用例">
                   <DeleteOutlined
-                    className="interface-delete-icon"
+                    className="interface-icon"
                     // style={{ display: this.state.delIcon == interfaceCase._id ? 'block' : 'none' }}
                     onClick={e => {
                       e.stopPropagation();
@@ -1558,7 +1560,7 @@ export default class InterfaceColMenu extends Component {
                 </Tooltip>
                 <Tooltip title="克隆用例">
                   <CopyOutlined
-                    className="interface-delete-icon"
+                    className="interface-icon"
                     // style={{ display: this.state.delIcon == interfaceCase._id ? 'block' : 'none' }}
                     onClick={e => {
                       e.stopPropagation();
@@ -1567,7 +1569,7 @@ export default class InterfaceColMenu extends Component {
                 </Tooltip>
                 <Tooltip title="移动用例">
                   <SwapOutlined
-                    className="interface-delete-icon"
+                    className="interface-icon"
                     // style={{display: this.state.delIcon == interfaceCase._id ? 'block' : 'none'}}
                     onClick={e => {
                       e.stopPropagation();
@@ -1587,34 +1589,36 @@ export default class InterfaceColMenu extends Component {
       }
       return (
         <TreeNode
+          style={{ width: '100%' }}
           key={'col_' + col._id}
           isLeaf = {childcol}
           title={
-            <div className="menu-title" title={col._id}>
-              {col.status==1?(
-                <span>
-                  {/* {col.status==1?(<Icon type="warning" style={{marginRight: 5}}/>):(<Icon type="folder-open" style={{marginRight: 5}}/>)} */}
-                  <WarningOutlined style={{marginRight: 5}} />
-                  <span style={{color:"red"}}>{col.name}</span>
-                </span>
-              ):(
-                <span>
-                  <FolderOpenOutlined style={{marginRight: 5}} />
-                  <span>{col.name}</span>
-                </span>
-              )}
+            <div className="menu" title={col._id}>
+              <div className="menu-title">
+                {col.status==1?(
+                  <span>
+                    {/* {col.status==1?(<Icon type="warning" style={{marginRight: 5}}/>):(<Icon type="folder-open" style={{marginRight: 5}}/>)} */}
+                    <WarningOutlined style={{marginRight: 5}} />
+                    <span style={{color:"red"}}>{col.name}</span>
+                  </span>
+                ):(
+                  <span>
+                    <FolderOpenOutlined style={{marginRight: 5}} />
+                    <span>{col.name}</span>
+                  </span>
+                )}
+              </div>
               <div className="btns">
                 <Tooltip title="删除集合">
                   <DeleteOutlined
-                    style={{display: list.length >= 1 ? '' : 'none'}}
-                    className="interface-delete-icon"
+                    className="interfacecol-icon"
                     onClick={() => {
                       this.showDelColConfirm(col._id,col.parent_id);
                     }} />
                 </Tooltip>
                 <Tooltip title="编辑集合">
                   <EditOutlined
-                    className="interface-delete-icon"
+                    className="interfacecol-icon"
                     onClick={e => {
                       e.stopPropagation();
                       this.showColModal('edit', col,col.parent_id);
@@ -1622,7 +1626,7 @@ export default class InterfaceColMenu extends Component {
                 </Tooltip>
                 <Tooltip title="导入接口">
                   <ImportOutlined
-                    className="interface-delete-icon"
+                    className="interfacecol-icon"
                     onClick={e => {
                       e.stopPropagation();
                       this.showImportInterfaceModal(col._id,col.case_env);
@@ -1630,7 +1634,7 @@ export default class InterfaceColMenu extends Component {
                 </Tooltip>
                 <Tooltip title="克隆集合">
                   <CopyOutlined
-                    className="interface-delete-icon"
+                    className="interfacecol-icon"
                     onClick={e => {
                       e.stopPropagation();
                       this.copyInterface(col);
@@ -1638,7 +1642,7 @@ export default class InterfaceColMenu extends Component {
                 </Tooltip>
                 <Tooltip title="添加子集合">
                   <PlusOutlined
-                    className="interface-delete-icon"
+                    className="interfacecol-icon"
                     onClick={e => {
                       e.stopPropagation();
                       this.showColModal('add', col);
@@ -1651,7 +1655,7 @@ export default class InterfaceColMenu extends Component {
                 {col.haschild==0 && !this.state.runcols.includes(col._id) &&(
                   <Tooltip title="异步执行">
                     <ReloadOutlined
-                      className="interface-delete-icon"
+                      className="interface-icon"
                       onClick={e => {
                         e.stopPropagation();
                         this.run(col._id,col.parent_id);
@@ -1735,7 +1739,7 @@ export default class InterfaceColMenu extends Component {
           <div className="spin-container">
             <Spin size="large" />
           </div>):(
-            <div className="tree-wrapper" style={{ maxHeight: parseInt(document.body.clientHeight) - headHeight + 'px'}}>
+            <div className="tree-wrapper" style={{ maxHeight: parseInt(document.body.clientHeight) - headHeight + 'px',marginTop:10}}>
               <Tree
                 multiple
                 loadData={this.onLoadData}
@@ -1745,7 +1749,7 @@ export default class InterfaceColMenu extends Component {
                 loadedKeys={this.state.loadedKeys}
                 onSelect={this.onSelect}
                 onExpand={this.onExpand}
-                draggable
+                draggable={{icon:false}}
                 onDrop={this.onDrop}
               >
                 {list.filter(me => (me.in === true || typeof me.in === "undefined")).map(colCreate)}

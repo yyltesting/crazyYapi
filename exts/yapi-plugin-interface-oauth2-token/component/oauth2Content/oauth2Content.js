@@ -3,15 +3,16 @@ import PropTypes from 'prop-types';
 import './index.scss';
 import { formatTime } from 'client/common.js';
 import AceEditor from '../../../../client/components/AceEditor/AceEditor'
+import { QuestionCircleOutlined, SaveOutlined } from '@ant-design/icons';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
 import {
-  Form,
   Input,
   Button,
   AutoComplete,
   InputNumber,
   Switch,
   Tooltip,
-  Icon,
   Row,
   Col,
   Select,
@@ -20,7 +21,7 @@ import {
   Popconfirm,
   Radio,
   message,
-  Collapse
+  Collapse,
 } from 'antd';
 const FormItem = Form.Item;
 import constants from 'client/constants/variable.js';
@@ -655,7 +656,7 @@ class OAuth2Content extends Component {
               <span>
                 获取token的地址&nbsp;
                 <Tooltip title="默认POST请求，取返回结果的access_token字段（路径中可以包含{time}，我会替换为当前时间戳）">
-                  <Icon type="question-circle-o" />
+                  <QuestionCircleOutlined />
                 </Tooltip>
               </span>
             }
@@ -808,7 +809,7 @@ class OAuth2Content extends Component {
                   <span>
                     请求头字段&nbsp;
                     <Tooltip title="将请求到的token附加到哪个Header字段上">
-                      <Icon type="question-circle-o" />
+                      <QuestionCircleOutlined />
                     </Tooltip>
                   </span>
                 }
@@ -862,7 +863,7 @@ class OAuth2Content extends Component {
         <div className="btnwrap-changeproject">
           <Button
             className="m-btn btn-save"
-            icon="save"
+            icon={<SaveOutlined />}
             type="primary"
             size="large"
             onClick={this.handleOk}

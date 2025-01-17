@@ -3,7 +3,10 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
-import { Form, Switch, Button, message, Icon, Tooltip, Radio } from 'antd';
+import { QuestionCircleOutlined } from '@ant-design/icons';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Switch, Button, message, Tooltip, Radio } from 'antd';
 import MockCol from './MockCol/MockCol.js';
 import mockEditor from 'client/components/AceEditor/mockEditor';
 import constants from '../../client/constants/variable.js';
@@ -120,7 +123,7 @@ class AdvMock extends Component {
                     href={constants.docHref.adv_mock_script}
                   >
                     <Tooltip title="点击查看文档">
-                      <Icon type="question-circle-o" />
+                      <QuestionCircleOutlined />
                     </Tooltip>
                   </a>
                 </span>

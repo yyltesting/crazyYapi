@@ -157,8 +157,10 @@
     margin: 0 0 5px 0;
     .key {
       flex-basis: 220px;
+      height: 100%;
     }
     .value {
+      height: 100%;
       flex-grow: 1;
     }
     .eq-symbol {

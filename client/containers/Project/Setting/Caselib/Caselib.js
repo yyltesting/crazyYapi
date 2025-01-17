@@ -712,6 +712,7 @@ render() {
             value={id + '-' + text}
             className="select"
             onChange={this.changeInterfaceStatus}
+            bordered={false}
           >
             <Option value={id + '-undone'}>
               <span className="tag-status undone">待执行</span>

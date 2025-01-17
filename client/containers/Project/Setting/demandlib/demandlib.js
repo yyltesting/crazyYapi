@@ -234,6 +234,7 @@ render() {
             value={id + '-' + text}
             className="select"
             onChange={this.changeInterfaceStatus}
+            bordered={false}
           >
             <Option value={id + '-done'}>
               <span className="tag-status done">已发布</span>
