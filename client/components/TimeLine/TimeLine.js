@@ -110,10 +110,10 @@ class TimeTree extends Component {
     });
   };
 
-  componentWillMount() {
+  async componentWillMount() {
     this.props.fetchNewsData(this.props.typeid, this.props.type, 1, 10);
     if (this.props.type === 'project') {
-      this.getApiList();
+      await this.getApiList();
     }
   }
 
@@ -152,25 +152,43 @@ class TimeTree extends Component {
       other: '其他'
     };
 
-    const children = this.state.apiList.map(item => {
-      let methodColor = variable.METHOD_COLOR[item.method ? item.method.toLowerCase() : 'get'];
-      return (
-        <Option title={item.title} value={item._id + ''} path={item.path} key={item._id}>
-          {item.title}{' '}
-          <Tag
-            style={{color: methodColor ? methodColor.color : '#cfefdf', backgroundColor: methodColor ? methodColor.bac : '#00a854', border: 'unset'}}
-          >
-            {item.method}
-          </Tag>
-        </Option>
-      );
-    });
 
-    children.unshift(
-      <Option value="" key="all">
-        选择全部
-      </Option>
-    );
+    const options = [
+      {
+        label: 'all',
+        options: [
+          { value: '', path: '', label: '选择全部' },
+        ],
+      },
+      {
+        label: 'other',
+        options: [
+          { value: 'wiki', path: '', label: 'wiki' },
+        ],
+      },
+      {
+        label: 'api',
+        options: this.state.apiList.map((item) => ({
+          value: item._id, // 用作选择值
+          path: item.path, // 自定义属性，可用于过滤
+          label: (
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <span>{item.title}</span>
+              <Tag
+                style={{
+                  color: variable.METHOD_COLOR[item.method.toLowerCase()]?.color || '#fff',
+                  backgroundColor: variable.METHOD_COLOR[item.method.toLowerCase()]?.bac || '#000',
+                  border: 'unset',
+                }}
+              >
+                {item.method}
+              </Tag>
+            </div>
+          ),
+        }))
+      },
+    ];
+
 
     if (data && data.length) {
       data = data.map((item, i) => {
@@ -250,8 +268,8 @@ class TimeTree extends Component {
                 style={{ width: '100%' }}
                 placeholder="Select Api"
                 optionLabelProp="title"
+                options={options}
                 filterOption={(inputValue, options) => {
-                  console.log({options});
                   try{
                   let props=typeof(options.props.children.props) =="undefined"?options.props:options.props.children.props;
                   if (props.value == '') return true;
@@ -266,13 +284,6 @@ class TimeTree extends Component {
                   return false;
                 }}
               >
-                {/* {children} */}
-                <OptGroup label="other">
-                  <Option value="wiki" path="" title="wiki">
-                    wiki
-                  </Option>
-                </OptGroup>
-                <OptGroup label="api">{children}</OptGroup>
               </AutoComplete>
             </Col>
           </Row>

@@ -3,7 +3,7 @@ const baseWebpackConfig = require("./webpack.base.conf");
 
 const devWebpackConfig = merge(baseWebpackConfig, {
   mode: "development",
-  devtool: "eval",
+  devtool: "cheap-module-source-map",
   output: {
     filename: "[name].bundle.js",
     publicPath: "/",
