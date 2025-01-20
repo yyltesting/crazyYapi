@@ -290,13 +290,13 @@ class ProjectEnvContent extends Component {
             logs
           }
         );
-        this.setState({
-            mysql : assignValue.env.mysql,
-            redis : assignValue.env.redis,
-            es : assignValue.env.es,
-            firebase : assignValue.env.firebase,
-            logs: assignValue.env.logs
-        })
+        // this.setState({
+        //     mysql : assignValue.env.mysql,
+        //     redis : assignValue.env.redis,
+        //     es : assignValue.env.es,
+        //     firebase : assignValue.env.firebase,
+        //     logs: assignValue.env.logs
+        // })
         onSubmit(assignValue);
       }
     });

@@ -469,11 +469,12 @@ class ProjectMessage extends Component {
                     <span className="radio-desc">只有组长和项目开发者可以索引并查看项目信息</span>
                   </Radio>
                   <br />
-                  {projectMsg.role === 'admin' && <Radio value="public" className="radio">
-                    <UnlockOutlined />公开<br />
-                    <span className="radio-desc">任何人都可以索引并查看项目信息</span>
-                  </Radio>}
-                  
+                  {(projectMsg.role === 'admin'||projectMsg.role === 'owner') &&
+                    <Radio value="public" className="radio">
+                      <UnlockOutlined />公开<br />
+                      <span className="radio-desc">任何人都可以索引并查看项目信息</span>
+                    </Radio>
+                  }
                 </RadioGroup>
               )}
             </FormItem>

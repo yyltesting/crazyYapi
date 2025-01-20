@@ -200,8 +200,8 @@ class larkRobotView extends Component {
           label={idx === 0 ? '机器人' : ''}
           {...(idx === 0 ? formItemLayout : formItemLayoutWithOutLabel)}
         >
-          <Row gutter={8}>
-            <Col span={8}>
+          <Row gutter={24} style={{display: 'flex', alignItems: 'center'}}>
+            <Col span={16}>
               {getFieldDecorator(`hooks[${obj.id}].url`, {
                 validateTrigger: ['onChange', 'onBlur'],
                 rules: [{
@@ -218,12 +218,12 @@ class larkRobotView extends Component {
                 />
               )}
             </Col>
-            <Col span={8}>
+            <Col span={4}>
               {getFieldDecorator(`hooks[${obj.id}].options`, {
                 initialValue: obj.value.options,
                 rules: [{ required: true, message: '请选择通知类型' }]
               })(
-                <Select mode="multiple" placeholder="请选择通知类型" style={{ width: '100%' }}>
+                <Select mode="multiple" placeholder="请选择通知类型">
                   <Option value="interface">接口</Option>
                   <Option value="interfacecol">测试集</Option>
                   <Option value="caselib">用例库</Option>
@@ -231,14 +231,14 @@ class larkRobotView extends Component {
                 </Select>
               )}
             </Col>
-            <Col span={8}>
+            <Col span={2}>
               {getFieldDecorator(`hooks[${obj.id}].open`, {
                   initialValue: obj.value.open
                 })(
                   <Switch checked={obj.value.open} onChange={(e)=>this.onChangeOpenHook(obj.id,e)} />
                 )}
             </Col>
-            <Col span={8} style={{display: 'flex', alignItems: 'center'}}>
+            <Col span={2}>
               <Button icon={<DeleteOutlined />} onClick={(e)=>this.deleteHook(obj.id,e)}>删除</Button>
             </Col>
           </Row>

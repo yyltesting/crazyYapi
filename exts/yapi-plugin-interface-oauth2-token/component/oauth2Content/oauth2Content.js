@@ -443,44 +443,26 @@ class OAuth2Content extends Component {
         dataIndex: 'keyName',
         width: '40%',
         render: (text, record, index) =>
-          record.flag.keyFlag ? (
-            <Input
-              value={text}
-              onChange={e =>
-                this.changeData('params', 'keyName', record.addId, index, e)
-              }
-              onBlur={() => this.cancelEdit('params', 'keyFlag', index)}
-            />
-          ) : (
-            <div
-              style={{ height: '32px', lineHeight: '32px' }}
-              onClick={() => this.editValue('params', 'keyFlag', index)}
-            >
-              {text}
-            </div>
-          )
+          <Input
+          value={text}
+          onChange={e =>
+            this.changeData('params', 'keyName', record.addId, index, e)
+          }
+          onBlur={() => this.cancelEdit('params', 'keyFlag', index)}
+        />
       },
       {
         title: 'VALUE',
         dataIndex: 'value',
         width: '40%',
         render: (text, record, index) =>
-          record.flag.valueFlag ? (
-            <Input
-              value={text}
-              onChange={e =>
-                this.changeData('params', 'value', record.addId, index, e)
-              }
-              onBlur={() => this.cancelEdit('params', 'valueFlag', index)}
-            />
-          ) : (
-            <div
-              style={{ height: '32px', lineHeight: '32px' }}
-              onClick={() => this.editValue('params', 'valueFlag', index)}
-            >
-              {text}
-            </div>
-          )
+          <Input
+            value={text}
+            onChange={e =>
+              this.changeData('params', 'value', record.addId, index, e)
+            }
+            onBlur={() => this.cancelEdit('params', 'valueFlag', index)}
+          />
       },
       {
         title: 'operation',
@@ -525,22 +507,14 @@ class OAuth2Content extends Component {
         dataIndex: 'value',
         width: '40%',
         render: (text, record, index) =>
-          record.flag.valueFlag ? (
-            <Input
-              value={text}
-              onChange={e =>
-                this.changeData('form_data', 'value', record.addId, index, e)
-              }
-              onBlur={() => this.cancelEdit('form_data', 'valueFlag', index)}
-            />
-          ) : (
-            <div
-              style={{ height: '32px', lineHeight: '32px' }}
-              onClick={() => this.editValue('form_data', 'valueFlag', index)}
-            >
-              {text}
-            </div>
-          )
+          <TextArea
+            value={text}
+            onChange={e =>
+              this.changeData('form_data', 'value', record.addId, index, e)
+            }
+            onBlur={() => this.cancelEdit('form_data', 'valueFlag', index)}
+            autoSize={{ minRows: 1, maxRows: 5 }}
+          />
       },
       {
         title: 'operation',

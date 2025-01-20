@@ -232,6 +232,7 @@ class MemberList extends Component {
                   value={record.role + '-' + record.uid}
                   className="select"
                   onChange={this.changeUserRole}
+                  bordered={false}
                 >
                   <Option value={'owner-' + record.uid}>组长</Option>
                   <Option value={'dev-' + record.uid}>开发者</Option>

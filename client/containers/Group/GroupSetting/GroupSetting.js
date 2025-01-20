@@ -221,7 +221,7 @@ class GroupSetting extends Component {
             />
           </Col>
         </Row>
-        <Row type="flex" justify="space-around" className="row" align="middle">
+        <Row type="flex" justify="space-around" className="row" align="middle" style={{marginTop:'10px'}}>
           <Col span={4} className="label">
             简介：
           </Col>
@@ -235,7 +235,7 @@ class GroupSetting extends Component {
             />
           </Col>
         </Row>
-        <Row type="flex" justify="space-around" className="row" align="middle">
+        <Row type="flex" justify="space-around" className="row" align="middle" style={{marginTop:'10px'}}>
           <Col span={4} className="label">
             接口自定义字段&nbsp;
             <Tooltip title={'可以在接口中添加 额外字段 数据'}>
