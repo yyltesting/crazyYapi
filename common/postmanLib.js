@@ -11,7 +11,15 @@ const jsrsasign = require('jsrsasign');
 const https = require('https');
 
 const isNode = typeof global == 'object' && global.global === global;
-//存留websocket客户端
+//存留全局方法 可能不同工程同时运行有问题
+var global_script='';
+function setGlobalScript(str){
+  global_script = str;
+}
+function getGlobalScript(){
+  return global_script;
+}
+//存留websocket客户端 注意前端和后端是分开的
 var socket = [];
 //存留websocket消息
 let message = {};
@@ -498,6 +506,7 @@ function sandboxByBrowser(context = {}, script) {
  * @param {*} commonContext  负责传递一些业务信息，crossRequest 不关注具体传什么，只负责当中间人
  */
 async function crossRequest(defaultOptions, preScript, afterScript,case_pre_script,case_post_script,colpre_script,colafter_script,ws, commonContext = {}) {
+  //进入该方法时
   // let t =  Object.assign({}, ws);
   let options = Object.assign({}, defaultOptions);
  // console.log({defaultOptions, preScript, afterScript,case_pre_script,case_post_script, commonContext})
@@ -573,10 +582,9 @@ async function crossRequest(defaultOptions, preScript, afterScript,case_pre_scri
     bs58Encode: utils.bs58Encode,
     tobedivisibleby: utils.tobedivisibleby,
     axios: axios
-  });
-
+  })
   if (preScript) {
-    context = await sandbox(context, preScript);
+    context = await sandbox(context, global_script+preScript);
     defaultOptions.url = options.url = URL.format({
       protocol: urlObj.protocol,
       host: urlObj.host,
@@ -587,7 +595,7 @@ async function crossRequest(defaultOptions, preScript, afterScript,case_pre_scri
     defaultOptions.data = options.data = context.requestBody;
   }
   if (colpre_script) {
-    context = await sandbox(context, colpre_script);
+    context = await sandbox(context, global_script+colpre_script);
     defaultOptions.url = options.url = URL.format({
       protocol: urlObj.protocol,
       host: urlObj.host,
@@ -598,7 +606,7 @@ async function crossRequest(defaultOptions, preScript, afterScript,case_pre_scri
     defaultOptions.data = options.data = context.requestBody;
   }
   if (case_pre_script) {
-    context = await sandbox(context, case_pre_script);
+    context = await sandbox(context, global_script+case_pre_script);
     // var y = decodeURIComponent(context.query);
     defaultOptions.url = options.url = URL.format({
       protocol: urlObj.protocol,
@@ -770,7 +778,7 @@ for(let i=0;i<Loopnum;i++){
     context.responseHeader = data.res.header;
     context.responseStatus = data.res.status;
     context.runTime = data.runTime;
-    context = await sandbox(context, afterScript);
+    context = await sandbox(context, global_script+afterScript);
     data.res.body = context.responseData;
     data.res.header = context.responseHeader;
     data.res.status = context.responseStatus;
@@ -782,7 +790,7 @@ for(let i=0;i<Loopnum;i++){
     context.responseHeader = data.res.header;
     context.responseStatus = data.res.status;
     context.runTime = data.runTime;
-    context = await sandbox(context, colafter_script);
+    context = await sandbox(context, global_script+colafter_script);
     data.res.body = context.responseData;
     data.res.header = context.responseHeader;
     data.res.status = context.responseStatus;
@@ -794,7 +802,7 @@ for(let i=0;i<Loopnum;i++){
     context.responseHeader = data.res.header;
     context.responseStatus = data.res.status;
     context.runTime = data.runTime;
-    context = await sandbox(context, case_post_script);
+    context = await sandbox(context, global_script+case_post_script);
     data.res.body = context.responseData;
     data.res.header = context.responseHeader;
     data.res.status = context.responseStatus;
@@ -965,6 +973,8 @@ exports.crossRequest = crossRequest;
 exports.handleCurrDomain = handleCurrDomain;
 exports.checkNameIsExistInArray = checkNameIsExistInArray;
 exports.getStorage = getStorage;
+exports.setGlobalScript = setGlobalScript;
+exports.getGlobalScript = getGlobalScript;
 exports.setsocket = setsocket;
 exports.getsocket = getsocket;
 exports.cleansocket = cleansocket;

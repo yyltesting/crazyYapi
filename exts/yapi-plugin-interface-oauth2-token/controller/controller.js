@@ -3,7 +3,7 @@ const https = require('https');
 const baseController = require('controllers/base.js');
 const oauthModel = require('../model/oauthModel.js');
 const syncTokenUtils = require('../utils/syncTokenUtil.js');
-const {crossRequest} = require('../../../common/postmanLib');
+const {crossRequest,setGlobalScript} = require('../../../common/postmanLib');
 
 class interfaceOauth2Controller extends baseController {
   constructor(ctx) {
@@ -141,6 +141,9 @@ class interfaceOauth2Controller extends baseController {
         if (dataType === 'data_json') {
           //获取工程信息
           let projectInfo = await this.projectModel.get(ctx.request.body.project_id);
+          if(projectInfo.global_script){
+            setGlobalScript(projectInfo.global_script);
+          }
           // let pre_script = projectInfo.pre_script;
           // let after_script = projectInfo.after_script;
           let options = {

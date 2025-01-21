@@ -14,6 +14,7 @@ const {
   crossRequest,
   handleCurrDomain,
   checkNameIsExistInArray,
+  setGlobalScript,
   setsocket,
   getsocket
 } = require('../../common/postmanLib');
@@ -224,6 +225,11 @@ class openController extends baseController {
     let colids=[];
     let colData2;
     var colName;
+    //获取工程全局key 并设置进lib
+    let projectInfo = await this.projectModel.getBaseInfo(projectId);
+    if(projectInfo.global_script){
+      setGlobalScript(projectInfo.global_script);
+    }
        //是否包含子测试集合，若包含获取子集合id
     if(ctx.params.descendants) {
       // colids = colids.concat(colData2.descendants);

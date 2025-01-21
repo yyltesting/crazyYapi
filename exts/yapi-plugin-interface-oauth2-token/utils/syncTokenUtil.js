@@ -4,7 +4,7 @@ const oauthModel = require('../model/oauthModel.js');
 const yapi = require('yapi.js');
 const https = require('https');
 const jobMap = new Map();
-const {crossRequest} = require('../../../common/postmanLib');
+const {crossRequest,setGlobalScript} = require('../../../common/postmanLib');
 
 class syncTokenUtils {
   constructor(ctx) {
@@ -185,6 +185,9 @@ class syncTokenUtils {
         let headers_data = this.arrToObject(oauthData.headers_data);
         //获取工程信息
         let projectInfo = await this.projectModel.get(projectId);
+        if(projectInfo.global_script){
+          setGlobalScript(projectInfo.global_script);
+        }
         // let pre_script = projectInfo.pre_script;
         // let after_script = projectInfo.after_script;
         let options = {

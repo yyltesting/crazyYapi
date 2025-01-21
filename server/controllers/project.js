@@ -985,7 +985,8 @@ class projectController extends baseController {
         desc: 'string',
         pre_script: 'string',
         after_script: 'string',
-        project_mock_script: 'string'
+        project_mock_script: 'string',
+        global_script: 'string'
       });
 
       if (!id) {

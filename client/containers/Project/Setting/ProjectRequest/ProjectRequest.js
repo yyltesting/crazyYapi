@@ -32,13 +32,15 @@ export default class ProjectRequest extends Component {
   componentWillMount() {
     this.setState({
       pre_script: this.props.projectMsg.pre_script,
-      after_script: this.props.projectMsg.after_script
+      after_script: this.props.projectMsg.after_script,
+      global_script: this.props.projectMsg.global_script
     });
   }
 
   handleSubmit = async () => {
     let result = await this.props.updateProjectScript({
       id: this.props.projectId,
+      global_script: this.state.global_script,
       pre_script: this.state.pre_script,
       after_script: this.state.after_script
     });
@@ -75,11 +77,19 @@ export default class ProjectRequest extends Component {
       }
     };
 
-    const { pre_script, after_script } = this.state;
+    const { pre_script, after_script,global_script } = this.state;
 
     return (
       <div className="project-request">
         <Form onSubmit={this.handleSubmit}>
+          <FormItem {...formItemLayout} label="全局公共方法(只做方法定义给工程/集合/用例脚本使用）">
+            <AceEditor
+              data={global_script}
+              onChange={editor => this.setState({ global_script: editor.text })}
+              fullScreen={true}
+              className="request-editor"
+            />
+          </FormItem>
           <FormItem {...formItemLayout} label="Pre-request Script(请求参数处理脚本)">
             <AceEditor
               data={pre_script}
