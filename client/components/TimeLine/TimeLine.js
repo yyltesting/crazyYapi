@@ -240,7 +240,7 @@ class TimeTree extends Component {
         <Modal
           style={{ minWidth: '800px' }}
           title="Api 改动日志"
-          visible={this.state.visible}
+          open={this.state.visible}
           footer={null}
           onCancel={this.handleCancel}
         >

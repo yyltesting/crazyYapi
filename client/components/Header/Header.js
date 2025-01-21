@@ -535,52 +535,49 @@ export default class HeaderCom extends Component {
             )}
           </div>
         </div>
-        {this.state.showPaymentModal && (
-          <Modal
-            title="stripe支付"
-            visible={this.state.showPaymentModal}
-            onCancel={this.closePaymentModal}
-            width={'1000px'}
-            footer={null}
-            style={{top:10}}
-          >
-            {/* 
-            <div className="payment-modal">
-              <form action="http://localhost:4242/create-checkout-session" method="POST">
-                <button type="submit">Checkout</button>
-              </form>
-            </div> */}
-            {this.state.stripePromise && (  // 只有在 stripePromise 存在时才渲染
-              <div id="checkout">
-                <EmbeddedCheckoutProvider
-                  stripe={this.state.stripePromise}
-                  options={options}
-                >
-                  <EmbeddedCheckout />
-                </EmbeddedCheckoutProvider>
-              </div>
-            )}
-          </Modal>
-        )}
-        {this.state.showInputPaymentModal && (
-          <Modal
-            title="stripe支付信息"
-            visible={this.state.showInputPaymentModal}
-            onOk={this.handleOk}
-            onCancel={this.closePaymentModal}
-            width={'500px'}
-            style={{top:10}}
-          >
-            <div className="pay-modal">
-              <Row className="payment_model_clientSecret">
-                <Input  onChange={this.changeclientSecret}  value={this.state.clientSecret}   placeholder="clientSecret"/>
-              </Row>
-              <Row className="payment_model_pk">
-                <Input  onChange={this.changePk}  value={this.state.pk}   placeholder="公钥"/>
-              </Row>
+        <Modal
+          title="stripe支付"
+          open={this.state.showPaymentModal}
+          onCancel={this.closePaymentModal}
+          width={'1000px'}
+          footer={null}
+          style={{top:10}}
+        >
+          {/* 
+          <div className="payment-modal">
+            <form action="http://localhost:4242/create-checkout-session" method="POST">
+              <button type="submit">Checkout</button>
+            </form>
+          </div> */}
+          {this.state.stripePromise && (  // 只有在 stripePromise 存在时才渲染
+            <div id="checkout">
+              <EmbeddedCheckoutProvider
+                stripe={this.state.stripePromise}
+                options={options}
+              >
+                <EmbeddedCheckout />
+              </EmbeddedCheckoutProvider>
             </div>
-          </Modal>
-        )}
+          )}
+        </Modal>
+    
+        <Modal
+          title="stripe支付信息"
+          open={this.state.showInputPaymentModal}
+          onOk={this.handleOk}
+          onCancel={this.closePaymentModal}
+          width={'500px'}
+          style={{top:10}}
+        >
+          <div className="pay-modal">
+            <Row className="payment_model_clientSecret">
+              <Input  onChange={this.changeclientSecret}  value={this.state.clientSecret}   placeholder="clientSecret"/>
+            </Row>
+            <Row className="payment_model_pk">
+              <Input  onChange={this.changePk}  value={this.state.pk}   placeholder="公钥"/>
+            </Row>
+          </div>
+        </Modal>
       </Header>
     );
   }

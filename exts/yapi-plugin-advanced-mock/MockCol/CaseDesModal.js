@@ -330,7 +330,7 @@ class CaseDesForm extends Component {
     return (
       <Modal
         title={isAdd ? '添加期望' : '编辑期望'}
-        visible={visible}
+        open={visible}
         maskClosable={false}
         onOk={this.handleOk}
         width={780}

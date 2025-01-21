@@ -291,7 +291,7 @@ class UpDateModal extends Component {
     return (
       <Modal
         title="修改项目"
-        visible={isUpdateModalShow}
+        open={isUpdateModalShow}
         onOk={this.handleOk}
         onCancel={this.handleCancel}
       >

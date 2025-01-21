@@ -1984,7 +1984,7 @@ executeTestsloop = async () => {
       <div className="interface-col">
         <Modal
           title={col_name+" 运行报告记录"} 
-          visible={this.state.showReportLogModal}
+          open={this.state.showReportLogModal}
           onOk={this.ShowReportLog}
           onCancel={this.closeReportLogModal}
           closable = {false}
@@ -2034,7 +2034,7 @@ executeTestsloop = async () => {
         </Modal>
         <Modal
           title="选择需要查看的日志服务"
-          visible={this.state.showLogModal}
+          open={this.state.showLogModal}
           onOk={this.searchLog}
           onCancel={this.closeLogModal}
           width={'1000px'}
@@ -2082,7 +2082,7 @@ executeTestsloop = async () => {
         </Modal>
         <Modal
             title="通用规则配置"
-            visible={this.state.commonSettingModalVisible}
+            open={this.state.commonSettingModalVisible}
             onOk={this.handleCommonSetting}
             onCancel={this.cancelCommonSetting}
             width={'1000px'}
@@ -2198,7 +2198,7 @@ executeTestsloop = async () => {
 
         <Modal
             title="循环测试"
-            visible={this.state.commonSettingLoop}
+            open={this.state.commonSettingLoop}
             onOk={this.executeTestsloop}
             onCancel={this.cancelLoopSetting}
             width={'1000px'}
@@ -2248,7 +2248,7 @@ executeTestsloop = async () => {
                   
         <Modal
             title="请求配置"
-            visible={this.state.Datadriven}
+            open={this.state.Datadriven}
             onOk={this.cancelDatadriven}
             onCancel={this.cancelDatadriven}
             footer = {null}
@@ -2260,7 +2260,7 @@ executeTestsloop = async () => {
         </Modal>
         <Modal
           title="JsonBody/Assert一键配置"
-          visible={this.state.bodyConfig}
+          open={this.state.bodyConfig}
           onOk={this.batchChangBody}
           onCancel={this.cancelBodyConfig}
           // footer = {null}
@@ -2456,159 +2456,61 @@ executeTestsloop = async () => {
           style={{
             minHeight: '500px'
           }}
-          visible={this.state.visible}
+          open={this.state.visible}
           onCancel={this.handleCancel}
           footer={null}
         >
           <CaseReport {...this.reports[this.state.curCaseid]} />
         </Modal>
 
-        {this.state.autoVisible && (
-          <Modal
-            title="服务端自动化测试"
-            width="1000px"
-            style={{
-              minHeight: '500px'
-            }}
-            visible={this.state.autoVisible}
-            onCancel={this.handleAuto}
-            className="autoTestsModal"
-            footer={null}
-          >
-            <Row justify="space-around" className="row" align="top">
-              <Col span={3} className="label" style={{ paddingTop: '16px' }}>
-                选择环境
-                <Tooltip title="默认使用测试用例选择的环境">
-                  <QuestionCircleOutlined />
-                </Tooltip>
-                &nbsp;：
-              </Col>
-              <Col span={21}>
-                <CaseEnv
-                  envList={this.props.envList}
-                  currProjectEnvChange={this.currProjectEnvChange}
-                  envValue={this.state.currColEnvObj}
-                  collapseKey={this.state.collapseKey}
-                  changeClose={this.changeCollapseClose}
-                />
-              </Col>
-            </Row>
-            <Row justify="start" className="row" align="middle" style={{ paddingTop: '16px' }}>
-              <Col>
-                <Col span={3}>
-                  输出格式：
-                </Col>
-                <Col span={3}>
-                  <Select value={this.state.mode} onChange={this.modeChange}>
-                    <Option key="html" value="html">
-                      html
-                    </Option>
-                    <Option key="json" value="json">
-                      json
-                    </Option>
-                  </Select>
-                </Col>
-
-                <Col span={3}>
-                  邮件通知
-                  <Tooltip title={'测试不通过时，会给项目组成员发送邮件'}>
-                    <QuestionCircleOutlined
-                      style={{
-                        width: '10px'
-                      }} />
-                  </Tooltip>
-                  &nbsp;：
-                </Col>
-                <Col span={3}>
-                  <Switch
-                    checked={this.state.email}
-                    checkedChildren="开"
-                    unCheckedChildren="关"
-                    onChange={this.emailChange}
-                  />
-                </Col>
-
-                <Col span={3}>
-                  下载数据
-                  <Tooltip title={'开启后，测试数据将被下载到本地'}>
-                    <QuestionCircleOutlined
-                      style={{
-                        width: '10px'
-                      }} />
-                  </Tooltip>
-                  &nbsp;：
-                </Col>
-                <Col span={3}>
-                  <Switch
-                    checked={this.state.download}
-                    checkedChildren="开"
-                    unCheckedChildren="关"
-                    onChange={this.downloadChange}
-                  />
-                </Col>
-                <Col span={3}>
-                  含子集合
-                  <Tooltip title={'开启后，将同时执行子集合所有用例'}>
-                    <QuestionCircleOutlined
-                      style={{
-                        width: '10px'
-                      }} />
-                  </Tooltip>
-                  &nbsp;：
-                </Col>
-                <Col span={3}>
-                  <Switch
-                    checked={this.state.descendants}
-                    data-allchilds={allChilds}
-                    checkedChildren="开"
-                    unCheckedChildren="关"
-                    onChange={this.descendants}
-                  />
-                </Col>
-                
-                <Col span={3}>
-                  子集合驱动
-                  <Tooltip title={'开启后，请求配置将调用子集合配置'}>
-                    <QuestionCircleOutlined
-                      style={{
-                        width: '10px'
-                      }} />
-                  </Tooltip>
-                  &nbsp;：
-                </Col>
-                <Col span={3}>
-                  <Switch
-                    checked={this.state.subset}
-                    checkedChildren="开"
-                    unCheckedChildren="关"
-                    onChange={this.subsetChange}
-                  />
-                </Col>
-
-                <Col span={3}>
-                  失败中断
-                  <Tooltip title={'开启后，失败将停止运行'}>
-                    <QuestionCircleOutlined
-                      style={{
-                        width: '10px'
-                      }} />
-                  </Tooltip>
-                  &nbsp;：
-                </Col>
-                <Col span={3}>
-                  <Switch
-                    checked={this.state.failedinterrupt}
-                    checkedChildren="开"
-                    unCheckedChildren="关"
-                    onChange={this.Failedinterrupt}
-                  />
-                </Col>
-              </Col>
-            </Row>
-            <Row justify="start" className="row" align="middle" style={{ paddingTop: '16px' }}>
+        <Modal
+          title="服务端自动化测试"
+          width="1000px"
+          style={{
+            minHeight: '500px'
+          }}
+          open={this.state.autoVisible}
+          onCancel={this.handleAuto}
+          className="autoTestsModal"
+          footer={null}
+        >
+          <Row justify="space-around" className="row" align="top">
+            <Col span={3} className="label" style={{ paddingTop: '16px' }}>
+              选择环境
+              <Tooltip title="默认使用测试用例选择的环境">
+                <QuestionCircleOutlined />
+              </Tooltip>
+              &nbsp;：
+            </Col>
+            <Col span={21}>
+              <CaseEnv
+                envList={this.props.envList}
+                currProjectEnvChange={this.currProjectEnvChange}
+                envValue={this.state.currColEnvObj}
+                collapseKey={this.state.collapseKey}
+                changeClose={this.changeCollapseClose}
+              />
+            </Col>
+          </Row>
+          <Row justify="start" className="row" align="middle" style={{ paddingTop: '16px' }}>
+            <Col>
               <Col span={3}>
-                服务端日志
-                <Tooltip title={'开启后，运行后会打开日志记录'}>
+                输出格式：
+              </Col>
+              <Col span={3}>
+                <Select value={this.state.mode} onChange={this.modeChange}>
+                  <Option key="html" value="html">
+                    html
+                  </Option>
+                  <Option key="json" value="json">
+                    json
+                  </Option>
+                </Select>
+              </Col>
+
+              <Col span={3}>
+                邮件通知
+                <Tooltip title={'测试不通过时，会给项目组成员发送邮件'}>
                   <QuestionCircleOutlined
                     style={{
                       width: '10px'
@@ -2618,77 +2520,173 @@ executeTestsloop = async () => {
               </Col>
               <Col span={3}>
                 <Switch
-                  checked={this.state.serverlog}
+                  checked={this.state.email}
                   checkedChildren="开"
                   unCheckedChildren="关"
-                  onChange={this.changeServerlog}
+                  onChange={this.emailChange}
                 />
               </Col>
-              {this.state.serverlog && (
-                <div>
-                  <Col span={3} style={{ width: '120px',marginLeft:'20px' }}>
-                    服务端日志uri
-                    <Tooltip title={'服务端日志关联env'}>
-                      <QuestionCircleOutlined
-                        style={{
-                          width: '15px'
-                        }} />
-                    </Tooltip>
-                    &nbsp;：
-                  </Col>
-                  <Col span={3} style={{ width: '200px' }}>
-                    <Select
-                      value={this.state.log_env}
-                      style={{ width: '100%' }}
-                      placeholder="关联envid"
-                      onChange={this.selectDomain}
-                    >
-                      {log_env}
-                    </Select>
-                  </Col>
-                  <Col span={3} style={{ width: '100px',marginLeft:'20px'  }}>
-                    日志服务名
-                    <Tooltip title={'服务端日志服务名'}>
-                      <QuestionCircleOutlined
-                        style={{
-                          width: '15px'
-                        }} />
-                    </Tooltip>
-                    &nbsp;：
-                  </Col>
-                  <Col span={3} style={{ width: '200px' }}>
-                    <Select
-                      mode="multiple"
-                      style={{ width: '100%' }}
-                      placeholder="请选择需要查看的日志服务"
-                      onChange={this.setjobName}
-                    >
-                      {jobNames}
-                    </Select>
-                  </Col>
-                </div>
-              )}
-            </Row>
-            <Row type="flex" justify="space-around" className="row" align="middle">
-              <Col span={21} className="autoTestUrl">
-                <a
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  href={localUrl + autoTestsUrl} >
-                  {autoTestsUrl}
-                </a>
+
+              <Col span={3}>
+                下载数据
+                <Tooltip title={'开启后，测试数据将被下载到本地'}>
+                  <QuestionCircleOutlined
+                    style={{
+                      width: '10px'
+                    }} />
+                </Tooltip>
+                &nbsp;：
               </Col>
               <Col span={3}>
-                <Button className="copy-btn" onClick={() => this.copyUrl(localUrl + autoTestsUrl)}>
-                  复制
-                </Button>
+                <Switch
+                  checked={this.state.download}
+                  checkedChildren="开"
+                  unCheckedChildren="关"
+                  onChange={this.downloadChange}
+                />
               </Col>
-            </Row>
-            <div className="autoTestMsg">
-              注：访问该URL，可以测试所有用例，请确保YApi服务器可以访问到环境配置的接口。配置好每个测试集合的通用规则，服务端测试将调用子集合的通用规则。
-            </div>
-          </Modal>
-        )}
+              <Col span={3}>
+                含子集合
+                <Tooltip title={'开启后，将同时执行子集合所有用例'}>
+                  <QuestionCircleOutlined
+                    style={{
+                      width: '10px'
+                    }} />
+                </Tooltip>
+                &nbsp;：
+              </Col>
+              <Col span={3}>
+                <Switch
+                  checked={this.state.descendants}
+                  data-allchilds={allChilds}
+                  checkedChildren="开"
+                  unCheckedChildren="关"
+                  onChange={this.descendants}
+                />
+              </Col>
+              
+              <Col span={3}>
+                子集合驱动
+                <Tooltip title={'开启后，请求配置将调用子集合配置'}>
+                  <QuestionCircleOutlined
+                    style={{
+                      width: '10px'
+                    }} />
+                </Tooltip>
+                &nbsp;：
+              </Col>
+              <Col span={3}>
+                <Switch
+                  checked={this.state.subset}
+                  checkedChildren="开"
+                  unCheckedChildren="关"
+                  onChange={this.subsetChange}
+                />
+              </Col>
+
+              <Col span={3}>
+                失败中断
+                <Tooltip title={'开启后，失败将停止运行'}>
+                  <QuestionCircleOutlined
+                    style={{
+                      width: '10px'
+                    }} />
+                </Tooltip>
+                &nbsp;：
+              </Col>
+              <Col span={3}>
+                <Switch
+                  checked={this.state.failedinterrupt}
+                  checkedChildren="开"
+                  unCheckedChildren="关"
+                  onChange={this.Failedinterrupt}
+                />
+              </Col>
+            </Col>
+          </Row>
+          <Row justify="start" className="row" align="middle" style={{ paddingTop: '16px' }}>
+            <Col span={3}>
+              服务端日志
+              <Tooltip title={'开启后，运行后会打开日志记录'}>
+                <QuestionCircleOutlined
+                  style={{
+                    width: '10px'
+                  }} />
+              </Tooltip>
+              &nbsp;：
+            </Col>
+            <Col span={3}>
+              <Switch
+                checked={this.state.serverlog}
+                checkedChildren="开"
+                unCheckedChildren="关"
+                onChange={this.changeServerlog}
+              />
+            </Col>
+            {this.state.serverlog && (
+              <div>
+                <Col span={3} style={{ width: '120px',marginLeft:'20px' }}>
+                  服务端日志uri
+                  <Tooltip title={'服务端日志关联env'}>
+                    <QuestionCircleOutlined
+                      style={{
+                        width: '15px'
+                      }} />
+                  </Tooltip>
+                  &nbsp;：
+                </Col>
+                <Col span={3} style={{ width: '200px' }}>
+                  <Select
+                    value={this.state.log_env}
+                    style={{ width: '100%' }}
+                    placeholder="关联envid"
+                    onChange={this.selectDomain}
+                  >
+                    {log_env}
+                  </Select>
+                </Col>
+                <Col span={3} style={{ width: '100px',marginLeft:'20px'  }}>
+                  日志服务名
+                  <Tooltip title={'服务端日志服务名'}>
+                    <QuestionCircleOutlined
+                      style={{
+                        width: '15px'
+                      }} />
+                  </Tooltip>
+                  &nbsp;：
+                </Col>
+                <Col span={3} style={{ width: '200px' }}>
+                  <Select
+                    mode="multiple"
+                    style={{ width: '100%' }}
+                    placeholder="请选择需要查看的日志服务"
+                    onChange={this.setjobName}
+                  >
+                    {jobNames}
+                  </Select>
+                </Col>
+              </div>
+            )}
+          </Row>
+          <Row type="flex" justify="space-around" className="row" align="middle">
+            <Col span={21} className="autoTestUrl">
+              <a
+                target="_blank"
+                rel="noopener noreferrer"
+                href={localUrl + autoTestsUrl} >
+                {autoTestsUrl}
+              </a>
+            </Col>
+            <Col span={3}>
+              <Button className="copy-btn" onClick={() => this.copyUrl(localUrl + autoTestsUrl)}>
+                复制
+              </Button>
+            </Col>
+          </Row>
+          <div className="autoTestMsg">
+            注：访问该URL，可以测试所有用例，请确保YApi服务器可以访问到环境配置的接口。配置好每个测试集合的通用规则，服务端测试将调用子集合的通用规则。
+          </div>
+        </Modal>
       </div>
     );
   }

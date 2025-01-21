@@ -167,7 +167,7 @@ class BachUpCase extends Component {
         <div>
           <Modal
             title="用例批量更新 注意更新的参数值有无互斥关系"
-            visible={this.state.showSyncModel}
+            open={this.state.showSyncModel}
             onOk={this.Syncbody}
             onCancel={() => {
               this.setState({ showSyncModel: false });

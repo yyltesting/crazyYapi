@@ -256,7 +256,7 @@ class ModalPostman extends Component {
             <EditOutlined /> 高级参数设置 utils工具方法：timestamp、bancard、idcard、phone
           </p>
         }
-        visible={visible}
+        open={visible}
         onOk={() => this.handleOk(outputParams())}
         onCancel={this.handleCancel}
         wrapClassName="modal-postman"

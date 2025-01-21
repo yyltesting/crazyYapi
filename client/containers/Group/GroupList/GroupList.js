@@ -283,10 +283,9 @@ export default class GroupList extends Component {
             })}
           </Menu>
         </div>
-        {this.state.addGroupModalVisible ? (
           <Modal
             title="添加分组"
-            visible={this.state.addGroupModalVisible}
+            open={this.state.addGroupModalVisible}
             onOk={this.addGroup}
             onCancel={this.hideModal}
             className="add-group-modal"
@@ -316,9 +315,6 @@ export default class GroupList extends Component {
               </Col>
             </Row>
           </Modal>
-        ) : (
-          ''
-        )}
       </div>
     );
   }

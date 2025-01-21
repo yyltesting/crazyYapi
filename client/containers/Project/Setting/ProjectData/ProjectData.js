@@ -919,7 +919,7 @@ class ProjectData extends Component {
               <Modal
                 className="add-col-modal"
                 title="添加到集合"
-                visible={this.state.saveColModalVisible}
+                open={this.state.saveColModalVisible}
                 onOk={()=>this.setState({ saveColModalVisible: false })}
                 onCancel={()=>this.setState({ saveColModalVisible: false,addColName:'',addColDesc:'',colid:[] })}
               >
@@ -964,7 +964,7 @@ class ProjectData extends Component {
               <Modal
                 className="export-col-modal"
                 title="选择导出集合"
-                visible={this.state.exportColModalVisible}
+                open={this.state.exportColModalVisible}
                 onOk={()=>this.setState({ exportColModalVisible: false })}
                 onCancel={()=>this.setState({ exportColModalVisible: false,colid:[] })}
               >

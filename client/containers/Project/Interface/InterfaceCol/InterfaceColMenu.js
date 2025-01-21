@@ -74,7 +74,7 @@ const ColModalForm = Form.create()(props => {
   h2title = type === 'edit' ? '编辑、编辑、编辑！' : h2title;
   // let dfenv = props.dfenv;
   return (
-    <Modal visible={visible} title={title} onCancel={onCancel} onOk={onCreate} >
+    <Modal open={visible} title={title} onCancel={onCancel} onOk={onCreate} >
       <h3>{h2title}</h3>
       <Form layout="vertical">
         <FormItem label="集合名">
@@ -1775,7 +1775,7 @@ export default class InterfaceColMenu extends Component {
 
         <Modal
             title="移动用例到其他项目"
-            visible={this.state.moveCaseVisible}
+            open={this.state.moveCaseVisible}
             className="import-case-modal"
             onOk={this.handleCaseMoveOk}
             onCancel={this.handleCaseMoveCancel}
@@ -1790,7 +1790,7 @@ export default class InterfaceColMenu extends Component {
 
         <Modal
           title="导入接口到集合"
-          visible={importInterVisible}
+          open={importInterVisible}
           onOk={this.handleImportOk}
           onCancel={this.handleImportCancel}
           className="import-case-modal"

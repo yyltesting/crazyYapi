@@ -51,7 +51,8 @@ class ProjectList extends Component {
     super(props);
     this.state = {
       groupList: [],
-      currGroupId: null
+      currGroupId: null,
+      groupType:''
     };
   }
   static propTypes = {
@@ -104,8 +105,32 @@ class ProjectList extends Component {
       currGroupId: this.props.currGroup._id ? this.props.currGroup._id : this.props.groupList[0]._id
     });
     this.setState({ groupList: this.props.groupList });
+    const selectedItem = this.props.groupList.find(
+      (item) => item._id === this.props.currGroup._id
+    );
+    if (selectedItem) {
+      this.setState({
+        groupType: selectedItem.type, // 更新 state 为选中的 type
+      });
+    }else{
+      this.setState({
+        groupType: this.props.groupList[0].type
+      });
+    }
   }
 
+  groupType=(value)=>{
+    // 根据选中的 value 查找对应的 item
+    const selectedItem = this.state.groupList.find(
+      (item) => item._id.toString() === value
+    );
+
+    if (selectedItem) {
+      this.setState({
+        groupType: selectedItem.type, // 更新 state 为选中的 type
+      });
+    }
+  }
   render() {
     const { getFieldDecorator } = this.props.form;
     return (
@@ -128,7 +153,7 @@ class ProjectList extends Component {
                   }
                 ]
               })(
-                <Select>
+                <Select onChange={this.groupType}>
                   {this.state.groupList.map((item, index) => (
                     <Option
                       disabled={
@@ -194,10 +219,12 @@ class ProjectList extends Component {
                     <span className="radio-desc">只有组长和项目开发者可以索引并查看项目信息</span>
                   </Radio>
                   <br />
-                  {/* <Radio value="public" className="radio">
-                    <Icon type="unlock" />公开<br />
-                    <span className="radio-desc">任何人都可以索引并查看项目信息</span>
-                  </Radio> */}
+                  {this.state.groupType !== 'private'&&
+                    <Radio value="public" className="radio">
+                      <LockOutlined />公开<br />
+                      <span className="radio-desc">任何人都可以索引并查看项目信息</span>
+                    </Radio>
+                  }
                 </RadioGroup>
               )}
             </FormItem>

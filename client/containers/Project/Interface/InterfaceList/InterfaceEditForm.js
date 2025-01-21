@@ -862,7 +862,7 @@ class InterfaceEditForm extends Component {
         <Modal
           title="批量添加参数"
           width={680}
-          visible={this.state.visible}
+          open={this.state.visible}
           onOk={this.handleBulkOk}
           onCancel={this.handleBulkCancel}
           okText="导入"

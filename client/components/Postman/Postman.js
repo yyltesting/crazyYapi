@@ -1149,19 +1149,18 @@ export default class Run extends Component {
           />
         )}
 
-        {this.state.envModalVisible && (
-          <Modal
-            title="环境设置"
-            visible={this.state.envModalVisible}
-            onOk={this.handleEnvOk}
-            onCancel={this.handleEnvCancel}
-            footer={null}
-            width={800}
-            className="env-modal"
-          >
-            <ProjectEnv projectId={this.props.data.project_id} onOk={this.handleEnvOk}/>
-          </Modal>
-        )}
+
+        <Modal
+          title="环境设置"
+          open={this.state.envModalVisible}
+          onOk={this.handleEnvOk}
+          onCancel={this.handleEnvCancel}
+          footer={null}
+          width={800}
+          className="env-modal"
+        >
+          <ProjectEnv projectId={this.props.data.project_id} onOk={this.handleEnvOk}/>
+        </Modal>
 
         {/* {this.props.type === 'case' ? (
           <div className="case-relation">
@@ -1814,15 +1813,15 @@ export default class Run extends Component {
           ) : null}       */}
 
         </Tabs>
-        <Modal title="查询结果集" visible={this.state.sqlquery} onOk={this.closesqlquery} onCancel={this.closesqlquery}>
+        <Modal title="查询结果集" open={this.state.sqlquery} onOk={this.closesqlquery} onCancel={this.closesqlquery}>
           <p>{this.state.resultsql}</p>
         </Modal>
-        <Modal title="查询结果集" visible={this.state.redisquery} onOk={this.closeredisquery} onCancel={this.closeredisquery}>
+        <Modal title="查询结果集" open={this.state.redisquery} onOk={this.closeredisquery} onCancel={this.closeredisquery}>
           <p>{this.state.resultredis}</p>
         </Modal>
         <Modal
             title="二维码"
-            visible={this.state.showQrcode}
+            open={this.state.showQrcode}
             onOk={this.closeQrcode}
             onCancel={this.closeQrcode}
             footer={null}

@@ -504,7 +504,7 @@ class InterfaceList extends Component {
         {this.state.visible && (
           <Modal
             title="添加接口"
-            visible={this.state.visible}
+            open={this.state.visible}
             onCancel={() => this.setState({ visible: false })}
             footer={null}
             className="addcatmodal"

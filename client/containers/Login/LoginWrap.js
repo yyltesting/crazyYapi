@@ -62,7 +62,7 @@ export default class LoginWrap extends Component {
           onCancel={() => this.setState({ fotgetpwd: false })}
           footer={null}
           className="Resetpwd"
-          visible={this.state.fotgetpwd}
+          open={this.state.fotgetpwd}
         >
           <ForgetpwdForm
             onCancel={() => this.setState({ fotgetpwd: false })}

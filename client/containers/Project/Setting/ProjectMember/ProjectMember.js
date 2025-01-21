@@ -331,7 +331,7 @@ class ProjectMember extends Component {
           {this.state.visible ? (
             <Modal
               title="添加成员"
-              visible={this.state.visible}
+              open={this.state.visible}
               onOk={this.handleOk}
               onCancel={this.handleCancel}
             >
@@ -361,7 +361,7 @@ class ProjectMember extends Component {
           )}
           <Modal
             title="批量导入成员"
-            visible={this.state.modalVisible}
+            open={this.state.modalVisible}
             onOk={this.handleModalOk}
             onCancel={this.handleModalCancel}
           >

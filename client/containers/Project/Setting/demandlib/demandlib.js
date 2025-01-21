@@ -324,7 +324,7 @@ render() {
         //添加
         <Modal
           title="需求详细描述，需求文档"
-          visible={this.state.aiCreateCaseModel}
+          open={this.state.aiCreateCaseModel}
           onCancel={() => this.setState({ aiCreateCaseModel: false,aiCreateCaseid:0,demandDesc:'' })}
           onOk={this.aiCreateCaselib}
           className="aicreatecasemodal"
@@ -349,7 +349,7 @@ render() {
         //添加
         <Modal
           title="添加需求"
-          visible={this.state.add}
+          open={this.state.add}
           onCancel={() => this.setState({ add: false })}
           footer={null}
           className="addcatmodal"
@@ -364,7 +364,7 @@ render() {
         //编辑
         <Modal
           title="编辑需求"
-          visible={this.state.edit}
+          open={this.state.edit}
           onCancel={() => this.setState({ edit: false })}
           footer={null}
           className="editcatmodal"
@@ -381,7 +381,7 @@ render() {
         //添加用例
         <Modal
           title="用例库"
-          visible={this.state.addcase}
+          open={this.state.addcase}
           onCancel={() => this.setState({ addcase: false })}
           footer={null}
           className="addcasemodal"

@@ -830,7 +830,7 @@ render() {
         wrapClassName="modal"
         className="modal-add-content"
         title={'用例excel上传-在线预览'}
-        visible={this.state.close}
+        open={this.state.close}
         onCancel={this.closemodal}
         destroyOnClose={true}
         footer={null}
@@ -864,7 +864,7 @@ render() {
         //添加
         <Modal
           title="添加用例"
-          visible={this.state.add}
+          open={this.state.add}
           onCancel={() => this.setState({ add: false })}
           footer={null}
           className="addcatmodal"
@@ -879,7 +879,7 @@ render() {
         //编辑
         <Modal
           title="编辑用例"
-          visible={this.state.edit}
+          open={this.state.edit}
           onCancel={() => this.setState({ edit: false })}
           footer={null}
           className="editcatmodal"

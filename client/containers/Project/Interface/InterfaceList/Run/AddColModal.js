@@ -92,7 +92,7 @@ export default class AddColModal extends Component {
       <Modal
         className="add-col-modal"
         title="添加到集合"
-        visible={this.props.visible}
+        open={this.props.visible}
         onOk={() => this.props.onOk(id, this.state.caseName)}
         onCancel={this.props.onCancel}
       >

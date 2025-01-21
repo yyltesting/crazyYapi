@@ -630,7 +630,7 @@ class InterfaceMenu extends Component {
         {this.state.visible ? (
           <Modal
             title="添加接口"
-            visible={this.state.visible}
+            open={this.state.visible}
             onCancel={() => this.changeModal('visible', false)}
             footer={null}
             className="addcatmodal"
@@ -651,7 +651,7 @@ class InterfaceMenu extends Component {
             title={
               this.state.curCatdata.addchild ? "在【" + this.state.curCatdata.name + "】下添加子分类" : "添加主分类"
             }
-            visible={this.state.add_cat_modal_visible}
+            open={this.state.add_cat_modal_visible}
             onCancel={() => this.changeModal('add_cat_modal_visible', false)}
             footer={null}
             className="addcatmodal"
@@ -669,7 +669,7 @@ class InterfaceMenu extends Component {
         {this.state.change_cat_modal_visible ? (
           <Modal
             title="修改分类"
-            visible={this.state.change_cat_modal_visible}
+            open={this.state.change_cat_modal_visible}
             onCancel={() => this.changeModal('change_cat_modal_visible', false)}
             footer={null}
             className="addcatmodal"
@@ -868,7 +868,7 @@ class InterfaceMenu extends Component {
         ) : null}
         <Modal
           title="移动接口到其他项目"
-          visible={this.state.moveInterVisible}
+          open={this.state.moveInterVisible}
           className="import-case-modal"
           onOk={this.handleMoveOk}
           onCancel={this.handleMoveCancel}
