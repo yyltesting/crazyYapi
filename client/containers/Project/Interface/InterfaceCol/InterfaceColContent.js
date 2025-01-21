@@ -2331,23 +2331,23 @@ executeTestsloop = async () => {
                   onChange={this.onChangeCheckbox}
                 >包含子集合用例</Checkbox>)}
             </div>
-            <Tooltip title= "请求配置">
-              <Button onClick={this.openDatadriven} style={{margin: '8px 20px 16px 0px'}} >
-                js Col请求配置</Button>
-            </Tooltip>
-            <Tooltip title= "参数配置">
-              <Button onClick={this.openBodyConfig} style={{margin: '8px 20px 8px 0px'}} >
-                参数断言批量配置</Button>
-            </Tooltip>
             <div>
               {(
                 <Checkbox
                   allChilds={allChilds}
                   checked={this.state.subsetcol}
                   onChange={this.onChangeSubsetcol}
-                >使用子集合驱动</Checkbox>)}
+                >使用子集合请求配置</Checkbox>)}
             </div>
             &nbsp;
+            <Tooltip title= "请求配置">
+              <Button onClick={this.openDatadriven} style={{margin: '8px 20px 16px 0px'}} >
+                js Col请求配置</Button>
+            </Tooltip>
+            <Tooltip title= "参数配置">
+              <Button onClick={this.openBodyConfig} style={{margin: '8px 20px 16px 0px'}} >
+                参数断言批量配置</Button>
+            </Tooltip>
           </Col>
           <Col span={10}>
             <CaseEnv
@@ -2388,16 +2388,16 @@ executeTestsloop = async () => {
                       }} >失败中断测试</Button>
                 &nbsp;
                 <Tooltip title="运行结果建议打开F12查看运行结果">
-                  <Button onClick={this.openLoopSetting} style={{
-                        marginRight: '8px'
-                      }} loading={this.state.isloading}>循环测试</Button>
+                  <Button onClick={this.openLoopSetting} loading={this.state.isloading}>
+                    循环测试</Button>
                 </Tooltip>
                 &nbsp;
                 <Button 
                   type="primary" 
                   style={{
                     marginTop: '8px',
-                    marginLeft: '8px'
+                    marginLeft: '8px',
+                    marginRight: '8px'
                   }}
                   onClick={this.executeTests}> 
                   开始测试

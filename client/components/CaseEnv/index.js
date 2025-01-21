@@ -61,15 +61,15 @@ export default class CaseEnv extends React.Component {
                       align="middle"
                       className="env-item"
                     >
-                      <Col span={6} className="label">
+                      <Col span={4} className="label">
                         <Tooltip title={item.name}>
-                          <span className="label-name">{item.name}</span>
+                          <span className="label-name">{item.name}_env</span>
                         </Tooltip>
                       </Col>
-                      <Col span={18}>
+                      <Col span={20}>
                         <Select
                           style={{
-                            width: '100%'
+                            width: '80%'
                           }}
                           value={this.props.envValue[item._id] || ''}
                           defaultValue=""
