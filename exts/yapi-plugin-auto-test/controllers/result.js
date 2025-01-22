@@ -100,7 +100,7 @@ class testResultController extends openController {
     //获取工程全局key 并设置进lib
     let projectInfo = await this.projectModel.getBaseInfo(projectId);
     if(projectInfo.global_script){
-      setGlobalScript(projectInfo.global_script);
+      setGlobalScript(projectId,projectInfo.global_script);
     }
        //是否包含子测试集合，若包含获取子集合id
     if(ctx.params.descendants) {

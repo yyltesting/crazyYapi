@@ -4,6 +4,7 @@ const baseController = require('controllers/base.js');
 const oauthModel = require('../model/oauthModel.js');
 const syncTokenUtils = require('../utils/syncTokenUtil.js');
 const {crossRequest,setGlobalScript} = require('../../../common/postmanLib');
+const createContext = require('../../../common/createContext')
 
 class interfaceOauth2Controller extends baseController {
   constructor(ctx) {
@@ -127,8 +128,15 @@ class interfaceOauth2Controller extends baseController {
     getTokenUrl = getTokenUrl.trim().replace('{time}', new Date().getTime());
     const axios = require('axios');
     let crossResult;
+    let options;
+    let projectInfo;
+    let result;
     try {
-      let result;
+      //获取工程信息
+      projectInfo = await this.projectModel.get(ctx.request.body.project_id);
+      if(projectInfo.global_script){
+        setGlobalScript(ctx.request.body.project_id,projectInfo.global_script);
+      }
       if (type === 'GET') {
         result = await axios.get(getTokenUrl, {
           params: params,
@@ -139,14 +147,7 @@ class interfaceOauth2Controller extends baseController {
         });
       } else {
         if (dataType === 'data_json') {
-          //获取工程信息
-          let projectInfo = await this.projectModel.get(ctx.request.body.project_id);
-          if(projectInfo.global_script){
-            setGlobalScript(projectInfo.global_script);
-          }
-          // let pre_script = projectInfo.pre_script;
-          // let after_script = projectInfo.after_script;
-          let options = {
+          options = {
             caseId: ctx.request.body._id,
             headers: headersData,
             method: ctx.request.body.method,
@@ -154,19 +155,9 @@ class interfaceOauth2Controller extends baseController {
             data: JSON.parse(data_json.trim().replace('{time}', new Date().getTime())),
             taskId: projectInfo.uid
           };
-          crossResult = await crossRequest(options, '', '',ctx.request.body.case_pre_script,ctx.request.body.case_post_script);
-          result = {
-            data : crossResult.res.body,
-            headers : crossResult.res.header,
-            status : crossResult.res.status
-          }
-        } else {
+        }else{
           headersData['Content-Type'] = 'application/x-www-form-urlencoded';
-          //获取工程信息
-          let projectInfo = await this.projectModel.get(ctx.request.body.project_id);
-          // let pre_script = projectInfo.pre_script;
-          // let after_script = projectInfo.after_script;
-          let options = {
+          options = {
             caseId: ctx.request.body._id,
             headers: headersData,
             method: ctx.request.body.method,
@@ -174,20 +165,25 @@ class interfaceOauth2Controller extends baseController {
             data: formData,
             taskId: projectInfo.uid
           };
-          crossResult = await crossRequest(options, '', '',ctx.request.body.case_pre_script,ctx.request.body.case_post_script);
-          result = {
-            data : crossResult.res.body,
-            headers : crossResult.res.header,
-            status : crossResult.res.status
-          }
+        }
+        crossResult = await crossRequest(options, '', '',ctx.request.body.case_pre_script,ctx.request.body.case_post_script,"","","",createContext(
+          projectInfo.uid,
+          ctx.request.body.project_id,
+          ctx.request.body._id
+        ));
+        result = {
+          data : crossResult.res.body,
+          headers : crossResult.res.header,
+          status : crossResult.res.status
+        }
           // result = await axios.post(getTokenUrl, formData.join('&'), {
           //   headers: headersData,
           //   httpsAgent: new https.Agent({
           //     rejectUnauthorized: false
           //   })
           // });
-        }
       }
+      
       ctx.body = yapi.commons.resReturn(result.data);
       if (result.status >= 300) {
         yapi.commons.log('校验地址返回错误状态,' + result);

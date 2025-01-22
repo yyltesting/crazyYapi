@@ -401,7 +401,7 @@ export function delProject(id) {
 export async function getProject(id) {
   let result = await axios.get('/api/project/get?id=' + id);
   if(result.data.errcode==0){
-    setGlobalScript(result.data.data.global_script);
+    setGlobalScript(id,result.data.data.global_script);
   }
   return {
     type: GET_CURR_PROJECT,

@@ -5,6 +5,7 @@ const yapi = require('yapi.js');
 const https = require('https');
 const jobMap = new Map();
 const {crossRequest,setGlobalScript} = require('../../../common/postmanLib');
+const createContext = require('../../../common/createContext')
 
 class syncTokenUtils {
   constructor(ctx) {
@@ -175,22 +176,22 @@ class syncTokenUtils {
     let method = oauthData.request_type;
     let result;
     let crossResult;
-
+    let headers_data 
+    let options;
+    let projectInfo
     try {
+      //获取工程信息
+      projectInfo = await this.projectModel.get(projectId);
+      if(projectInfo.global_script){
+        setGlobalScript(projectId,projectInfo.global_script);
+      }
       if (method === 'GET') {
-        let headers_data = oauthData.headers_data;
+        headers_data = oauthData.headers_data;
         let params = oauthData.params;
         result = await this.execGetToken(getTokenUrl, method, headers_data, params);
       } else if(oauthData.dataType === 'data_json'){
-        let headers_data = this.arrToObject(oauthData.headers_data);
-        //获取工程信息
-        let projectInfo = await this.projectModel.get(projectId);
-        if(projectInfo.global_script){
-          setGlobalScript(projectInfo.global_script);
-        }
-        // let pre_script = projectInfo.pre_script;
-        // let after_script = projectInfo.after_script;
-        let options = {
+        headers_data = this.arrToObject(oauthData.headers_data);
+        options = {
           caseId: oauthData._id,
           headers: headers_data,
           method: oauthData.request_type,
@@ -198,20 +199,10 @@ class syncTokenUtils {
           data: JSON.parse(oauthData.data_json),
           taskId: projectInfo.uid
         };
-        crossResult = await crossRequest(options, '', '',oauthData.case_pre_script,oauthData.case_post_script);
-        result = {
-          data : crossResult.res.body,
-          headers : crossResult.res.header,
-          status : crossResult.res.status
-        }
       }else{
-        let headers_data = this.arrToObject(oauthData.headers_data);
-        let formData = this.arrToObject(oauthData.form_data);
-        //获取工程信息
-        let projectInfo = await this.projectModel.get(projectId);
-        // let pre_script = projectInfo.pre_script;
-        // let after_script = projectInfo.after_script;
-        let options = {
+        headers_data = this.arrToObject(oauthData.headers_data);
+        formData = this.arrToObject(oauthData.form_data);
+        options = {
           caseId: oauthData._id,
           headers: headers_data,
           method: oauthData.request_type,
@@ -219,23 +210,17 @@ class syncTokenUtils {
           data: formData,
           taskId: projectInfo.uid
         };
-        crossResult = await crossRequest(options, '', '',oauthData.case_pre_script,oauthData.case_post_script);
-        result = {
-          data : crossResult.res.body,
-          headers : crossResult.res.header,
-          status : crossResult.res.status
-        }
-        // let dataType = oauthData.dataType;
-        // let formData = oauthData.form_data;
-        // let dataJson = oauthData.data_json;
-        // result = await this.execGetToken(
-        //   getTokenUrl,
-        //   method,
-        //   headers_data,
-        //   formData,
-        //   dataJson,
-        //   dataType
-        // );
+      }
+
+      crossResult = await crossRequest(options, '', '',oauthData.case_pre_script,oauthData.case_post_script,"","","",createContext(
+        projectInfo.uid,
+        projectInfo._id,
+        oauthData._id
+      ));
+      result = {
+        data : crossResult.res.body,
+        headers : crossResult.res.header,
+        status : crossResult.res.status
       }
       if(result.status!==200){
         yapi.commons.log('环境：【' + oauthData.env_name + '】获取数据失败，请确认 getTokenUrl 是否正确');

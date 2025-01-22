@@ -81,7 +81,6 @@ class OAuth2Content extends Component {
       env_name,
       get_token_url,
       is_oauth_open,
-      project_id,
       token_header,
       token_valid_hour,
       up_time,
@@ -135,7 +134,6 @@ class OAuth2Content extends Component {
           env_name,
           get_token_url,
           is_oauth_open,
-          project_id,
           token_header,
           token_valid_hour,
           token_valid_unit: 'hour',
@@ -224,8 +222,7 @@ class OAuth2Content extends Component {
       form_data,
       dataType,
       headers_data,
-      _id,
-      project_id
+      _id
     } = this.state.oauth_data;
     if (!is_oauth_open) {
       callback();
@@ -234,7 +231,7 @@ class OAuth2Content extends Component {
     try {
       let res = await axios.post('/api/plugin/oauthInterface/url/valid', {
         _id,
-        project_id,
+        project_id:this.props.projectId,
         url: get_token_url,
         method: request_type,
         headers_data: headers_data,

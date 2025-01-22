@@ -11,10 +11,10 @@ const jsrsasign = require('jsrsasign');
 const https = require('https');
 
 const isNode = typeof global == 'object' && global.global === global;
-//存留全局方法 可能不同工程同时运行有问题
-var global_script='';
-function setGlobalScript(str){
-  global_script = str;
+//存留全局方法
+var global_script={};
+function setGlobalScript(id,str){
+  global_script[id] = str;
 }
 function getGlobalScript(){
   return global_script;
@@ -584,7 +584,7 @@ async function crossRequest(defaultOptions, preScript, afterScript,case_pre_scri
     axios: axios
   })
   if (preScript) {
-    context = await sandbox(context, global_script+preScript);
+    context = await sandbox(context, global_script[context.yapi_projectId]+preScript);
     defaultOptions.url = options.url = URL.format({
       protocol: urlObj.protocol,
       host: urlObj.host,
@@ -595,7 +595,7 @@ async function crossRequest(defaultOptions, preScript, afterScript,case_pre_scri
     defaultOptions.data = options.data = context.requestBody;
   }
   if (colpre_script) {
-    context = await sandbox(context, global_script+colpre_script);
+    context = await sandbox(context, global_script[context.yapi_projectId]+colpre_script);
     defaultOptions.url = options.url = URL.format({
       protocol: urlObj.protocol,
       host: urlObj.host,
@@ -606,7 +606,7 @@ async function crossRequest(defaultOptions, preScript, afterScript,case_pre_scri
     defaultOptions.data = options.data = context.requestBody;
   }
   if (case_pre_script) {
-    context = await sandbox(context, global_script+case_pre_script);
+    context = await sandbox(context, global_script[context.yapi_projectId]+case_pre_script);
     // var y = decodeURIComponent(context.query);
     defaultOptions.url = options.url = URL.format({
       protocol: urlObj.protocol,
@@ -778,7 +778,7 @@ for(let i=0;i<Loopnum;i++){
     context.responseHeader = data.res.header;
     context.responseStatus = data.res.status;
     context.runTime = data.runTime;
-    context = await sandbox(context, global_script+afterScript);
+    context = await sandbox(context, global_script[context.yapi_projectId]+afterScript);
     data.res.body = context.responseData;
     data.res.header = context.responseHeader;
     data.res.status = context.responseStatus;
@@ -790,7 +790,7 @@ for(let i=0;i<Loopnum;i++){
     context.responseHeader = data.res.header;
     context.responseStatus = data.res.status;
     context.runTime = data.runTime;
-    context = await sandbox(context, global_script+colafter_script);
+    context = await sandbox(context, global_script[context.yapi_projectId]+colafter_script);
     data.res.body = context.responseData;
     data.res.header = context.responseHeader;
     data.res.status = context.responseStatus;
@@ -802,7 +802,7 @@ for(let i=0;i<Loopnum;i++){
     context.responseHeader = data.res.header;
     context.responseStatus = data.res.status;
     context.runTime = data.runTime;
-    context = await sandbox(context, global_script+case_post_script);
+    context = await sandbox(context, global_script[context.yapi_projectId]+case_post_script);
     data.res.body = context.responseData;
     data.res.header = context.responseHeader;
     data.res.status = context.responseStatus;
