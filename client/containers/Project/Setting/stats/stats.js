@@ -64,43 +64,59 @@ export class stats extends React.Component {
     };
   }
   async componentWillMount() {
-    let result = await this.props.getcolcasestats(this.props.curProject._id);
-    let stats = result.payload.data.data;
-    let result1 = await this.props.getcasestats(this.props.curProject._id);
-    let stats1 = result1.payload.data.data;
-    let result2 = await this.props.getfailcol(this.props.curProject._id);
-    let failcollist = result2.payload.data.data;
-
-    let caselibverisonsresult = await this.props.getcaseliversions(this.props.curProject._id);
-    let caselibverisons = caselibverisonsresult.payload.data.data;
-    let demandlistresult = await this.props.getdemands(this.props.curProject._id);
-    let demandlist = demandlistresult.payload.data.data;
-    
-    for(let item of failcollist){
-      item.up_time = moment(item.up_time*1000).format("YYYY-MM-DD HH:mm:ss");
-      item.href = "/project/"+this.props.curProject._id+"/interface/col/"+item._id;
-    }
-    let result3= await this.props.getfailcase(this.props.curProject._id);
-    let failcaselist = result3.payload.data.data;
-    for(let item of failcaselist){
-      item.up_time = moment(item.up_time*1000).format("YYYY-MM-DD HH:mm:ss");
-      item.href = "/project/"+this.props.curProject._id+"/interface/case/"+item.interface_caseid;
-    }
-    this.setState(
-      {
-        sumcol:stats.col,
-        successcol:stats.colsuccess,
-        failcol:stats.colfail,
-        casecount:stats1.casecount,
-        casesuccess:stats1.casesuccess,
-        casefail:stats1.casefail,
-        failcollist : failcollist,
-        failcaselist:failcaselist,
-        demandlist:demandlist,
-        caselibverisons:caselibverisons
-      }
-    )
+    const { curProject, getcolcasestats, getcasestats, getfailcol, getcaseliversions, getdemands, getfailcase } = this.props;
+    const projectId = curProject._id;
+  
+    // 并行获取数据
+    const [
+      colStatsResult,
+      caseStatsResult,
+      failColResult,
+      caseLibVersionsResult,
+      demandListResult,
+      failCaseResult
+    ] = await Promise.all([
+      getcolcasestats(projectId),
+      getcasestats(projectId),
+      getfailcol(projectId),
+      getcaseliversions(projectId),
+      getdemands(projectId),
+      getfailcase(projectId)
+    ]);
+  
+    // 提取数据
+    const colStats = colStatsResult.payload.data.data;
+    const caseStats = caseStatsResult.payload.data.data;
+    const failColList = failColResult.payload.data.data;
+    const caseLibVersions = caseLibVersionsResult.payload.data.data;
+    const demandList = demandListResult.payload.data.data;
+    const failCaseList = failCaseResult.payload.data.data;
+  
+    // 格式化数据
+    const formatItem = (item, type) => {
+      item.up_time = moment(item.up_time * 1000).format("YYYY-MM-DD HH:mm:ss");
+      item.href = `/project/${projectId}/interface/${type}/${type === "col" ? item._id : item.interface_caseid}`;
+      return item;
+    };
+  
+    const formattedFailColList = failColList.map(item => formatItem(item, "col"));
+    const formattedFailCaseList = failCaseList.map(item => formatItem(item, "caselib"));
+  
+    // 更新状态
+    this.setState({
+      sumcol: colStats.col,
+      successcol: colStats.colsuccess,
+      failcol: colStats.colfail,
+      casecount: caseStats.casecount,
+      casesuccess: caseStats.casesuccess,
+      casefail: caseStats.casefail,
+      failcollist: formattedFailColList,
+      failcaselist: formattedFailCaseList,
+      demandlist: demandList,
+      caselibverisons: caseLibVersions
+    });
   }
+  
   returnCase = (t)=>{
     localStorage.setItem('libCase',t);
   }
@@ -117,19 +133,19 @@ export class stats extends React.Component {
     this.setState({demandid:value})
   }
   searchCaseState=async ()=>{
-    let result1 = await this.props.getcasestats(this.props.curProject._id,this.state.demandid,this.state.caselibVersion);
-    let stats1 = result1.payload.data.data;
-    let result3= await this.props.getfailcase(this.props.curProject._id,this.state.demandid,this.state.caselibVersion);
-    let failcaselist = result3.payload.data.data;
+    let caseStatsResult = await this.props.getcasestats(this.props.curProject._id,this.state.demandid,this.state.caselibVersion);
+    let caseStats = caseStatsResult.payload.data.data;
+    let failCaseResult= await this.props.getfailcase(this.props.curProject._id,this.state.demandid,this.state.caselibVersion);
+    let failcaselist = failCaseResult.payload.data.data;
     for(let item of failcaselist){
       item.up_time = moment(item.up_time*1000).format("YYYY-MM-DD HH:mm:ss");
       item.href = "/project/"+this.props.curProject._id+"/interface/case/"+item.interface_caseid;
     }
     this.setState(
       {
-        casecount:stats1.casecount,
-        casesuccess:stats1.casesuccess,
-        casefail:stats1.casefail,
+        casecount:caseStats.casecount,
+        casesuccess:caseStats.casesuccess,
+        casefail:caseStats.casefail,
         failcaselist:failcaselist
       }
     )
