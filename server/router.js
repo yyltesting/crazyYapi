@@ -136,6 +136,11 @@ let routerConfig = {
       action: 'getversion',
       path: 'getversion',
       method: 'get'
+    },
+    {
+      action: 'upinterfacecaseid',
+      path: 'upinterfacecaseid',
+      method: 'post'
     }
   ],
   demand:[

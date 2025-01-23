@@ -5,7 +5,7 @@ import {connect} from 'react-redux';
 import * as XLSX from 'xlsx';
 import axios from 'axios';
 import ExcelJs from "exceljs";
-import { CopyOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { CopyOutlined, DeleteOutlined, EditOutlined,ArrowRightOutlined,CheckOutlined } from '@ant-design/icons';
 import { message, Modal, Table, Button, Upload, Select, Layout, Tooltip, Input } from 'antd';
 import './Caselib.scss';
 import Addcase from '../../Interface/InterfaceList/Addcase.js';
@@ -86,7 +86,8 @@ class Caselib extends Component {
       serchtitle:'',
       delid:[],
       delloading:false,
-      selectedRowKeys:[]
+      selectedRowKeys:[],
+      editedRows:{}
     };
     this.cancelSourceSet = new Set();
   }
@@ -138,8 +139,15 @@ class Caselib extends Component {
     }
     res = await this.props.caseliblist(option);
     if (axios.isCancel(res.payload)) return;
+    let data = [];
+    data = this.props.caselist;
+    let dataSource = data.map(item => {
+      item.key = item._id;
+      return item;
+    });
     this.setState({
-      isLoading: false
+      isLoading: false,
+      dataSource: dataSource
     })
   };
   //表单改变
@@ -314,6 +322,54 @@ Copycase= async data => {
   returnCase = (t)=>{
     localStorage.setItem('libCase',t);
   }
+  upCaseforinterfaceCase=async(key,interface_caseid)=>{
+    try{
+      if(isNaN(interface_caseid-0))
+      {
+        message.error("请输入数字");
+        return
+      }
+      const params = {
+        caseid: key,
+        interface_caseid:interface_caseid
+      };
+      let result = await axios.post('/api/caselib/upinterfacecaseid', params);
+      if (result.data.errcode === 0) {
+        message.success('更新成功');
+        let editedRows = this.state;
+        delete editedRows[key];
+        this.setState({
+          editedRows: {
+            ...editedRows
+          }
+        });
+      } else {
+        message.error(result.data.errmsg);
+      }
+    }catch(e){
+      message.error('用例KEY不符合规范');
+    }
+  }
+  // 修改某一行的 interface_caseid
+  changeInterfaceCaseId = (key, value) => {
+    //记录编辑的数据
+    const { editedRows } = this.state;
+    if(!editedRows[key]){
+      this.setState({
+        editedRows: {
+          ...editedRows,
+          [key]: !editedRows[key]
+        }
+      });
+    }
+    let { dataSource } = this.state;
+    const updatedData = dataSource.map(row =>
+      row.key === key ? { ...row, interface_caseid: value } : row
+    );
+    this.setState({
+      dataSource: updatedData
+    });
+  };
   //导入
   toSubmit = async() => {
     await this.setState({
@@ -486,7 +542,7 @@ Copycase= async data => {
           case "title":
             return { width: 20 };
           case "preconditions":
-            return { width: 20 };
+            return { width: 10 };
           case "step":
             return { width: 30 };
           case "expect":
@@ -497,8 +553,10 @@ Copycase= async data => {
             return { width: 10 };
           case "status":
             return { width: 10 };
+          case "interface_caseid":
+            return { width: 30 };
           default:
-            return { width: 10 };
+            return { width: 20 };
         }
       });
   
@@ -744,7 +802,18 @@ render() {
       dataIndex: 'interface_caseid',
       key: 'interface_caseid',
       // render: text => <a href={`/project/${this.props.projectid}/interface/case/${text}`}>{text}</a>
-      render: text=> <Button type='link' href={`/project/${this.props.projectid}/interface/case/${text}`} onClick={()=>this.returnCase(text)}>{text}</Button>
+      render: (text,record)=> {
+        const isEditing = this.state.editedRows[record._id];
+        return(
+          <div>
+            <Input.Group compact>
+              <Button type="text" icon={<ArrowRightOutlined />} href={`/project/${this.props.projectid}/interface/case/${text}`} onClick={()=>this.returnCase(text)}></Button>
+              <Input defaultValue={text} style={{width:'60px'}} onChange={e => this.changeInterfaceCaseId(record._id,e.target.value)}></Input>
+              {isEditing && <Button type="text" icon={<CheckOutlined />} onClick={()=>this.upCaseforinterfaceCase(record._id,record.interface_caseid)}/>}
+            </Input.Group>
+          </div>
+        )
+      }
     },
     {
       title: '操作',
@@ -775,12 +844,7 @@ render() {
     }
   ];
   // let total = 0;
-  let data = [];
-  data = this.props.caselist;
-  data = data.map(item => {
-    item.key = item._id;
-    return item;
-  });
+
   let aggregate = this.props.aggregate;
   let aggregateMessage = JSON.stringify(aggregate.map(obj => {
     let types = apistatusArr.find(item => item.value === obj._id);
@@ -819,7 +883,7 @@ render() {
           }}
           >
           <div className="caselist">
-            <Table className='table-caselist' rowSelection={rowSelection} loading={this.state.isLoading} columns={columns} dataSource={data} position='bottom' bordered pagination={pageConfig} onChange={this.handleChange}/>
+            <Table className='table-caselist' rowSelection={rowSelection} loading={this.state.isLoading} columns={columns} dataSource={this.state.dataSource} position='bottom' bordered pagination={pageConfig} onChange={this.handleChange}/>
           </div>
         </Content>
       </Layout>

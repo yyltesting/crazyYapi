@@ -259,7 +259,83 @@ class caselibController extends baseController {
         return(ctx.body = yapi.commons.resReturn(null, 400, e.message));
       }
     }
+  /**
+  * 更新关联key
+  * @interface /caselib/upinterfacecaseid
+  * @method POST
+  * @category caselib
+  * @foldnumber 10
+  * @param {Number} caseid 用例id，不能为空
+  * @param {Number} interface_caseid 关联接口用例id
+  * @returns {Object}
+  * @example 
+   */
+  async upinterfacecaseid(ctx) {
+    try {
+      let params = ctx.request.body;
+      let id = params.caseid;
 
+      params = yapi.commons.handleParams(params, {
+        interface_caseid:'number'
+      });
+      let caseData = await this.Model.get(id);
+      if (!caseData) {
+        return (ctx.body = yapi.commons.resReturn(null, 400, '不存在'));
+      }
+      if (!params.caseid) {
+        return (ctx.body = yapi.commons.resReturn(null, 400, '用例id不能为空'));
+      }
+
+      let auth = await this.checkAuth(params.caseid, 'case', 'edit');
+      if (!auth) {
+          return (ctx.body = yapi.commons.resReturn(null, 400, '没有权限'));
+      }
+
+      if(params.interface_caseid){
+        let interfacecaseData = await this.caseModel.get(params.interface_caseid);//获取对应接口用例数据
+        if(!interfacecaseData){
+          return (ctx.body = yapi.commons.resReturn(null, 400, '接口用例不存在'));//判断当前接口用例数据是否存在
+        }else{
+          let resultdata = await this.Model.getInterfacecaseid(params.interface_caseid);//获取当前key是否有数据
+          if(resultdata&&caseData.interface_caseid!=params.interface_caseid){
+            return (ctx.body = yapi.commons.resReturn(null, 400, '接口用例已被绑定'));
+          }else if(caseData&&caseData.interface_caseid!==params.interface_caseid){
+            await this.caseModel.up(caseData.interface_caseid,{
+              testcaseid : null
+            });
+            let interfaceparams = {
+              testcaseid : id
+            }
+            await this.caseModel.up(params.interface_caseid,interfaceparams);
+          }else{
+            let interfaceparams = {
+              testcaseid : id
+            }
+            await this.caseModel.up(params.interface_caseid,interfaceparams);
+          }
+        }
+      }else if(caseData.interface_caseid){
+        await this.caseModel.up(caseData.interface_caseid,{
+          testcaseid : null
+        });
+      }
+      delete params.caseid;
+      let result = await this.Model.up(id, params);
+      let username = this.getUsername();
+      let demandData = await this.demandlibModel.get(caseData.demandid);
+      let project_id = demandData.project_id;
+      yapi.commons.saveLog({
+          content: `<a href="/user/profile/${this.getUid()}">${username}</a> 更新了用例库关联KEY <a href="/project/${project_id}/demandlib">${params.title}</a>`,
+          type: 'project',
+          uid:this.getUid(),
+          username: username,
+          typeid: project_id
+        });
+      ctx.body = yapi.commons.resReturn(result);
+    } catch (e) {
+      return(ctx.body = yapi.commons.resReturn(null, 400, e.message));
+    }
+  }
   /**
    * 获取所有项目需求
    * @interface /caselib/list
