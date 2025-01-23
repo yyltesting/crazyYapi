@@ -41,7 +41,15 @@ class caselib extends baseModel {
       })
       .exec();
   }
-
+  getversion(id){
+    return this.model
+    .find({
+      demandid: id,
+      version: { $ne: null }
+    })
+    .distinct('version')
+    .exec();
+  }
   getInterfacecaseid(interface_caseid) {
     return this.model
       .findOne({
@@ -50,25 +58,29 @@ class caselib extends baseModel {
       .exec();
   }
 
-  getdemandcase(demandid){
+  getdemandcase(demandid,version){
+    let query = { demandid: demandid };
+    if (version) {
+      query.version = version;
+    }
     return this.model
-    .count({
-      demandid: demandid
-    })
+    .count(query)
   }
-  getcasesuccess(demandid){
+  getcasesuccess(demandid,version){
+    let query = { demandid: demandid,status:'pass' };
+    if (version) {
+      query.version = version;
+    }
     return this.model
-    .count({
-      demandid: demandid,
-      status: 'pass'
-    })
+    .count(query)
   }
-  failcase(demandid){
+  failcase(demandid,version){
+    let query = { demandid: demandid,status:'fail' };
+    if (version) {
+      query.version = version;
+    }
     return this.model
-      .find({
-        demandid: demandid,
-        status:'fail'
-      })
+      .find(query)
       .select('title up_time interface_caseid')
       .exec();
   }

@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes, { number } from 'prop-types';
-import {getcolcasestats,getProject,getcasestats,getfailcol,getfailcase} from '../../../../reducer/modules/project.js';
+import {getcolcasestats,getProject,getcasestats,getfailcol,getfailcase,getcaseliversions,getdemands} from '../../../../reducer/modules/project.js';
 import {connect} from 'react-redux';
 // import axios from 'axios';
-import {Tooltip,Progress,Layout,List,Button} from 'antd';
+import {Tooltip,Progress,Layout,List,Button,Select} from 'antd';
+import { SearchOutlined } from '@ant-design/icons';
 import { withRouter } from 'react-router';
 import './stats.scss';
 import InfiniteScroll from 'react-infinite-scroller';
@@ -19,7 +20,9 @@ const { Content } = Layout;
       curProject: state.project.currProject,
       casestats: state.project.casestats,
       failcol: state.project.failcol,
-      failcase:state.project.failcase
+      failcase:state.project.failcase,
+      demandlist:state.project.demandlist,
+      caselibverisons:state.project.caselibverisons
     };
   },
   {
@@ -27,7 +30,9 @@ const { Content } = Layout;
     getProject,
     getcasestats,
     getfailcol,
-    getfailcase
+    getfailcase,
+    getcaseliversions,
+    getdemands
   }
 )
 @withRouter
@@ -49,7 +54,13 @@ export class stats extends React.Component {
       casesuccess:number,
       casefail:number,
       failcollist:[],
-      failcaselist:[]
+      failcaselist:[],
+      demandlist:[],
+      caselibverisons:[],
+      caselibVersion:'',
+      demandid:'',
+      interfaceVersions:[],
+      interfaceVersion:''
     };
   }
   async componentWillMount() {
@@ -59,6 +70,12 @@ export class stats extends React.Component {
     let stats1 = result1.payload.data.data;
     let result2 = await this.props.getfailcol(this.props.curProject._id);
     let failcollist = result2.payload.data.data;
+
+    let caselibverisonsresult = await this.props.getcaseliversions(this.props.curProject._id);
+    let caselibverisons = caselibverisonsresult.payload.data.data;
+    let demandlistresult = await this.props.getdemands(this.props.curProject._id);
+    let demandlist = demandlistresult.payload.data.data;
+    
     for(let item of failcollist){
       item.up_time = moment(item.up_time*1000).format("YYYY-MM-DD HH:mm:ss");
       item.href = "/project/"+this.props.curProject._id+"/interface/col/"+item._id;
@@ -78,7 +95,9 @@ export class stats extends React.Component {
         casesuccess:stats1.casesuccess,
         casefail:stats1.casefail,
         failcollist : failcollist,
-        failcaselist:failcaselist
+        failcaselist:failcaselist,
+        demandlist:demandlist,
+        caselibverisons:caselibverisons
       }
     )
   }
@@ -87,6 +106,35 @@ export class stats extends React.Component {
   }
   returnCol = (t)=>{
     localStorage.setItem('libCol',t);
+  }
+  selectInterfaceVersion = (value)=>{
+    this.setState({interfaceVersion:value})
+  }
+  selectCaselibVersion = (value)=>{
+    this.setState({caselibVersion:value})
+  }
+  selectDemand = (value)=>{
+    this.setState({demandid:value})
+  }
+  searchCaseState=async ()=>{
+    let result1 = await this.props.getcasestats(this.props.curProject._id,this.state.demandid,this.state.caselibVersion);
+    let stats1 = result1.payload.data.data;
+    let result3= await this.props.getfailcase(this.props.curProject._id,this.state.demandid,this.state.caselibVersion);
+    let failcaselist = result3.payload.data.data;
+    for(let item of failcaselist){
+      item.up_time = moment(item.up_time*1000).format("YYYY-MM-DD HH:mm:ss");
+      item.href = "/project/"+this.props.curProject._id+"/interface/case/"+item.interface_caseid;
+    }
+    this.setState(
+      {
+        casecount:stats1.casecount,
+        casesuccess:stats1.casesuccess,
+        casefail:stats1.casefail,
+        failcaselist:failcaselist
+      }
+    )
+  }
+  searchColState = async()=>{
   }
 render() {
   const {successcol,sumcol,casecount,casesuccess} = this.state;
@@ -107,7 +155,9 @@ render() {
           }}
           >
           <div className="colstats">
-            <p className='title'>测试集合通过率：</p>
+            <div className='coldesc'>
+              <p className='title'>测试集合通过率：</p>
+            </div>
             <div className='Passingrate'>
               <Tooltip title="测试集合通过率">
                 <Progress width={400} percent={percent}  type="circle"/>
@@ -144,7 +194,43 @@ render() {
             </div>
           </div>
           <div className="casestats">
-            <p className='title'>测试用例库通过率：</p>
+            <div className='casesdesc'>
+              <p className='title'>测试用例库通过率：</p>
+              <div className='casefilter'>
+                <Select
+                  showSearch
+                  allowClear={true}
+                  placeholder="需求"
+                  optionFilterProp="children"
+                  onChange={this.selectDemand}
+                  filterOption={(input, option) =>
+                    (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                  }
+                  options={this.state.demandlist.map((item) => ({
+                    value: item._id,
+                    label: item.demand
+                  }))}
+                />
+                <Select
+                  showSearch
+                  allowClear={true}
+                  placeholder="版本"
+                  optionFilterProp="children"
+                  onChange={this.selectCaselibVersion}
+                  filterOption={(input, option) =>
+                    (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                  }
+                  options={this.state.caselibverisons.map((item) => ({
+                    value: item,
+                    label: item
+                  }))}
+                />
+                <Tooltip title="search">
+                  <Button shape="circle" icon={<SearchOutlined />} onClick={this.searchCaseState}/>
+                </Tooltip>
+              </div>
+            </div>
+            
             <div className='Passingrate'>
               <Tooltip title="测试用例库通过率">
                 <Progress width={400} percent={percent2}  type="circle"/>
@@ -165,7 +251,13 @@ render() {
                     <List.Item key={item._id}>
                       {item.interface_caseid!==null?(
                         <List.Item.Meta
-                          title={<Button type='link' href={item.href} onClick={()=>this.returnCase(item.interface_caseid)}>{item.title}</Button>}
+                          title={
+                            <Button type='link' href={item.href} onClick={()=>this.returnCase(item.interface_caseid)}>
+                              {item.title.length > 10
+                              ? item.title.substr(0, 10) + '...'
+                              : item.title
+                            }
+                            </Button>}
                         />
                       ):(
                         <List.Item.Meta

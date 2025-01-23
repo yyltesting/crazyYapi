@@ -36,7 +36,7 @@
       display: flex;
       justify-content: space-between;
       overflow: hidden;
-      gap: 5px;                   // 设置按钮之间的间距
+      gap: 8px;                   // 设置按钮之间的间距
       .btns {
         display: flex;              // 确保按钮区域正确布局
         align-items: center;        // 垂直居中按钮
@@ -59,7 +59,7 @@
       .btns {
         display: flex;
         align-items: center;        // 垂直居中按钮
-        gap: 5px; 
+        gap: 8px; 
         color: #2395f1;
         // display: block;
         .interface-icon {

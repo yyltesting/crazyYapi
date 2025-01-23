@@ -9,7 +9,7 @@
     display: flex;
     justify-content: space-between;
     overflow: hidden;
-    gap: 5px;                   // 设置按钮之间的间距
+    gap: 8px;                   // 设置按钮之间的间距
     height: 30px;
     .container-title{
       display: flex;              // 确保按钮区域正确布局
@@ -38,7 +38,7 @@
     .btns {
       display: flex;
       align-items: center;        // 垂直居中按钮
-      gap: 5px; 
+      gap: 8px; 
       // display: block;
       .interfacecol-icon {
         display: block;

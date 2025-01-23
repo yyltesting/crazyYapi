@@ -33,6 +33,9 @@ class projectController extends baseController {
     this.followModel = yapi.getInst(followModel);
     this.tokenModel = yapi.getInst(tokenModel);
     this.interfaceModel = yapi.getInst(interfaceModel);
+    this.interfaceColModel = yapi.getInst(interfaceColModel);
+    this.demandlibModel = yapi.getInst(demandlibModel);
+    this.caselibModel = yapi.getInst(caselibModel);
 
     const id = 'number';
     const member_uid = ['number'];
@@ -697,14 +700,13 @@ class projectController extends baseController {
     async failcol(ctx) {
       let params = ctx.params;
       let projectId= params.id || params.project_id; // 通过 token 访问
-      let interfacecolInst = yapi.getInst(interfaceColModel);
-      let failcol= await interfacecolInst.failcol(projectId);
+      let failcol= await this.interfaceColModel.failcol(projectId);
       ctx.body = yapi.commons.resReturn(failcol);
     }
     /**
    * 获取项目测试用例库通过率
    * @interface /project/casestats
-   * @method GET
+   * @method POST
    * @category project
    * @foldnumber 10
    * @param {Number} id 项目id，不能为空
@@ -715,18 +717,17 @@ class projectController extends baseController {
      async casestats(ctx) {
       let params = ctx.params;
       let projectId= params.id || params.project_id; // 通过 token 访问
-      let demandlib= yapi.getInst(demandlibModel);
-      let demandid = await demandlib.getid(projectId);
-      let caselib= yapi.getInst(caselibModel);
-      let casecount = await caselib.getdemandcase(demandid);
-      let casesuccess = await caselib.getcasesuccess(demandid);
+      let demandid = params.demandid?params.demandid : await this.demandlibModel.getid(projectId);
+      let version = params.version?params.version : '';
+      let casecount = await this.caselibModel.getdemandcase(demandid,version);
+      let casesuccess = await this.caselibModel.getcasesuccess(demandid,version);
       let casefail = casecount - casesuccess;
       ctx.body = yapi.commons.resReturn({casecount:casecount,casesuccess:casesuccess,casefail:casefail});
     }
     /**
    * 获取项目测试用例库失败用例
    * @interface /project/failcase
-   * @method GET
+   * @method POST
    * @category project
    * @foldnumber 10
    * @param {Number} id 项目id，不能为空
@@ -737,10 +738,9 @@ class projectController extends baseController {
     async failcase(ctx) {
       let params = ctx.params;
       let projectId= params.id || params.project_id; // 通过 token 访问
-      let demandlib= yapi.getInst(demandlibModel);
-      let demandid = await demandlib.getid(projectId);
-      let caselib= yapi.getInst(caselibModel);
-      let failcase = await caselib.failcase(demandid);
+      let demandid = params.demandid?params.demandid :await this.demandlibModel.getid(projectId);
+      let version = params.version?params.version : '';
+      let failcase = await this.caselibModel.failcase(demandid,version);
       ctx.body = yapi.commons.resReturn(failcase);
     }
   /**

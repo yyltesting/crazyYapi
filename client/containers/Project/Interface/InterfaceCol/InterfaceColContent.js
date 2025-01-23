@@ -2287,7 +2287,7 @@ executeTestsloop = async () => {
                         />
                       </FormItem>
                     )}
-                    <FormItem label="Assert">
+                    <FormItem label="Assert&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;">
                       <AceEditor
                         data={item.test_script}
                         onChange={editor => this.changTestScript(editor.text,item._id)}
@@ -2407,7 +2407,7 @@ executeTestsloop = async () => {
           </Col>
         </Row>
 
-        <div className="component-label-wrapper">
+        <div className="component-label-wrapper" style={{marginTop:'10px'}}>
           <Label onChange={val => this.handleChangeInterfaceCol(val, col_name)} desc={col_desc} />
         </div>
         <Spin spinning={this.state.isLoading}>

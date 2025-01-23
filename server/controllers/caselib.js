@@ -14,7 +14,26 @@ class caselibController extends baseController {
     this.caseModel = yapi.getInst(interfaceCaseModel);
     this.interfaceModel = yapi.getInst(interfaceModel);
     this.projectModel = yapi.getInst(projectModel);
+    this.demandlibModel = yapi.getInst(demandModel);
   }
+    /**
+   * 获取项目测试用例库版本集
+   * @interface /caselib/getversion
+   * @method GET
+   * @category project
+   * @foldnumber 10
+   * @param {Number} id 项目id，不能为空
+   * @returns {Object}
+   * @example ./api/project/get.json
+   */
+
+    async getversion(ctx) {
+      let params = ctx.params;
+      let projectId= params.id || params.project_id; // 通过 token 访问
+      let demandid = await this.demandlibModel.getid(projectId);
+      let versionlist = await this.Model.getversion(demandid);
+      ctx.body = yapi.commons.resReturn(versionlist);
+    }
   /**
   * 添加用例
   * @interface /caselib/add
@@ -114,8 +133,7 @@ class caselibController extends baseController {
 
     let uid = this.getUid();
     let username = this.getUsername();
-    let demand = yapi.getInst(demandModel);
-    let demandData = await demand.get(params.demandid);
+    let demandData = await this.demandlibModel.get(params.demandid);
     let project_id = demandData.project_id;
     let demandtitle = demandData.demand;
     yapi.commons.saveLog({
@@ -227,8 +245,7 @@ class caselibController extends baseController {
         delete params.caseid;
         let result = await this.Model.up(id, params);
         let username = this.getUsername();
-        let demand = yapi.getInst(demandModel);
-        let demandData = await demand.get(caseData.demandid);
+        let demandData = await this.demandlibModel.get(caseData.demandid);
         let project_id = demandData.project_id;
         yapi.commons.saveLog({
             content: `<a href="/user/profile/${this.getUid()}">${username}</a> 更新了用例 <a href="/project/${project_id}/demandlib">${params.title}</a>`,
@@ -265,8 +282,7 @@ class caselibController extends baseController {
       status = params.status ? params.status.split(',') : [],
       limit = params.limit || 10,
       title = params.title;
-      let demand = yapi.getInst(demandModel);
-      let demandData = await demand.get(id);
+      let demandData = await this.demandlibModel.get(id);
       let project_id = demandData.project_id;
       let project = await this.projectModel.getBaseInfo(project_id);
       if (project.project_type === 'private') {
@@ -364,8 +380,7 @@ class caselibController extends baseController {
       }
       let result = await this.Model.del(id);
       let username = this.getUsername();
-      let demand = yapi.getInst(demandModel);
-      let demandData = await demand.get(caseData.demandid);
+      let demandData = await this.demandModel.get(caseData.demandid);
       let project_id = demandData.project_id;
       yapi.commons.saveLog({
         content: `<a href="/user/profile/${this.getUid()}">${username}</a> 删除了用例 ${
@@ -425,8 +440,7 @@ class caselibController extends baseController {
           }
           await this.Model.del(id[i]);
           let username = this.getUsername();
-          let demand = yapi.getInst(demandModel);
-          let demandData = await demand.get(caseData.demandid);
+          let demandData = await this.demandlibModel.get(caseData.demandid);
           let project_id = demandData.project_id;
           yapi.commons.saveLog({
             content: `<a href="/user/profile/${this.getUid()}">${username}</a> 删除了用例 ${
@@ -493,8 +507,7 @@ class caselibController extends baseController {
       delete params.id;
       let result = await this.Model.upStatus(id, params.status);
       let username = this.getUsername();
-      let demand = yapi.getInst(demandModel);
-      let demandData = await demand.get(caseData.demandid);
+      let demandData = await this.demandlibModel.get(caseData.demandid);
       let project_id = demandData.project_id;
       yapi.commons.saveLog({
           content: `<a href="/user/profile/${this.getUid()}">${username}</a> 更新了用例 ${caseData.title} <a href="/project/${project_id}/demandlib">${status}</a>`,
@@ -635,8 +648,7 @@ class caselibController extends baseController {
   }
   let uid = this.getUid();
   let username = this.getUsername();
-  let demand = yapi.getInst(demandModel);
-  let demandData = await demand.get(demandid);
+  let demandData = await this.demandlibModel.get(demandid);
   let project_id = demandData.project_id;
   let demandtitle = demandData.demand;
   yapi.commons.saveLog({
@@ -667,8 +679,7 @@ class caselibController extends baseController {
     try {
       let params = ctx.request.body;
       let id = params.demandid;
-      let demand = yapi.getInst(demandModel);
-      let demandData = await demand.get(id);
+      let demandData = await this.demandlibModel.get(id);
       let project_id = demandData.project_id;
       let project = await this.projectModel.getBaseInfo(project_id);
       if (project.project_type === 'private') {

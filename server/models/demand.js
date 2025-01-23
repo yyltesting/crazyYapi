@@ -32,7 +32,17 @@ class demand extends baseModel {
       })
       .exec();
   }
-
+  getdemand(id){
+    return this.model
+    .find({
+      project_id: id
+    })
+    .sort({
+      "up_time": -1
+    })
+    .select('demand')
+    .exec();
+  }
   getid(project_id) {
     return this.model
       .find({

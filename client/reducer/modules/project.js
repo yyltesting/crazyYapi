@@ -28,6 +28,8 @@ const GET_PROJECT_CASE = 'yapi/project/GET_PROJECT_CASE';
 const GET_FAIL_COL = 'yapi/project/GET_FAIL_COL';
 const GET_FAIL_CASE = 'yapi/project/GET_FAIL_CASE';
 const SET_FIREBASE_APP = 'yapi/project/SET_FIREBASE_APP';
+const GET_PROJECT_CASELIBVERSIONS = 'yapi/project/GET_PROJECT_CASELIBVERSIONS';
+const GET_PROJECT_DEMANDS = 'yapi/project/GET_PROJECT_DEMANDS'
 // Reducer
 const initialState = {
   isUpdateModalShow: false,
@@ -52,6 +54,8 @@ const initialState = {
   casestats:{},
   failcol:[],
   failcase:[],
+  demandlist:[],
+  caselibverisons:[],
   firebaseApp:null
 };
 
@@ -93,7 +97,18 @@ export default (state = initialState, action) => {
         currProject: action.payload.data.data
       };
     }
-
+    case GET_PROJECT_DEMANDS:{
+      return {
+        ...state,
+        demandlist: action.payload.data.data
+      };
+    }
+    case GET_PROJECT_CASELIBVERSIONS:{
+      return {
+        ...state,
+        caselibverisons: action.payload.data.data
+      };
+    }
     case FETCH_PROJECT_LIST: {
       return {
         ...state,
@@ -180,7 +195,28 @@ export function copyProjectMsg(params) {
     payload: axios.post('/api/project/copy', params)
   };
 }
-
+// 获取项目需求集
+export function getdemands(project_id) {
+  return {
+    type: GET_PROJECT_DEMANDS,
+    payload: axios.get('/api/demand/getdemand', {
+      params: {
+        project_id: project_id
+      }
+    })
+  };
+}
+// 获取项目用例库版本集
+export function getcaseliversions(project_id) {
+  return {
+    type: GET_PROJECT_CASELIBVERSIONS,
+    payload: axios.get('/api/caselib/getversion', {
+      params: {
+        project_id: project_id
+      }
+    })
+  };
+}
 // 获取项目集合统计
 export function getcolcasestats(project_id) {
   return {
@@ -204,24 +240,24 @@ export function getfailcol(project_id) {
   };
 }
 // 获取项目用例库统计
-export function getcasestats(project_id) {
+export function getcasestats(project_id,demandid,version) {
   return {
     type: GET_PROJECT_COL,
-    payload: axios.get('/api/project/casestats', {
-      params: {
-        project_id: project_id
-      }
+    payload: axios.post('/api/project/casestats', {
+      project_id: project_id,
+      demandid:demandid,
+      version:version
     })
   };
 }
 // 获取项目失败用例
-export function getfailcase(project_id) {
+export function getfailcase(project_id,demandid,version) {
   return {
     type: GET_FAIL_CASE,
-    payload: axios.get('/api/project/failcase', {
-      params: {
-        project_id: project_id
-      }
+    payload: axios.post('/api/project/failcase', {
+      project_id: project_id,
+      demandid:demandid,
+      version:version
     })
   };
 }

@@ -15,9 +15,17 @@
   height: auto;
   display: flex;
   margin-top: 20px;
-  .title{
-    font-size: 20px;
-    font-weight: 500;
+  .coldesc{
+    .title{
+      font-size: 20px;
+      font-weight: 500;
+    }
+    .colfilter {
+      align-self: flex-start; /* 将 .casefilter 靠左对齐 */
+      display: flex; /* 确保内部元素水平对齐 */
+      flex-direction: row; /* 横向排列内部元素 */
+      gap: 8px; /* 添加元素之间的间距 */
+    }
   }
   .Passingrate{
     height: 400px;
@@ -41,10 +49,19 @@
   display: flex;
   margin-top: 20px;
   margin-bottom: 20px;
-  .title{
-    font-size: 20px;
-    font-weight: 500;
+  .casesdesc{
+    .title{
+      font-size: 20px;
+      font-weight: 500;
+    }
+    .casefilter {
+      align-self: flex-start; /* 将 .casefilter 靠左对齐 */
+      display: flex; /* 确保内部元素水平对齐 */
+      flex-direction: row; /* 横向排列内部元素 */
+      gap: 8px; /* 添加元素之间的间距 */
+    }
   }
+
   .Passingrate{
     height: 400px;
     width: 400px;

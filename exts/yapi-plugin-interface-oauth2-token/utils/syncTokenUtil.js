@@ -224,7 +224,6 @@ class syncTokenUtils {
       }
       if(result.status!==200){
         yapi.commons.log('环境：【' + oauthData.env_name + '】获取数据失败，请确认 getTokenUrl 是否正确');
-        return (ctx.body = yapi.commons.resReturn(null,400,'获取token失败'));
       }
       let accessToken = this.getTokenByPath(result, oauthData.token_path);
       //更新到对应的env上;

@@ -15,6 +15,23 @@ class demandController extends baseController {
     this.interfaceModel = yapi.getInst(interfaceModel);
     this.projectModel = yapi.getInst(projectModel);
   }
+    /**
+   * 获取项目需求集
+   * @interface /demand/getdemand
+   * @method GET
+   * @category project
+   * @foldnumber 10
+   * @param {Number} id 项目id，不能为空
+   * @returns {Object}
+   * @example ./api/project/get.json
+   */
+
+    async getdemand(ctx) {
+      let params = ctx.params;
+      let projectId= params.id || params.project_id; // 通过 token 访问
+      let demandlist = await this.Model.getdemand(projectId);
+      ctx.body = yapi.commons.resReturn(demandlist);
+    }
   /**
   * 添加项目需求
   * @interface /demand/add

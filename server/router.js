@@ -131,6 +131,11 @@ let routerConfig = {
       action: 'export',
       path: 'export',
       method: 'post'
+    },
+    {
+      action: 'getversion',
+      path: 'getversion',
+      method: 'get'
     }
   ],
   demand:[
@@ -158,6 +163,11 @@ let routerConfig = {
       action: 'upstatus',
       path: 'upstatus',
       method: 'post'
+    },
+    {
+      action: 'getdemand',
+      path: 'getdemand',
+      method: 'get'
     }
   ],
   group: [
@@ -335,12 +345,12 @@ let routerConfig = {
     {
       action:'failcase',
       path:'failcase',
-      method:'get'
+      method:'post'
     },
     {
       action:'casestats',
       path:'casestats',
-      method:'get'
+      method:'post'
     },
     {
       action:'colstats',
