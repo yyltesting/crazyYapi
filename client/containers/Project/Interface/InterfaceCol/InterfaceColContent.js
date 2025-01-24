@@ -379,7 +379,7 @@ class InterfaceColContent extends Component {
         return item;
       });
     });
-    this.setState({ rows: newRows,caseItem:caseItem });
+    this.setState({ rows: newRows,caseItem:caseItem,currCaseList:newRows });
   };
 
 

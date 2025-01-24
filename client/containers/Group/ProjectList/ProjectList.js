@@ -15,6 +15,7 @@ import { autobind } from 'core-decorators';
 import { setBreadcrumb } from '../../../reducer/modules/user';
 
 import './ProjectList.scss';
+import { isMoment } from 'moment';
 
 @connect(
   state => {
