@@ -134,6 +134,10 @@ function setupSql() {
         project_id: 1
       });
 
+      let caseLib = mongoose.connection.db.collection('caselib');
+      caseLib.createIndex({
+        version: 1
+      });
       result.then(
         function() {
           fs.ensureFileSync(yapi.path.join(yapi.WEBROOT_RUNTIME, 'init.lock'));

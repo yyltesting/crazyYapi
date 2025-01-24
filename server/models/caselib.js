@@ -61,7 +61,7 @@ class caselib extends baseModel {
   getdemandcase(demandid,version){
     let query = { demandid: demandid };
     if (version) {
-      query.version = version;
+      query.version = { $regex: version, $options: 'i' };
     }
     return this.model
     .count(query)
@@ -69,7 +69,7 @@ class caselib extends baseModel {
   getcasesuccess(demandid,version){
     let query = { demandid: demandid,status:'pass' };
     if (version) {
-      query.version = version;
+      query.version = { $regex: version, $options: 'i' };
     }
     return this.model
     .count(query)
@@ -77,7 +77,7 @@ class caselib extends baseModel {
   failcase(demandid,version){
     let query = { demandid: demandid,status:'fail' };
     if (version) {
-      query.version = version;
+      query.version = { $regex: version, $options: 'i' };
     }
     return this.model
       .find(query)

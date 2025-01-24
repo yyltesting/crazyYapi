@@ -325,7 +325,7 @@ class caselibController extends baseController {
       let demandData = await this.demandlibModel.get(caseData.demandid);
       let project_id = demandData.project_id;
       yapi.commons.saveLog({
-          content: `<a href="/user/profile/${this.getUid()}">${username}</a> 更新了用例库关联KEY <a href="/project/${project_id}/demandlib">${params.title}</a>`,
+          content: `<a href="/user/profile/${this.getUid()}">${username}</a> 更新了用例库关联KEY <a href="/project/${project_id}/demandlib">${caseData.title}</a>`,
           type: 'project',
           uid:this.getUid(),
           username: username,
