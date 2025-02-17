@@ -217,7 +217,10 @@ class InterfaceEditForm extends Component {
         upafterscriptstr:'',
         upafterscriptnewstr:'',
         upcaseids:[],
-        caseids:[]
+        caseids:[],
+        jsontoSchemaModel:false,
+        jsonTxt:'',
+        jsontoschemaType:'Request'
       },
       curdata
     );
@@ -625,7 +628,73 @@ class InterfaceEditForm extends Component {
       showSyncModel : true
     })
   }
-
+  jsontoSchemaModel = ()=>{
+    this.setState({
+      jsontoSchemaModel : true
+    })
+  }
+  handleJsontoschema = d =>{
+    this.setState({
+      jsonTxt: d.text
+    });
+  }
+  onChangeJsontoschemaType = (e)=>{
+    this.setState({jsontoschemaType:e.target.value})
+  }
+  jsontoSchema = ()=>{
+    let jsonString = this.state.jsonTxt;
+    let jsontoschemaType = this.state.jsontoschemaType;
+    // 正则表达式：匹配字段、值和注释部分
+    const regex = /"(\w+)":\s*(("[^"]*")|(\d+)|(\{[^}]*\})|(\[[^\]]*\]))\s*(, \/\/\s*([^\n]+))?/g;
+    const regex1 = /"(\w+)":\s*(("[^"]*")|(\d+)|(\{[^}]*\})|(\[[^\]]*\]))\s*(\/\/\s*([^\n]+))?/g;
+    const schema = {
+      type: "object",
+      properties: {},
+      required: [],
+    };
+  
+    let match;
+    while ((match = regex.exec(jsonString)) !== null) {
+      const key = match[1]; // 字段名
+      const value = match[2]; // 字段值
+      let description = match[8] || ""; // 注释部分
+      if(!description){
+        description = regex1.exec(jsonString)[8]||""
+      }
+      // 根据字段值的类型推断字段类型
+      let fieldType;
+      if (value.startsWith("\"")) {
+        fieldType = "string";
+      } else if (!isNaN(value)) {
+        fieldType = "number";
+      } else if (value.startsWith("{") || value.startsWith("[")) {
+        fieldType = "object"; // 处理对象或数组
+      }
+  
+      // 将字段及其描述添加到JSON Schema中
+      schema.properties[key] = {
+        type: fieldType,
+        description: description.trim(),
+      };
+  
+      // 将所有字段添加到必填项
+      schema.required.push(key);
+    }
+    if(jsontoschemaType=='Request'){
+      this.setState({
+        req_body_other:JSON.stringify(schema)
+      })
+    }else{
+      this.setState({
+        res_body:JSON.stringify(schema)
+      })
+    }
+    this.setState({
+      jsontoSchemaModel:false,
+      jsonTxt:'',
+      jsontoschemaType:'Request'
+    })
+  }
   render() {
     const caseids = [];
     this.state.caseids.forEach(item=>{
@@ -860,6 +929,26 @@ class InterfaceEditForm extends Component {
           </BachUpCase>
         ):null}
         <Modal
+          title="josn"
+          open={this.state.jsontoSchemaModel}
+          onOk={this.jsontoSchema}
+          onCancel={() => {
+            this.setState({ jsontoSchemaModel: false,jsonTxt:'',jsontoschemaType:'Request' });
+          }}
+          width={'500px'}
+        >
+          <AceEditor
+            data={this.state.jsonTxt}
+            style={{width: '100%', height: '500px' }}
+            onChange={this.handleJsontoschema}
+            fullScreen={true}
+          />
+          <Radio.Group onChange={this.onChangeJsontoschemaType} value={this.state.jsontoschemaType}>
+            <Radio value='Request'>Reuqest</Radio>
+            <Radio value='Response'>Response</Radio>
+          </Radio.Group>
+        </Modal>
+        <Modal
           title="批量添加参数"
           width={680}
           open={this.state.visible}
@@ -1021,7 +1110,9 @@ class InterfaceEditForm extends Component {
               </FormItem>
             )}
           </div>
-
+          <Tooltip title ="jsonschema转换">      
+            <Button type="primary"  onClick={this.jsontoSchemaModel}>JsonSchema转换</Button>
+          </Tooltip>  
           <h2 className="interface-title">请求参数设置</h2>
 
           <div className="container-radiogroup">

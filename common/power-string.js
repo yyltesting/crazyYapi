@@ -50,6 +50,37 @@ const stringHandles = {
       return await web.eth.personal.sign(str, web.currentProvider.selectedAddress);
     }
   },
+  //交易
+  sendTransaction : async function (to, value, data = '') {
+    if (typeof window === 'undefined') {
+      return '服务端不支持eth交易';
+    }
+  
+    const web3 = new Web3(window.ethereum);
+    const accounts = await web3.eth.getAccounts(); // 获取当前钱包地址
+    if (accounts.length === 0) {
+      return '未连接钱包';
+    }
+  
+    const from = accounts[0];
+  
+    try {
+      const tx = {
+        from,
+        to, // 交易接收地址
+        value: value, // 交易金额
+        data, // 额外数据（可选）
+      };
+  
+      const receipt = await web3.eth.sendTransaction(tx);
+      console.log('交易成功:', receipt);
+      return receipt;
+    } catch (error) {
+      console.error('交易失败:', error);
+      return error;
+    }
+  },
+  
   //谷歌登录
   oauth2SignIn:function(str){
     var oauth2Endpoint = 'https://accounts.google.com/o/oauth2/v2/auth';

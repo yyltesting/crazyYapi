@@ -577,6 +577,7 @@ async function crossRequest(defaultOptions, preScript, afterScript,case_pre_scri
     timestamp: utils.timestamp,
     timestampms: utils.timestampms,
     ethsign: utils.ethsign,
+    sendTransaction:utils.sendTransaction,
     encodeDES: utils.encodeDES,
     encodeAES: utils.encodeAES,
     bs58Encode: utils.bs58Encode,
