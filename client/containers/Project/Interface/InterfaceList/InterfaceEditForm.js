@@ -644,49 +644,84 @@ class InterfaceEditForm extends Component {
   jsontoSchema = ()=>{
     let jsonString = this.state.jsonTxt;
     let jsontoschemaType = this.state.jsontoschemaType;
-    // 正则表达式：匹配字段、值和注释部分
-    const regex = /"(\w+)":\s*(("[^"]*")|(\d+)|(\{[^}]*\})|(\[[^\]]*\]))\s*(, \/\/\s*([^\n]+))?/g;
-    const regex1 = /"(\w+)":\s*(("[^"]*")|(\d+)|(\{[^}]*\})|(\[[^\]]*\]))\s*(\/\/\s*([^\n]+))?/g;
-    const schema = {
-      type: "object",
-      properties: {},
-      required: [],
-    };
+    // **存储字段注释**
+    const commentsMap = {};
   
-    let match;
-    while ((match = regex.exec(jsonString)) !== null) {
-      const key = match[1]; // 字段名
-      const value = match[2]; // 字段值
-      let description = match[8] || ""; // 注释部分
-      if(!description){
-        description = regex1.exec(jsonString)[8]||""
+    // 1️⃣ 逐行提取注释
+    const lines = jsonString.split('\n');
+    for (const line of lines) {
+      const match = line.match(/"(\w+)"\s*:\s*[^\/]*\/\/\s*(.*)/);
+      if (match) {
+        const key = match[1];
+        const comment = match[2]?.trim() || "";
+        commentsMap[key] = comment;
       }
-      // 根据字段值的类型推断字段类型
-      let fieldType;
-      if (value.startsWith("\"")) {
-        fieldType = "string";
-      } else if (!isNaN(value)) {
-        fieldType = "number";
-      } else if (value.startsWith("{") || value.startsWith("[")) {
-        fieldType = "object"; // 处理对象或数组
-      }
-  
-      // 将字段及其描述添加到JSON Schema中
-      schema.properties[key] = {
-        type: fieldType,
-        description: description.trim(),
-      };
-  
-      // 将所有字段添加到必填项
-      schema.required.push(key);
     }
+  
+    // 2️⃣ 清理 JSON 注释并解析
+    const cleanJsonStr = jsonString.replace(/\/\/[^\n]*/g, "");
+    let parsedJson;
+    try {
+      parsedJson = JSON.parse(cleanJsonStr);
+    } catch (error) {
+      console.error("JSON 解析失败:", error);
+      return null;
+    }
+  
+    // 3️⃣ 递归构建 Schema（修正属性合并）
+    function buildSchema(obj, key = "") {
+      if (Array.isArray(obj)) {
+        const itemsSchema = obj.length > 0 ? buildSchema(obj[0], key) : {};
+        return { type: "array", items: itemsSchema };
+      } else if (typeof obj === "object" && obj !== null) {
+        const subSchema = {
+          type: "object",
+          properties: {},
+          required: [],
+        };
+  
+        // 添加当前层级的描述
+        if (commentsMap[key]) {
+          subSchema.description = commentsMap[key];
+        } 
+  
+        // 处理每个子属性
+        for (const childKey of Object.keys(obj)) {
+          const childValue = obj[childKey];
+          let childSchema;
+  
+          if (Array.isArray(childValue)) {
+            childSchema = buildSchema(childValue, childKey);
+          } else if (typeof childValue === "object" && childValue !== null) {
+            childSchema = buildSchema(childValue, childKey);
+          } else {
+            childSchema = { type: typeof childValue };
+          }
+  
+          // 合并子 Schema 并添加描述
+          subSchema.properties[childKey] = {
+            ...childSchema,
+            description: commentsMap[childKey] || "",
+          };
+          subSchema.required.push(childKey);
+        }
+  
+        return subSchema;
+      } else {
+        return { type: typeof obj, description: commentsMap[key] || "" };
+      }
+    }
+    
+    let jsonSchema = buildSchema(parsedJson);
+    let schema = JSON.stringify(jsonSchema, null, 2);
+    commentsMap = {};
     if(jsontoschemaType=='Request'){
       this.setState({
-        req_body_other:JSON.stringify(schema)
+        req_body_other:schema
       })
     }else{
       this.setState({
-        res_body:JSON.stringify(schema)
+        res_body:schema
       })
     }
     this.setState({
