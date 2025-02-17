@@ -645,7 +645,7 @@ class InterfaceEditForm extends Component {
     let jsonString = this.state.jsonTxt;
     let jsontoschemaType = this.state.jsontoschemaType;
     // **存储字段注释**
-    const commentsMap = {};
+    let commentsMap = {};
   
     // 1️⃣ 逐行提取注释
     const lines = jsonString.split('\n');
