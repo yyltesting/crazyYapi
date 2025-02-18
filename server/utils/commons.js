@@ -986,6 +986,8 @@ exports.runCaseScript = async function runCaseScript(params, colId, interfaceId)
       timestamp: utils.timestamp,
       timestampms: utils.timestampms,
       ethsign: utils.ethsign,
+      sendTransaction:utils.sendTransaction,
+      getWalletAddress:utils.getWalletAddress,
       encodeDES: utils.encodeDES,
       encodeAES: utils.encodeAES,
       bs58Encode: utils.bs58Encode,

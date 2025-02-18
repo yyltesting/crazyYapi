@@ -80,7 +80,28 @@ const stringHandles = {
       return error;
     }
   },
-  
+  //获取钱包地址
+  getWalletAddress : async function () {
+    if (window.ethereum) {
+        try {
+            const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+            if (accounts.length > 0) {
+                console.log("当前钱包地址:", accounts[0]);
+                return accounts[0];
+            } else {
+                console.log("未连接 MetaMask");
+                return null;
+            }
+        } catch (error) {
+            console.error("获取钱包地址失败:", error);
+            return null;
+        }
+    } else {
+        console.log("MetaMask 未安装");
+        return null;
+    }
+},
+
   //谷歌登录
   oauth2SignIn:function(str){
     var oauth2Endpoint = 'https://accounts.google.com/o/oauth2/v2/auth';
