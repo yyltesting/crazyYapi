@@ -69,7 +69,7 @@ const {
   getsocket,
   setsocket
 } = require('common/postmanLib.js');
-const { handleParamsValue, json_parse, ArrayToObject } = require('common/utils.js');
+const { handleParamsValue, json_parse, ArrayToObject,buildGCPLogsURL,formatTimestamp } = require('common/utils.js');
 import CaseEnv from 'client/components/CaseEnv';
 import Label from '../../../../components/Label/Label.js';
 const Option = Select.Option;
@@ -1311,7 +1311,9 @@ executeTestsloop = async () => {
       run_end = Math.round(new Date().getTime());
     }else{
       //延后一秒
-      run_end = run_end+1000;
+      // run_end = run_end+1000;
+      //延后10秒
+      run_end = run_end+10000;
     }
     if(run_start==0){
       //前五分钟
@@ -1324,8 +1326,23 @@ executeTestsloop = async () => {
     // 计算窗口的宽度和高度 (80%)
     const windowWidth = screenWidth * 0.8;
     const windowHeight = screenHeight * 0.8;
+    //General日志查询
+    // window.open(`${this.state.log_url}/d/8v3LFO2nk/logs-app?orgId=1&var-app=${this.state.log_jobName}&var-search=&from=${run_start}&to=${run_end}`, '_blank',`width=${windowWidth},height=${windowHeight}`);
+    //谷歌之日查询
+    const params = {
+      "inv": "1",
+      "invt": "Abri9Q",
+      "project": this.state.log_jobName,
+      "query": this.state.log_url,
+      "storageScope": "project",
+      "cursorTimestamp":formatTimestamp(Math.round(new Date().getTime())),
+      "startTime": formatTimestamp(run_start),
+      "endTime": formatTimestamp(run_end)
+    };
+    let url = buildGCPLogsURL("https://console.cloud.google.com/logs/query",params);
+    // console.log(run_start,run_end,formatTimestamp(run_start),formatTimestamp(run_end),url);
+    window.open(url, '_blank',`width=${windowWidth},height=${windowHeight}`);
     
-    window.open(`${this.state.log_url}/d/8v3LFO2nk/logs-app?orgId=1&var-app=${this.state.log_jobName}&var-search=&from=${run_start}&to=${run_end}`, '_blank',`width=${windowWidth},height=${windowHeight}`);
     this.setState({showLogModal:false,log_jobName:'',log_env:'',log_jobNames:[],log_url:''});
   }
   closeLogModal=()=>{

@@ -1,4 +1,5 @@
 const defaultTheme = require('./defaultTheme.js');
+const { buildGCPLogsURL,formatTimestamp } = require('../../../common/utils.js');
 
 function json_format(json) {
   if (json && typeof json === 'object') {
@@ -39,15 +40,33 @@ function createHtml5(left, tp, msg, runTime,colName,startTime,endTime,logurl,job
   }
   let script='';
   if(jobname){
-    endTime = endTime + 1000;
+    endTime = endTime + 10000;
     jobname = jobname.split(',');
     let w=500;
+    //谷歌之日查询
     jobname.forEach(item=>{
+      const params = {
+        "inv": "1",
+        "invt": "Abri9Q",
+        "project": item,
+        "query": logurl,
+        "storageScope": "project",
+        "cursorTimestamp":formatTimestamp(Math.round(new Date().getTime())),
+        "startTime": formatTimestamp(startTime),
+        "endTime": formatTimestamp(endTime)
+      };
+      let url = buildGCPLogsURL("https://console.cloud.google.com/logs/query",params);
       script = script+`
-      window.open('${logurl}/d/8v3LFO2nk/logs-app?orgId=1&var-app=${item}&var-search=&from=${startTime}&to=${endTime}', '_blank','width=1200,height=600,left=${w},top=100');
+      window.open('${url}', '_blank','width=1200,height=600,left=${w},top=100');
       `;
       w= w+20;
     })
+    // jobname.forEach(item=>{
+    //   script = script+`
+    //   window.open('${logurl}/d/8v3LFO2nk/logs-app?orgId=1&var-app=${item}&var-search=&from=${startTime}&to=${endTime}', '_blank','width=1200,height=600,left=${w},top=100');
+    //   `;
+    //   w= w+20;
+    // })
 
   }
   //html5模板

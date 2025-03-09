@@ -13,10 +13,11 @@ const sha = require('sha.js');
 const Base64 = require('js-base64').Base64;
 const bs58 = require('bs58');
 
-const Web3 = require('web3');
+
 const CryptoJS = require('crypto-js');
 
 const firebase = require('firebase');
+const ContractMethod = require('./ContractMethod').method;
 // import * as firebase from 'firebase';
 
 const stringHandles = {
@@ -42,66 +43,6 @@ const stringHandles = {
       return error;
     }
   },
-  ethsign: async function(str){  
-    if(typeof window === 'undefined'){
-      return '服务端不支持eth签名'
-    }else{
-      const web = await new Web3(window.ethereum);
-      return await web.eth.personal.sign(str, web.currentProvider.selectedAddress);
-    }
-  },
-  //交易
-  sendTransaction : async function (to, value, data = '') {
-    if (typeof window === 'undefined') {
-      return '服务端不支持eth交易';
-    }
-  
-    const web3 = new Web3(window.ethereum);
-    const accounts = await web3.eth.getAccounts(); // 获取当前钱包地址
-    if (accounts.length === 0) {
-      return '未连接钱包';
-    }
-  
-    const from = accounts[0];
-  
-    try {
-      const tx = {
-        from,
-        to, // 交易接收地址
-        value: value, // 交易金额
-        data, // 额外数据（可选）
-      };
-  
-      const receipt = await web3.eth.sendTransaction(tx);
-      console.log('交易成功:', receipt);
-      return receipt;
-    } catch (error) {
-      console.error('交易失败:', error);
-      return error;
-    }
-  },
-  //获取钱包地址
-  getWalletAddress : async function () {
-    if (window.ethereum) {
-        try {
-            const accounts = await window.ethereum.request({ method: 'eth_accounts' });
-            if (accounts.length > 0) {
-                console.log("当前钱包地址:", accounts[0]);
-                return accounts[0];
-            } else {
-                console.log("未连接 MetaMask");
-                return null;
-            }
-        } catch (error) {
-            console.error("获取钱包地址失败:", error);
-            return null;
-        }
-    } else {
-        console.log("MetaMask 未安装");
-        return null;
-    }
-},
-
   //谷歌登录
   oauth2SignIn:function(str){
     var oauth2Endpoint = 'https://accounts.google.com/o/oauth2/v2/auth';
@@ -518,7 +459,7 @@ function handleSegment(str, index) {
 }
 
 module.exports = {
-  utils: stringHandles,
+  utils: Object.assign(stringHandles, ContractMethod),
   PowerString,
   /**
    * 类似于 angularJs的 filter 功能

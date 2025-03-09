@@ -322,9 +322,9 @@ class testResultController extends openController {
    * @param {*} ctx 
    */
   async getTestResult(ctx) {
-    if (!this.$tokenAuth && !this.$auth) {
-      return (ctx.body = yapi.commons.resReturn(null, 40022, 'token 验证失败'));
-    }
+    // if (!this.$tokenAuth && !this.$auth) {
+    //   return (ctx.body = yapi.commons.resReturn(null, 40022, 'token 验证失败'));
+    // }
     try {
       const id = ctx.params.id;
       let results = await this.testResultModel.get(id)

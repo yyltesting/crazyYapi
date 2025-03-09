@@ -496,7 +496,7 @@ class ProjectEnvContent extends Component {
         configname = ['url'];
       }
       if(name =='logs'){
-        configname = ['url','jobName'];
+        configname = ['url/query','jobName'];
       }
       return (
         <Row gutter={2} key={index}>

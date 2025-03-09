@@ -127,7 +127,28 @@ exports.handleParamsValue = handleParamsValue;
 
 exports.simpleJsonPathParse = simpleJsonPathParse;
 exports.handleMockWord = handleMockWord;
+//转换谷歌日志查询url
+function buildGCPLogsURL(url,params) {
+  const baseUrl = url;
 
+  // 取出 query 字段
+  const queryPart = encodeURIComponent(params.query).replace(/%0A/g, "\n"); // 保留换行
+
+  // 其余参数转换为查询字符串
+  const queryParams = { ...params };
+  delete queryParams.query; // query 需要特殊处理
+
+  const searchParams = new URLSearchParams(queryParams).toString();
+  return `${baseUrl};query=${queryPart};storageScope=${params.storageScope};cursorTimestamp=${params.cursorTimestamp};startTime=${params.startTime};endTime=${params.endTime}?${searchParams}`;
+}
+exports.buildGCPLogsURL = buildGCPLogsURL;
+//时间戳转ISO 8601 纳秒级 UTC 时间格式
+function formatTimestamp(timestamp) {
+  const date = new Date(timestamp);
+
+  return date.toISOString(); // 自动转换为 YYYY-MM-DDTHH:mm:ss.SSSZ 格式
+}
+exports.formatTimestamp = formatTimestamp;
 exports.joinPath = (domain, joinPath) => {
   let l;
   if(domain){
