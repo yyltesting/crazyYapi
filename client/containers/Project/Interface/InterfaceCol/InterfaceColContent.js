@@ -1420,7 +1420,7 @@ executeTestsloop = async () => {
     this.props.currProject.env.forEach(item=>{
       if(item._id==value){
         item.logs.forEach(i=>{
-          if(i.name=='url'){
+          if(i.name=='url/query'){
             this.setState({log_url:i.value});
           }
           if(i.name=='jobName'){

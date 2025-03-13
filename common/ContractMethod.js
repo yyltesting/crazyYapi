@@ -21,12 +21,7 @@ const ContractMethod = {
 
     // 钱包的私钥
     const privateKey = key;
-
-    // 要签名的消息
-    const message = str;
-
-    // 对消息进行签名
-    const signature = await web3.eth.accounts.sign(message, privateKey);
+    const signature = await web3.eth.accounts.sign(str, privateKey);
     console.log('signature',signature);
     return signature;
   },
