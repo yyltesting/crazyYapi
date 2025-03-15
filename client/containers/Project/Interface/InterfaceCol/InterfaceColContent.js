@@ -11,6 +11,7 @@ import {
   ExclamationCircleOutlined,
   InfoCircleOutlined,
   QuestionCircleOutlined,
+  RedoOutlined 
 } from '@ant-design/icons';
 
 import { Form } from '@ant-design/compatible';
@@ -77,6 +78,7 @@ const createContext = require('common/createContext')
 
 import copy from 'copy-to-clipboard';
 import {findStorageKeysFromScript} from "../../../../../common/utils";
+import { result } from 'lodash';
 
 const defaultModalStyle = {
   top: 10
@@ -1193,7 +1195,139 @@ executeTestsloop = async () => {
     }
     this.setState({ visible: true, curCaseid: id });
   };
+  reTest = async(id,test_script,interface_id,rowIndex)=>{
+    var options = this.reports[id];
+    options.test_script = test_script?test_script:'';
+    options.interface_id = interface_id;
+    let result = {
+      code: 400,
+      msg: '数据异常',
+      validRes: []
+    };
+    var ws;
+    this.setState(prevState => {
+      const newRows = prevState.rows.map((row, j) => 
+        j === rowIndex ? { ...row, test_status: 'loading' } : row
+      );
+      return { rows: newRows };
+    });
+    if(options.method=='WS'||options.method=='WSS'){
+      //遍历weocket对象数组
+      let s = getsocket();
+      for(let i=0;i<s.length;i++){
+        if(s[i].url==options.url){
+          ws = s[i]
+        }
+      }
+      if(!ws||ws.readyState==3){
+        // 创建了一个客户端的socket,然后让这个客户端去连接服务器的socket
+        ws = new WebSocket(options.url);
+        try{
+          await new Promise((resolve,reject) => {
+            ws.onerror = (err) => {
+              reject(err);
+            };
+            ws.onopen=()=> {
+              console.log("connect success !!!!");
+              this.WebSocket = ws;
+              setsocket(this.WebSocket);
+              resolve('ws连接成功');
+            }
+          })
+        }catch(err){
+          console.log('ws连接失败',err);
+        }
+      }
+    }
+    try {
+      let data;
+      console.log(options);
+      data = await crossRequest(options, '', '','','', '','',ws,createContext(
+        this.props.curUid,
+        this.props.match.params.id,
+        options.interface_id
+      ));
+      options.taskId = this.props.curUid;
+      let res = (data.res.body = json_parse(data.res.body));
+      result = {
+        ...options,
+        ...result,
+        res_header: data.res.header,
+        res_body: res,
+        status: data.res.status,
+        statusText: data.res.statusText
+        // time: data.res.time
+      };
+      let requestParams =options.params?options.params:{};
+      if (options.data && typeof options.data === 'object') {
+        requestParams = {
+          ...requestParams,
+          ...options.data
+        };
+      }
 
+      let validRes = [];
+
+      let responseData = Object.assign(
+        {},
+        {
+          status: data.res.status,
+          body: res,
+          header: data.res.header,
+          statusText: data.res.statusText
+        }
+      );
+
+      // 断言测试
+      await this.handleScriptTest(options, responseData, validRes, requestParams);
+
+      if (validRes.length === 0) {
+        result.code = 0;
+        result.validRes = [
+          {
+            message: '验证通过'
+          }
+        ],
+        result.msg='验证通过';
+      } else if (validRes.length > 0) {
+        result.code = 1;
+        result.validRes = validRes;
+        result.msg='验证失败';
+      } 
+      //判断请求如果是二进制或者返回时图片则清理不必要的数据避免请求数据太大
+      if(options.headers['Content-Type'] == 'binary/octet-stream' ){
+        delete result.data;
+      }
+      if(options.headers.binary&&result.status == 200){
+        delete result.res_body;
+      }
+      console.log('result',result);
+      let status = 'error';
+      if (result.code === 400) {
+        status = 'error';
+      } else if (result.code === 0) {
+        status = 'ok';
+      } else if (result.code === 1) {
+        status = 'invalid';
+      }else{
+        status = 'error';
+      }
+      this.reports[id] = result;
+      this.records[id] = {
+        status: result.status,
+        params: result.params,
+        body: result.res_body
+      };
+      this.setState(prevState => {
+        const newRows = prevState.rows.map((row, j) => 
+          j === rowIndex ? { ...row, test_status: status } : row
+        );
+        return { rows: newRows };
+      });
+    } catch(e){
+      console.log(e);
+    }
+  }
   // openAdv = id => {
   //   let findCase = _.find(this.props.currCaseList, item => item.id === id);
   //
@@ -1952,7 +2086,10 @@ executeTestsloop = async () => {
                 if (!this.reports[rowData.id]) {
                   return null;
                 }
-                return <Button onClick={() => this.openReport(rowData.id)}>测试报告</Button>;
+                return <div>
+                  <Button onClick={() => this.openReport(rowData.id)}>测试报告</Button>
+                  <Button shape="circle" icon={<RedoOutlined  /> }onClick={() => this.reTest(rowData.id,rowData.test_script,rowData.interface_id,rowData.index)}></Button>
+                </div> ;
               };
               return <div className="interface-col-table-action">{reportFun()}</div>;
             }
