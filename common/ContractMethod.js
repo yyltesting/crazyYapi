@@ -588,8 +588,33 @@ const ContractMethod = {
       return null;
     }
   },
-  
-}
+  // 元数据
+  contractMetadata: {
+    ethsign: ['str'],
+    web3signForKey: ['neturl', 'key', 'str'],
+    createAccounts: [],
+    sendTransaction: ['to', 'value', 'data'],
+    sendTransactionForkey: ['neturl', 'amount', 'senderAddress', 'recipientAddress', 'tokenContractAddress', 'privateKey'],
+    sendTransactionForETH: ['neturl', 'amount', 'senderAddress', 'recipientAddress', 'privateKey'],
+    getBalance: ['neturl', 'accountAddress', 'tokenContractAddress'],
+    getWalletAddress: [],
+    getAccountBalance: ['neturl', 'accountAddress', 'type'],
+    createSpaceId: ['commission', 'accountAddress', 'contractAddress'],
+    createSpaceIdForkey: ['neturl', 'commission', 'accountAddress', 'contractAddress', 'privateKey'],
+    findSpaceByOwner: ['accountAddress', 'contractAddress'],
+    findSpaceByOwnerForKey: ['neturl', 'accountAddress', 'contractAddress'],
+    approve: ['amount', 'accountAddress', 'feecontractAddress', 'contractAddress'],
+    approveForkey: ['neturl', 'amount', 'accountAddress', 'feecontractAddress', 'contractAddress', 'privateKey'],
+    pledgeMoney: ['amount', 'space_id', 'accountAddress', 'contractAddress'],
+    pledgeMoneyForkey: ['neturl', 'amount', 'space_id', 'accountAddress', 'contractAddress', 'privateKey'],
+    unpledgeMoney: ['amount', 'space_id', 'accountAddress', 'contractAddress'],
+    unpledgeMoneyForkey: ['neturl', 'amount', 'space_id', 'accountAddress', 'contractAddress', 'privateKey'],
+    claimReward: ['rewardSeason', 'amount', 'merkleProof', 'accountAddress', 'contractAddress'],
+    claimRewardForkey: ['neturl', 'rewardSeason', 'amount', 'merkleProof', 'accountAddress', 'contractAddress', 'privateKey'],
+    claimairdropReward: ['rewardSeason', 'amount', 'merkleProof', 'accountAddress', 'contractAddress'],
+    claimairdropRewardForkey: ['neturl', 'rewardSeason', 'amount', 'merkleProof', 'accountAddress', 'contractAddress', 'privateKey']
+  }
+};
 module.exports = {
   method:ContractMethod
 }

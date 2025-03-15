@@ -362,6 +362,37 @@ const stringHandles = {
 
   number: function(str) {
     return !isNaN(str) ? +str : str;
+  },
+  metadata:{
+    firebasesgin: [],
+    oauth2SignIn: ['str'],
+    revokeAccess: ['str'],
+    phone: [],
+    idcard: [],
+    bancard: ['Str'],
+    timestamp: ['str'],
+    timestampms: ['str'],
+    tobedivisibleby: ['str', '...args'],
+    encodeDES: ['str', 'AuthTokenKey', 'AuthTokenIv'],
+    encodeAES: ['str', 'AuthTokenKey', 'AuthTokenIv'],
+    imgBase64: [],
+    bs58Encode: ['str'],
+    md5: ['str'],
+    sha: ['str', 'arg'],
+    sha1: ['str'],
+    sha224: ['str'],
+    sha256: ['str'],
+    sha384: ['str'],
+    sha512: ['str'],
+    base64: ['str'],
+    unbase64: ['str'],
+    substr: ['str', '...args'],
+    concat: ['str', '...args'],
+    lconcat: ['str', '...args'],
+    lower: ['str'],
+    upper: ['str'],
+    length: ['str'],
+    number: ['str']
   }
 };
 

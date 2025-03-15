@@ -119,7 +119,7 @@ export default class ColRequest extends Component {
             placement="right"
             closable={true}
             onClose={this.onClose}
-            visible={this.state.visible}
+            open={this.state.visible}
           >
             {inputPile}
           </Drawer>

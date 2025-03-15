@@ -18,6 +18,8 @@ import {
   Tabs,
   Tooltip,
   message,
+  Drawer,
+  List
 } from 'antd';
 import ReactFileReader from "react-file-reader";
 import constants from '../../constants/variable.js';
@@ -29,7 +31,7 @@ import ModalPostman from '../ModalPostman/index.js';
 import './Postman.scss';
 import ProjectEnv from '../../containers/Project/Setting/ProjectEnv/index.js';
 import json5 from 'json5';
-
+import ContextUtils from "../ContextUtils/contextUtils";
 const { TextArea } = Input;
 const FormItem = Form.Item;
 const { handleParamsValue, ArrayToObject, schemaValidator } = require('common/utils.js');
@@ -43,7 +45,7 @@ const {
   getsocket,
   cleansocket
 } = require('common/postmanLib.js');
-const createContext = require('common/createContext')
+const createContext = require('common/createContext');
 
 const HTTP_METHOD = constants.HTTP_METHOD;
 const InputGroup = Input.Group;
@@ -163,6 +165,7 @@ export default class Run extends Component {
     this.state = {
       method:'',
       preview:false,
+      utilsVisible:false,
       sql:'',
       sqlquery:false,
       resultsql:'',
@@ -273,7 +276,7 @@ export default class Run extends Component {
     data.case_pre_script= typeof case_pre_script === "undefined"?'':case_pre_script;
     data.case_post_script= typeof case_post_script === "undefined"?'':case_post_script;
 
-    await this.setState(
+    this.setState(
       {
         ...this.state,
         req_body_other_schema:req_body_other,
@@ -794,6 +797,16 @@ export default class Run extends Component {
       case_pre_script : ps
     })
   }
+  showDrawer = () => {
+    this.setState({
+      utilsVisible: true
+    });
+  };
+  utilsClose= () => {
+    this.setState({
+      utilsVisible: false
+    });
+  };
   // 模态框的相关操作
   showModal = (val, index, type) => {
     let inputValue = '';
@@ -1148,8 +1161,8 @@ export default class Run extends Component {
             col_id={this.props.data.col_id}
           />
         )}
-
-
+        <ContextUtils visible={this.state.utilsVisible} onClose={this.utilsClose}></ContextUtils>
+        
         <Modal
           title="环境设置"
           open={this.state.envModalVisible}
@@ -1576,6 +1589,7 @@ export default class Run extends Component {
               )}
           </Panel>
           <Panel header="用例前置/后置js处理器" key="4">
+            <Button onClick={this.showDrawer}>utils函数集</Button>
             <div className="project-request">
               <Form >
                 <FormItem  label="前置处理器:">
