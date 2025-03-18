@@ -32,6 +32,13 @@
     npm install --production --registry https://registry.npmmirror.com
     node server/app.js 启动服务
 
+####  crazy-yapi 已部署后的更新操作
+
+    git pull
+    npm install --production --registry https://registry.npmmirror.com （若有包更新根据pack.json判断）
+    node server/app.js
+    请耐心等候
+
 ####  二次开发注意事项
     若服务部署在外网因为vm沙箱不安全，建议使用VM2升级至3.9.16或使用server/utils/sandbox.js替换sandbox(可能引起一些错误)
 
