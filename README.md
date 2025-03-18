@@ -39,6 +39,17 @@
     node server/app.js
     请耐心等候
 
+#### 服务器部署可参考该目录结果
+    crazy-yapi/
+    ├── docker-compose.yml
+    ├── Dockerfile
+    ├── entrypoint.sh       # 新增启动脚本
+    ├── mongo_data/        # MongoDB数据目录
+    ├── yapi_data/         # 初始化标记目录
+    ├── code/              # 新增代码存储目录（自动生成）
+    └── config/
+        └── config.json
+
 ####  二次开发注意事项
     若服务部署在外网因为vm沙箱不安全，建议使用VM2升级至3.9.16或使用server/utils/sandbox.js替换sandbox(可能引起一些错误)
 
