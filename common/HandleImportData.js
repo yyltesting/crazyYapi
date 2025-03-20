@@ -430,6 +430,8 @@ async function handle(
             delete data.__v;
             delete data.disable;
             delete data.testcaseid;
+            data.case_env = envid;
+            data.project_id = projectId;
             data.req_headers = handleTypeParams(data,'req_headers');
             data.req_body_other = handleTypeParams(data, 'req_body_other');
             data.req_query = handleTypeParams(data, 'req_query');
