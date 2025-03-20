@@ -3,6 +3,7 @@ const praitAbi = require('./Abijson/praitAbi.json');
 const rewardAbi = require('./Abijson/rewardAbi.json');
 const airdropAbi = require('./Abijson/airdrop.json');
 const praiAbi = require('./Abijson/praiAbi.json');
+const PaymentReceiverAbi = require('./Abijson/PaymentReceiverAbi.json');
 const Web3 = require('web3');
 
 const ContractMethod = {
@@ -466,6 +467,40 @@ const ContractMethod = {
       return null;
     }
   },
+  withdrawForkey:async function(neturl,accountAddress, contractAddress, privateKey) {
+    try {
+      const web3 = new Web3(neturl); 
+  
+      const contract = new web3.eth.Contract(stakingAbi.abi, contractAddress);
+      // 估算 gas
+      const gasEstimate = await contract.methods.withdraw().estimateGas({ from: accountAddress });
+      console.log('estimategas==', gasEstimate);
+  
+      // 获取最新的 nonce
+      const nonce = await web3.eth.getTransactionCount(accountAddress, 'pending');
+  
+      // 交易对象
+      const txObject = {
+        from: accountAddress,
+        to: contractAddress,
+        gas: gasEstimate,
+        nonce: nonce,
+        data: contract.methods.withdraw().encodeABI(), // 编码合约调用
+      };
+  
+      // 签名交易
+      const signedTx = await web3.eth.accounts.signTransaction(txObject, privateKey);
+  
+      // 发送交易
+      const receipt = await web3.eth.sendSignedTransaction(signedTx.rawTransaction);
+      
+      console.log('Transaction withdraw Hash:', receipt.transactionHash);
+      return receipt.transactionHash;
+    } catch (error) {
+      console.error("createSpaceId error:", error);
+      return null;
+    }
+  },
   //领取奖励
   claimReward: async function(rewardSeason,amount,merkleProof,accountAddress,contractAddress) {
     if (window.ethereum) {
@@ -588,6 +623,45 @@ const ContractMethod = {
       return null;
     }
   },
+  //bsc支付
+  bscPayForkey : async function(neturl,accountAddress, contractAddress, privateKey) {
+    try {
+      const web3 = new Web3(neturl); 
+  
+      const contract = new web3.eth.Contract(PaymentReceiverAbi.abi, contractAddress);
+      // 计算 0.05 BNB 的 wei 数量
+      const wei = await contract.methods.minPaymentAmount().call();
+      const value = web3.utils.toHex(web3.utils.toBN(wei));
+      // 估算 gas
+      const gasEstimate = await contract.methods.pay().estimateGas({ from: accountAddress,value: value  });
+      console.log('estimategas==', gasEstimate);
+  
+      // 获取最新的 nonce
+      const nonce = await web3.eth.getTransactionCount(accountAddress, 'pending');
+  
+      // 交易对象
+      const txObject = {
+        from: accountAddress,
+        to: contractAddress,
+        gas: gasEstimate,
+        nonce: nonce,
+        value: value,
+        data: contract.methods.pay().encodeABI(), // 编码合约调用
+      };
+  
+      // 签名交易
+      const signedTx = await web3.eth.accounts.signTransaction(txObject, privateKey);
+  
+      // 发送交易
+      const receipt = await web3.eth.sendSignedTransaction(signedTx.rawTransaction);
+      
+      console.log('Transaction stake Hash:', receipt.transactionHash);
+      return receipt.transactionHash;
+    } catch (error) {
+      console.error("createSpaceId error:", error);
+      return null;
+    }
+  },
   // 元数据
   contractMetadata: {
     ethsign: ['str'],
@@ -609,10 +683,12 @@ const ContractMethod = {
     pledgeMoneyForkey: ['neturl', 'amount', 'space_id', 'accountAddress', 'contractAddress', 'privateKey'],
     unpledgeMoney: ['amount', 'space_id', 'accountAddress', 'contractAddress'],
     unpledgeMoneyForkey: ['neturl', 'amount', 'space_id', 'accountAddress', 'contractAddress', 'privateKey'],
+    withdrawForkey:['neturl','accountAddress', 'contractAddress', 'privateKey'],
     claimReward: ['rewardSeason', 'amount', 'merkleProof', 'accountAddress', 'contractAddress'],
     claimRewardForkey: ['neturl', 'rewardSeason', 'amount', 'merkleProof', 'accountAddress', 'contractAddress', 'privateKey'],
     claimairdropReward: ['rewardSeason', 'amount', 'merkleProof', 'accountAddress', 'contractAddress'],
-    claimairdropRewardForkey: ['neturl', 'rewardSeason', 'amount', 'merkleProof', 'accountAddress', 'contractAddress', 'privateKey']
+    claimairdropRewardForkey: ['neturl', 'rewardSeason', 'amount', 'merkleProof', 'accountAddress', 'contractAddress', 'privateKey'],
+    bscPayForkey:['neturl','accountAddress', 'contractAddress', 'privateKey']
   }
 };
 module.exports = {
