@@ -765,7 +765,7 @@ export default class InterfaceColMenu extends Component {
     }
     //如果未点击展开某个节点进行导入且路由没有colid 则设为当前colid
     if(!this.props.router){
-      this.props.history.push('/project/' +  this.props.match.params.id + '/interface/col/' + result.data.data[0]._id);
+      this.props.history.push('/project/' +  this.props.match.params.id + '/interface/col/' + result.payload.data.data[0]._id);
     }
   }
   //更新树的用例集
