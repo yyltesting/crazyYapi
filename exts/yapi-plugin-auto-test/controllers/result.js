@@ -7,7 +7,9 @@ const _ = require('loadsh');
 const renderToHtml = require('../../../server/utils/reportHtml');
 const tools = require('../utils/tools');
 const Config = require('../utils/config');
-
+const {
+  setGlobalScript
+} = require('../../../common/postmanLib');
 
 class testResultController extends openController {
   constructor(ctx) {

@@ -589,6 +589,7 @@ async function crossRequest(defaultOptions, preScript, afterScript,case_pre_scri
     createSpaceIdForkey:utils.createSpaceIdForkey,
     findSpaceByOwner:utils.findSpaceByOwner,
     findSpaceByOwnerForKey:utils.findSpaceByOwnerForKey,
+    updateSpaceRateForkey:utils.updateSpaceRateForkey,
     approve:utils.approve,
     approveForkey:utils.approveForkey,
     pledgeMoney:utils.pledgeMoney,

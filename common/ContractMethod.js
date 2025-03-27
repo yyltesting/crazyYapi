@@ -272,6 +272,42 @@ const ContractMethod = {
       return null
     }
   },
+  //修改空间利率
+  updateSpaceRateForkey : async function(neturl,space_id,commission, accountAddress, contractAddress, privateKey) {
+    try {
+      const web3 = new Web3(neturl); 
+  
+      const contract = new web3.eth.Contract(stakingAbi.abi, contractAddress);
+  
+      // 估算 gas
+      const gasEstimate = await contract.methods.updateSpaceRate(space_id,commission).estimateGas({ from: accountAddress });
+      console.log('estimategas==', gasEstimate);
+  
+      // 获取最新的 nonce
+      const nonce = await web3.eth.getTransactionCount(accountAddress, 'pending');
+  
+      // 交易对象
+      const txObject = {
+        from: accountAddress,
+        to: contractAddress,
+        gas: gasEstimate,
+        nonce: nonce,
+        data: contract.methods.updateSpaceRate(space_id,commission).encodeABI(), // 编码合约调用
+      };
+  
+      // 签名交易
+      const signedTx = await web3.eth.accounts.signTransaction(txObject, privateKey);
+  
+      // 发送交易
+      const receipt = await web3.eth.sendSignedTransaction(signedTx.rawTransaction);
+      
+      console.log('Transaction Hash:', receipt.transactionHash);
+      return receipt.transactionHash;
+    } catch (error) {
+      console.error("updateSpaceRate error:", error);
+      return null;
+    }
+  },
   findSpaceByOwnerForKey: async function(neturl,accountAddress, contractAddress) {
     try {
         const web3 = new Web3(neturl); // 使用合适的网络URL
@@ -677,6 +713,7 @@ const ContractMethod = {
     createSpaceIdForkey: ['neturl', 'commission', 'accountAddress', 'contractAddress', 'privateKey'],
     findSpaceByOwner: ['accountAddress', 'contractAddress'],
     findSpaceByOwnerForKey: ['neturl', 'accountAddress', 'contractAddress'],
+    updateSpaceRateForkey: ['neturl', 'space_id', 'commission', 'accountAddress', 'contractAddress', 'privateKey'],
     approve: ['amount', 'accountAddress', 'feecontractAddress', 'contractAddress'],
     approveForkey: ['neturl', 'amount', 'accountAddress', 'feecontractAddress', 'contractAddress', 'privateKey'],
     pledgeMoney: ['amount', 'space_id', 'accountAddress', 'contractAddress'],
