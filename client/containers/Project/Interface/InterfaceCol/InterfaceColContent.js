@@ -11,7 +11,9 @@ import {
   ExclamationCircleOutlined,
   InfoCircleOutlined,
   QuestionCircleOutlined,
-  RedoOutlined 
+  RedoOutlined,
+  DownloadOutlined,
+  DeleteOutlined 
 } from '@ant-design/icons';
 
 import { Form } from '@ant-design/compatible';
@@ -68,7 +70,9 @@ const {
   crossRequest,
   checkNameIsExistInArray,
   getsocket,
-  setsocket
+  setsocket,
+  getData,
+  clearData
 } = require('common/postmanLib.js');
 const { handleParamsValue, json_parse, ArrayToObject,buildGCPLogsURL,formatTimestamp } = require('common/utils.js');
 import CaseEnv from 'client/components/CaseEnv';
@@ -466,6 +470,42 @@ class InterfaceColContent extends Component {
       this.setState({showReportLogModal:true,reportLog:log});
     }
   }
+  savaToCsv=()=>{
+    let jsonData = getData(); // 获取 JSON 数据
+    console.log('jsonData', jsonData);
+
+    if (!jsonData || jsonData.length === 0) {
+        message.error("数据为空");
+        return;
+    }
+
+    // 提取 CSV 头部
+    const headers = Object.keys(jsonData[0]).join(","); // 动态获取第一个对象的 keys 作为表头
+
+    // 处理 CSV 数据行
+    const rows = jsonData.map(row => {
+        return Object.values(row).map(value => `${value}`).join(",");
+    }).join("\n");
+
+    // 组合 CSV 内容
+    const csvContent = headers +"\n" + rows;
+
+    // 创建 Blob 对象
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+
+    // 创建下载链接
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "data.csv";
+    document.body.appendChild(link);
+    link.click();
+
+    // 清理
+    document.body.removeChild(link);
+};
+cleanCsv=()=>{
+  clearData();
+}
   executeTests = async () => {
     let run_start = Math.round(new Date().getTime());
     this.reports={};
@@ -2569,19 +2609,36 @@ executeTestsloop = async () => {
             '正在异步执行可稍后查看结果-------------------------------------------------------'
             )}
           <h3 className="interface-title">
-            {this.getSummaryText()}
-            &nbsp; 
-            <Button 
-              icon={<ContainerOutlined />}
-              onClick={this.viewLog}> 
-              服务器日志
-            </Button>  
-            &nbsp; 
-            <Button 
-              icon={<ContainerOutlined />}
-              onClick={this.viewreportLog}> 
-              报告记录
-            </Button>  
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+              <div>
+                {this.getSummaryText()}
+                &nbsp; 
+                <Button 
+                  icon={<ContainerOutlined />}
+                  onClick={this.viewLog}> 
+                  服务器日志
+                </Button>  
+                &nbsp; 
+                <Button 
+                  icon={<ContainerOutlined />}
+                  onClick={this.viewreportLog}> 
+                  报告记录
+                </Button>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center'}}>
+                <Button 
+                  icon={<DownloadOutlined />}
+                  onClick={this.savaToCsv}
+                  style={{ marginRight: '10px' }}> 
+                  下载csv
+                </Button>    
+                <Button 
+                  icon={<DeleteOutlined />}
+                  onClick={this.cleanCsv}> 
+                  清理csv数据
+                </Button>
+              </div>
+            </div>
           </h3>
           <Table.Provider
             components={components}

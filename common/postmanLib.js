@@ -11,6 +11,18 @@ const jsrsasign = require('jsrsasign');
 const https = require('https');
 
 const isNode = typeof global == 'object' && global.global === global;
+//保存数据到一个数组json对象中
+let jsonData = [];
+function saveData(item) {
+  //item是数组[]
+  jsonData.push(item);
+}
+function getData() { 
+  return jsonData;
+}
+function clearData() {
+  jsonData = [];
+}
 //存留全局方法
 var global_script={};
 function setGlobalScript(id,str){
@@ -550,7 +562,10 @@ async function crossRequest(defaultOptions, preScript, afterScript,case_pre_scri
     storage: await getStorage(taskId),
     taskId: taskId,
     ws: ws,
-    wsmsg: wsmsg
+    wsmsg: wsmsg,
+    saveData:saveData,
+    getData:getData,
+    clearData:clearData
   };
   //console.log("context init end!");
   Object.assign(context, commonContext)
@@ -1006,3 +1021,6 @@ exports.setsocket = setsocket;
 exports.getsocket = getsocket;
 exports.cleansocket = cleansocket;
 exports.wsmsg = wsmsg;
+exports.saveData=saveData;
+exports.getData=getData;
+exports.clearData=clearData;
