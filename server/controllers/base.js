@@ -66,7 +66,8 @@ class baseController {
       '/api/utils/redis',
       '/api/utils/es',
       "/api/utils/setstorage",
-      "/api/utils/createMultiLevelDirs"
+      "/api/utils/createMultiLevelDirs",
+      "/api/utils/facebyte/accountMint"
     ];
 
     let params = Object.assign({}, ctx.query, ctx.request.body);

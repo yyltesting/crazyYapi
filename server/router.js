@@ -895,6 +895,11 @@ let routerConfig = {
       action: 'createMultiLevelDirs',
       path: 'createMultiLevelDirs',
       method: 'post'
+    },
+    {
+      action: 'accountMint',
+      path: 'facebyte/accountMint',
+      method: 'post'
     }
   ]
 };

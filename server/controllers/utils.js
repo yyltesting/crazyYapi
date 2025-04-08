@@ -7,6 +7,8 @@ const query = require('../utils/database.js');
 const redisquery = require('../utils/redis.js');
 // 连接es
 const esquery = require('../utils/elasticsearch.js');
+//facebyte
+const accountMint = require('../utils/wkzsUtils/faceByte.js');
 const getStorage = require('../../common/postmanLib').getStorage;
 
 const fs = require('fs');
@@ -164,5 +166,27 @@ class utilsColController extends baseController {
     }
     fs.mkdirSync(dirPath);  // 重新创建空的根目录
   };
+  /**
+   * facebyte登录注册
+   * @interface /utils/facebyte/accountMint
+   * @method POST
+   * @category utils
+   * @foldnumber 10
+   * @param {String} url
+   * @param {String} username
+   * @param {String} password
+   * @param {String} type // 1:注册 2:mint+poh推送 3:登录
+   * @returns {Object}
+   * @example
+   */
+  async accountMint(ctx) {
+    let params = ctx.request.body;
+    try{
+      let result = await accountMint.accountMint(params.url,params.username,params.password,params.type);
+      ctx.body = yapi.commons.resReturn(result,200,'成功');
+    }catch(err){
+      ctx.body = yapi.commons.resReturn(err,200,'成功');
+    }
+  }
 }
 module.exports = utilsColController;
