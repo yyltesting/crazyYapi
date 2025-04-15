@@ -600,6 +600,7 @@ async function crossRequest(defaultOptions, preScript, afterScript,case_pre_scri
     getWalletAddress:utils.getWalletAddress,
     web3signForKey:utils.web3signForKey,
     getAccountBalance:utils.getAccountBalance,
+    createSpaceWhitelistForKey:utils.createSpaceWhitelistForKey,
     createSpaceId:utils.createSpaceId,
     createSpaceIdForkey:utils.createSpaceIdForkey,
     findSpaceByOwner:utils.findSpaceByOwner,

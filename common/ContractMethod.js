@@ -200,6 +200,42 @@ const ContractMethod = {
       return error;
     }
   },
+  //创建空间白名单
+  createSpaceWhitelistForKey: async function(neturl,whitelist,accountAddress,contractAddress,privateKey) {
+    try {
+      const web3 = new Web3(neturl); 
+  
+      const contract = new web3.eth.Contract(stakingAbi.abi, contractAddress);
+
+      // 估算 gas
+      const gasEstimate = await contract.methods.setSpaceWhitelist(whitelist,true).estimateGas({ from: accountAddress });
+      console.log('estimategas==', gasEstimate);
+  
+      // 获取最新的 nonce
+      const nonce = await web3.eth.getTransactionCount(accountAddress, 'pending');
+  
+      // 交易对象
+      const txObject = {
+        from: accountAddress,
+        to: contractAddress,
+        gas: gasEstimate,
+        nonce: nonce,
+        data: contract.methods.setSpaceWhitelist(whitelist,true).encodeABI(), // 编码合约调用
+      };
+  
+      // 签名交易
+      const signedTx = await web3.eth.accounts.signTransaction(txObject, privateKey);
+  
+      // 发送交易
+      const receipt = await web3.eth.sendSignedTransaction(signedTx.rawTransaction);
+      
+      console.log('Transaction Hash:', receipt.transactionHash);
+      return receipt.transactionHash;
+    } catch (error) {
+      console.error("createSpaceId error:", error);
+      return null;
+    }
+  },
   //创建spaceid
   createSpaceId : async function(commission,accountAddress,contractAddress) {
     if (window.ethereum) {
@@ -709,6 +745,7 @@ const ContractMethod = {
     getBalance: ['neturl', 'accountAddress', 'tokenContractAddress'],
     getWalletAddress: [],
     getAccountBalance: ['neturl', 'accountAddress', 'type'],
+    createSpaceWhitelistForKey: ['neturl', 'whitelist', 'accountAddress', 'contractAddress'],
     createSpaceId: ['commission', 'accountAddress', 'contractAddress'],
     createSpaceIdForkey: ['neturl', 'commission', 'accountAddress', 'contractAddress', 'privateKey'],
     findSpaceByOwner: ['accountAddress', 'contractAddress'],
