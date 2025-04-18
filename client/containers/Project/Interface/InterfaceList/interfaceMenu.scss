@@ -5,9 +5,12 @@
   .interface-list { 
     display: flex;
     width: 100%;  
+    justify-content: space-between;
+    align-items: center;        // 垂直居中按钮
     // line-height: 25px;
     .ant-tree-node-content-wrapper {
       width: calc(100% - 28px);
+      overflow: hidden;  // 防止内容溢出
     }
     // .btn-http {
     //   height: 23px;
@@ -37,36 +40,34 @@
       justify-content: space-between;
       overflow: hidden;
       gap: 8px;                   // 设置按钮之间的间距
+      .container-title{
+        align-content: center;        // 垂直居中按钮
+        white-space: nowrap; /* 禁止换行 */
+        overflow: hidden; /* 隐藏超出部分 */
+        margin-right: 40px;
+        flex: 1;                    // 占用所有剩余空间
+        min-width: 0;               // 允许flex项目收缩到内容之下
+      }
       .btns {
         display: flex;              // 确保按钮区域正确布局
         align-items: center;        // 垂直居中按钮
-        // display: none;
-        .interface-icon {
-          display: none;
-        }
-        .interfacecat-icon {
-          display: none;
+        flex-shrink: 0;             // 防止按钮被压缩
+        .interface-icon, .interfacecat-icon {
+          display: none;           // 初始隐藏所有图标
         }
       }
     }
   
+    // 修改悬停效果实现方式，完全依赖CSS而非JavaScript状态
     .container:hover {
-      width: 100%;
-      height: 40px;
-      display: flex;
-      justify-content: space-between;
-      overflow: hidden; 
       .btns {
         display: flex;
         align-items: center;        // 垂直居中按钮
-        gap: 8px; 
+        flex-shrink: 0;             // 防止按钮被压缩
+        gap: 12px; 
         color: #2395f1;
-        // display: block;
-        .interface-icon {
-          display: block;
-        }
-        .interfacecat-icon {
-          display: block;
+        .interface-icon, .interfacecat-icon {
+          display: block;           // 悬停时显示图标
         }
       }
     }

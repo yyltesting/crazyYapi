@@ -306,7 +306,7 @@ class InterfaceMenu extends Component {
     let that = this;
     const ref = confirm({
       title: '确定删除此接口分类吗？',
-      content: '温馨提示：该操作会删除该分类下“所有接口及子分类”，接口删除后无法恢复)',
+      content: '温馨提示：该操作会删除该分类下"所有接口及子分类"，接口删除后无法恢复)',
       okText: '确认',
       cancelText: '取消',
       async onOk() {
@@ -345,14 +345,6 @@ class InterfaceMenu extends Component {
         visible: false
       });
     });
-  };
-
-  enterItem = id => {
-    this.setState({delIcon: id});
-  };
-
-  leaveItem = () => {
-    this.setState({delIcon: null});
   };
 
   onFilter = e => {
@@ -693,8 +685,6 @@ class InterfaceMenu extends Component {
           title={
             <div
               className="container"
-              onMouseEnter={() => this.enterItem(item._id)}
-              onMouseLeave={this.leaveItem}
             >
               <div className="container-title">
                 <Link
@@ -712,12 +702,11 @@ class InterfaceMenu extends Component {
                       e.stopPropagation();
                       this.showDelCatConfirm(item._id);
                     }}
-                    style={{display: this.state.delIcon == item._id ? 'block' : 'none'}} />
+                  />
                 </Tooltip>
                 <Tooltip title="添加子分类">
                   <PlusOutlined
                     className="interfacecat-icon"
-                    style={{display: this.state.delIcon == item._id ? 'block' : 'none'}}
                     onClick={e => {
                       e.stopPropagation();
                       this.changeModal('add_cat_modal_visible', true);
@@ -730,11 +719,9 @@ class InterfaceMenu extends Component {
                 <Tooltip title="修改分类">
                   <EditOutlined
                     className="interfacecat-icon"
-                    style={{display: this.state.delIcon == item._id ? 'block' : 'none'}}
                     onClick={e => {
                       e.stopPropagation();
                       this.changeModal('change_cat_modal_visible', true);
-                      // item.addchild=false;
                       this.setState({
                         curCatdata: item
                       });
@@ -743,7 +730,6 @@ class InterfaceMenu extends Component {
                 <Tooltip title="添加接口">
                   <PlusOutlined
                     className="interfacecat-icon"
-                    style={{display: this.state.delIcon == item._id ? 'block' : 'none'}}
                     onClick={e => {
                       e.stopPropagation();
                       this.changeModal('visible', true);
@@ -753,10 +739,6 @@ class InterfaceMenu extends Component {
                     }} />
                 </Tooltip>
               </div>
-
-              {/*<Dropdown overlay={menu(item)} trigger={['click']} onClick={e => e.stopPropagation()}>
-                <Icon type='ellipsis' className="interface-delete-icon" />
-              </Dropdown>*/}
             </div>
           }
           key={'cat_' + item._id}
@@ -765,7 +747,6 @@ class InterfaceMenu extends Component {
           {item.list.map(itemInterfaceCreate)}
         </TreeNode>
       );
-
     };
 
     const itemInterfaceCreate = item => {
@@ -775,8 +756,6 @@ class InterfaceMenu extends Component {
           title={
             <div
               className="container"
-              onMouseEnter={() => this.enterItem(item._id)}
-              onMouseLeave={this.leaveItem}
             >
               <div className="container-title">
                 <Link
@@ -796,7 +775,7 @@ class InterfaceMenu extends Component {
                       e.stopPropagation();
                       this.showConfirm(item);
                     }}
-                    style={{display: this.state.delIcon == item._id ? 'block' : 'none'}} />
+                  />
                 </Tooltip>
                 <Tooltip title="复制接口">
                   <CopyOutlined
@@ -805,7 +784,7 @@ class InterfaceMenu extends Component {
                       e.stopPropagation();
                       this.copyInterface(item._id);
                     }}
-                    style={{display: this.state.delIcon == item._id ? 'block' : 'none'}} />
+                  />
                 </Tooltip>
                 <Tooltip title="移动接口">
                   <ScanOutlined
@@ -814,12 +793,9 @@ class InterfaceMenu extends Component {
                       e.stopPropagation();
                       this.showMoveInterfaceModal(item._id);
                     }}
-                    style={{display: this.state.delIcon == item._id ? 'block' : 'none'}} />
+                  />
                 </Tooltip>
               </div>
-              {/*<Dropdown overlay={menu(item)} trigger={['click']} onClick={e => e.stopPropagation()}>
-           <Icon type='ellipsis' className="interface-delete-icon" style={{ opacity: this.state.delIcon == item._id ? 1 : 0 }}/>
-        </Dropdown>*/}
             </div>
           }
           key={'' + item._id}
@@ -849,6 +825,9 @@ class InterfaceMenu extends Component {
               onExpand={this.onExpand}
               draggable={{icon:false}}
               onDrop={this.onDrop}
+              virtual={false}
+              motion={false}
+              height={parseInt(document.body.clientHeight) - headHeight - 20}
             >
               <TreeNode
                 className="item-all-interface"

@@ -2,22 +2,33 @@
   // line-height: 25px;
   .ant-tree-node-content-wrapper {
     width: calc(100% - 28px);
+    overflow: hidden;  // 防止内容溢出
   }
-  .opts-icon,
-  .opts-icon:hover,
+  .ant-tree-switcher{
+    display: flex;
+    align-items: center; /* 垂直居中 */
+    justify-content: center;
+    // line-height: normal;
+  }
   .menu{
     display: flex;
     justify-content: space-between;
     overflow: hidden;
     gap: 8px;                   // 设置按钮之间的间距
-    height: 30px;
-    .container-title{
+    height: 35px;
+    .menu-title{
       display: flex;              // 确保按钮区域正确布局
       align-items: center;        // 垂直居中按钮
+      white-space: nowrap;        // 禁止换行
+      overflow: hidden;           // 隐藏超出部分
+      text-overflow: ellipsis;    // 添加省略号
+      flex: 1;                    // 占用所有剩余空间
+      min-width: 0;               // 允许flex项目收缩到内容之下
     }
     .btns {
       display: flex;              // 确保按钮区域正确布局
       align-items: center;        // 垂直居中按钮
+      flex-shrink: 0;             // 防止按钮被压缩
       // display: none;
       .interface-icon {
         display: none;
@@ -39,6 +50,7 @@
       display: flex;
       align-items: center;        // 垂直居中按钮
       gap: 8px; 
+      flex-shrink: 0;             // 防止按钮被压缩
       // display: block;
       .interfacecol-icon {
         display: block;
@@ -53,12 +65,12 @@
   }
 }
 
-.container {
-  display: block;
-  width: 100%;
-  // padding: 10px;
-  padding-top: 10px;
-}
+// .container {
+//   display: block;
+//   width: 100%;
+//   // padding: 10px;
+//   padding-top: 10px;
+// }
 /*
  * note that styling gu-mirror directly is a bad practice because it's too generic.
  * you're better off giving the draggable elements a unique class and styling that directly!
@@ -68,16 +80,16 @@
   background-color: rgba(0, 0, 0, 0.2);
   transition: opacity 0.4s ease-in-out;
 }
-.container div {
-  cursor: move;
-  cursor: grab;
-  cursor: -moz-grab;
-  cursor: -webkit-grab;
-  margin-bottom: 10px;
-}
-.container div:last-child {
-  margin-bottom: 0;
-}
+// .container div {
+//   cursor: move;
+//   cursor: grab;
+//   cursor: -moz-grab;
+//   cursor: -webkit-grab;
+//   // margin-bottom: 10px;
+// }
+// .container div:last-child {
+//   margin-bottom: 0;
+// }
 .gu-mirror {
   cursor: grabbing;
   cursor: -moz-grabbing;
@@ -199,7 +211,9 @@
 .tree-wrapper {
   min-height: 500px;
   overflow-y: scroll;
+  overflow-x: hidden;  // 禁止水平滚动
   scroll-behavior: smooth;
+  width: 100%;         // 确保宽度固定
 }
 
 .spin-container {
