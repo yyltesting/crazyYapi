@@ -435,8 +435,8 @@ export default class InterfaceColMenu extends Component {
       message.error(e)
     }
   }
-  onSelect = async(keys, e) => {
-    let key = e.node.props.eventKey;
+  onSelect = (keys, e) => {
+    let key = e.node.key;
     let isCtrlPressed =e.nativeEvent.ctrlKey;
     if (key) {
       const type = key.split('_')[0];
@@ -449,13 +449,13 @@ export default class InterfaceColMenu extends Component {
         let optCaseids = this.state.optCaseids;
         if(optCaseids.includes(key)){
           let cancelDelids = optCaseids.filter(item=>item!==key);
-          await this.setState({
+          this.setState({
             optCaseids:optCaseids.filter(item=>item!==key),
             selectedKey: [...cancelDelids]
           })
         }else{
           optCaseids.push(key);
-          await this.setState({
+          this.setState({
             selectedKey: [...optCaseids]
           })
         }
@@ -464,25 +464,25 @@ export default class InterfaceColMenu extends Component {
         let optColids = this.state.optColids;
         if(optColids.includes(key)){
           let cancelDelids = optColids.filter(item=>item!==key);
-          await this.setState({
+          this.setState({
             optColids:optColids.filter(item=>item!==key),
             selectedKey: [...cancelDelids]
           })
         }else{
           optColids.push(key);
-          await this.setState({
+          this.setState({
             selectedKey: [...optColids]
           })
         }
       }else if(expandedKeys.includes(key) && selectedKey.includes(key)) {
         //单选
-        await this.setState({
+        this.setState({
           expandedKeys: expandedKeys.filter(i => i !== key),
           selectedKey: keys
         })
       } else {
         //单选
-        await this.setState({
+        this.setState({
           expandedKeys: type === 'col' ? [...expandedKeys, key] : expandedKeys,
           selectedKey: [key]
         })
@@ -1016,7 +1016,7 @@ export default class InterfaceColMenu extends Component {
   onDrop = async e => {
 
 
-    let dropColIndex = e.node.props.pos.split('-').map(it => {
+    let dropColIndex = e.node.pos.split('-').map(it => {
       return Number.parseInt(it)
     });
     dropColIndex.shift();
@@ -1030,14 +1030,14 @@ export default class InterfaceColMenu extends Component {
     }
     const {interfaceColList} = this.props;
     const dragid = e.dragNode.props.eventKey;
-    const dropid = e.node.props.eventKey;
+    const dropid = e.node.key;
     console.log({interfaceColList, dropColIndex, dropid,dragColIndex,dragid});
     const dropColItem = this.getcolItem(interfaceColList, dropColIndex, dropid.indexOf('col') != -1);
     const dragColItem = this.getcolItem(interfaceColList, dragColIndex, dragid.indexOf('col') != -1);
     console.log({dropColItem, dragColItem});
     const dropColId = dropColItem._id;
     const dragColId = dragColItem._id;
-    const dropPos = e.node.props.pos.split('-');
+    const dropPos = e.node.pos.split('-');
     const dropIndex = Number(dropPos[dropPos.length - 1]);
     const dragPos = e.dragNode.props.pos.split('-');
     const dragIndex = Number(dragPos[dragPos.length - 1]);
@@ -1470,7 +1470,7 @@ export default class InterfaceColMenu extends Component {
       // }
       //子item的参数和首次的参数
       let params = {
-          id:treeNode.props.eventKey.split('_')[1]
+          id:treeNode.key.split('_')[1]
       }  
       this.setState({loadedKeys:[...treeNode.props.eventKey.split('_')[1]]})
       //异步请求获取数据就在这触发
@@ -1739,7 +1739,7 @@ export default class InterfaceColMenu extends Component {
           <div className="spin-container">
             <Spin size="large" />
           </div>):(
-            <div className="tree-wrapper" style={{ maxHeight: parseInt(document.body.clientHeight) - headHeight + 'px',marginTop:10}}>
+            <div className="tree-wrapper" style={{ marginTop:10 }}>
               <Tree
                 multiple
                 loadData={this.onLoadData}
@@ -1751,6 +1751,8 @@ export default class InterfaceColMenu extends Component {
                 onExpand={this.onExpand}
                 draggable={{icon:false}}
                 onDrop={this.onDrop}
+                virtual={true}
+                height={window.innerHeight - headHeight}
               >
                 {list.filter(me => (me.in === true || typeof me.in === "undefined")).map(colCreate)}
               </Tree>

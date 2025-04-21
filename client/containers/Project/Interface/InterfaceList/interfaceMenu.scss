@@ -11,6 +11,7 @@
     .ant-tree-node-content-wrapper {
       width: calc(100% - 28px);
       overflow: hidden;  // 防止内容溢出
+      position: relative;
     }
     // .btn-http {
     //   height: 23px;

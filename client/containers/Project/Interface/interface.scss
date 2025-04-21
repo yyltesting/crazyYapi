@@ -32,22 +32,25 @@
     display: flex;
     justify-content: space-between;
     background-color: $color-bg-gray;
+    margin-bottom: 0;
   }
   .ant-tabs-tab {
     flex-basis: 50%;
     text-align: center;
-    // margin-bottom: 10px;
+    margin: 0;
+    padding: 8px 16px;
   }
   .ant-tabs-nav-list{
     width: 100%;
   }
-  .ant-tabs.ant-tabs-card > .ant-tabs-bar .ant-tabs-tab {
+  .ant-tabs-card > .ant-tabs-nav .ant-tabs-tab,
+  .ant-tabs-card > div > .ant-tabs-nav .ant-tabs-tab {
     height: 39px;
     background: #fff;
     border-bottom: 0;
     border-radius: 0;
   }
-  .ant-tabs.ant-tabs-card > .ant-tabs-bar .ant-tabs-tab:nth-of-type(2) {
+  .ant-tabs-card > .ant-tabs-bar .ant-tabs-tab:nth-of-type(2) {
     border-left: 0;
   }
   // .ant-tabs.ant-tabs-card > .ant-tabs-bar .ant-tabs-tab:last-of-type {
@@ -114,19 +117,16 @@
   .interface-content {
     .ant-tabs-nav {
       display: flex;
-      justify-content: space-between;
+      width: 100%;
     }
     .ant-tabs-tab {
-      margin: 0; /* 移除默认间距 */
+      margin: 0;
       text-align: center;
       width: 100px;
-      // margin-bottom: 10px;
     }
-    // .ant-tabs-ink-bar {
-    //   width: 100%; /* 确保选择条占满每个 tab 的宽度 */
-    //   left: 0; /* 将选择条对齐到 tab 的起始位置 */
-    //   margin: 0 !important; /* 清除多余的 margin */
-    // }
+    .ant-tabs-ink-bar {
+      height: 2px;
+    }
   }
   .interface-title {
     clear: both;

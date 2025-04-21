@@ -1,13 +1,23 @@
+.tree-wrapper {
+  min-height: 500px;
+  overflow-y: scroll;
+  scroll-behavior: smooth;
+}
 .col-list-tree {
   // line-height: 25px;
+  .ant-tree-treenode{
+    transition: none !important; // 禁用过渡
+  }
   .ant-tree-node-content-wrapper {
     width: calc(100% - 28px);
     overflow: hidden;  // 防止内容溢出
+    transition: none !important; // 禁用过渡
   }
   .ant-tree-switcher{
     display: flex;
     align-items: center; /* 垂直居中 */
     justify-content: center;
+    transition: none !important; // 禁用过渡
     // line-height: normal;
   }
   .menu{
@@ -208,13 +218,6 @@
   }
 }
 
-.tree-wrapper {
-  min-height: 500px;
-  overflow-y: scroll;
-  overflow-x: hidden;  // 禁止水平滚动
-  scroll-behavior: smooth;
-  width: 100%;         // 确保宽度固定
-}
 
 .spin-container {
   display: flex;
