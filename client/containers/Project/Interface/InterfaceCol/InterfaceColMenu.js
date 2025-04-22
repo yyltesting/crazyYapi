@@ -495,9 +495,10 @@ export default class InterfaceColMenu extends Component {
           isRander: false
         });
         this.props.history.push('/project/' + project_id + '/interface/col/' + id);
-        setTimeout( () => {
+        // setTimeout( () => {
+          //异步加载子集合
           this.onLoadData(e.node);
-        }, 200);
+        // }, 200);
       } 
       if(type === 'case'&&!isCtrlPressed){
         this.props.setColData({
