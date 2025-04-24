@@ -1042,7 +1042,19 @@ export default class InterfaceColMenu extends Component {
     const dropIndex = Number(dropPos[dropPos.length - 1]);
     const dragPos = e.dragNode.props.pos.split('-');
     const dragIndex = Number(dragPos[dragPos.length - 1]);
-
+    // // 确定拖拽方向（上移还是下移）
+    // const isMovingUp = dragIndex > dropIndex;
+    // console.log('拖拽方向:', isMovingUp ? '上移' : '下移');
+    
+    // // 打印完整的拖拽事件信息
+    // console.log('拖拽事件详情:', {
+    //   node: e.node,
+    //   dragNode: e.dragNode, 
+    //   dropPosition: e.dropPosition,
+    //   dropToGap: e.dropToGap,
+    //   dragOverGapTop: e.node.props.dragOverGapTop,
+    //   dragOver: e.node.props.dragOver
+    // });
 
     if (dragid.indexOf('col') === -1) {
       if (dropColId === dragColId) {
@@ -1050,12 +1062,12 @@ export default class InterfaceColMenu extends Component {
         let caseList = dropColItem.caseList;
         let childCount = dropColItem.children ? dropColItem.children.length : 0;
         let changes = arrayChangeIndex(caseList, dragIndex - childCount, dropIndex - childCount);
-        await axios.post('/api/col/up_case_index', changes).then();
+        await axios.post('/api/col/up_case_index', changes);
         await this.updateTreeCase(dropColId);
       } else {
         await axios.post('/api/col/up_case', {id: dragid.substr(5), col_id: dropColId});
-        await this.updateTreeCase(dropColId);
         await this.updateTreeCase(dragColId);
+        await this.updateTreeCase(dropColId);
       }
       // const {projectId, router} = this.props;
       // this.props.fetchInterfaceColList(projectId);
@@ -1078,7 +1090,7 @@ export default class InterfaceColMenu extends Component {
         } else {// 不同级别时，拖到节点或下gap时，成为子目录
           parent_id = dropColItem._id;
         }
-        await axios.post('/api/col/up_col', {col_id, parent_id}).then();
+        await axios.post('/api/col/up_col', {col_id, parent_id});
         // await this.updateTreeCol(dragColItem.parent_id,this.props.match.params.id);
         // await this.updateTreeCol(dropColItem.parent_id,this.props.match.params.id);
         this.getList();
@@ -1091,11 +1103,11 @@ export default class InterfaceColMenu extends Component {
             dropColIndex.pop();
             changes = arrayChangeIndex(this.getcolItem(interfaceColList, dropColIndex, true).children, dragIndex, dropIndex);
           }
-          await axios.post('/api/col/up_col_index', changes).then();
+          await axios.post('/api/col/up_col_index', changes);
         } else {//如果drop在gap上，则是成为drop目标的子目录
           let col_id = dragColItem._id;
           let parent_id = dropColItem._id;
-          await axios.post('/api/col/up_col', {col_id, parent_id}).then();
+          await axios.post('/api/col/up_col', {col_id, parent_id});
         }
         await this.updateTreeCol(dropColItem.parent_id,this.props.match.params.id);
       }

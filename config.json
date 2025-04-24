@@ -7,6 +7,11 @@
       "DATABASE": "yapi",
       "port": 27017
    },
+   "openAi":{
+      "apiKey":"",
+      "model":"",
+      "baseURL":""
+   },
    "mail": {
       "enable": true,
       "host": "smtp.qq.com",
