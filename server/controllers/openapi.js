@@ -1,20 +1,73 @@
 const baseController = require('./base.js');
 const caselibModel = require('../models/caselib.js');
 const caseModel = require('../models/interfaceCase.js');
+const globalModel = require('../models/global.js');
 const yapi = require('../yapi.js');
 const OpenAI = require('openai');
 
+var openai = null;
+var lastInitTime = 0;
+var initializationInProgress = false;
+var INIT_INTERVAL = 3600000; // 1小时
 class openaiController extends baseController {
     constructor() {
         super();
         this.caseLibModel = yapi.getInst(caselibModel);
         this.caseModel = yapi.getInst(caseModel);
-        // 在构造函数中创建 OpenAI 实例，仅创建一次
-        this.openai = new OpenAI({
-            apiKey:yapi.WEBCONFIG.openAi.apiKey,
-            baseURL:yapi.WEBCONFIG.openAi.baseURL,
-            moel:yapi.WEBCONFIG.openAi.model
-        });
+        this.globalModel = yapi.getInst(globalModel);
+    }
+    async getAiInstance() {
+        const now = Date.now();
+        // console.log('this.openai:', openai,lastInitTime,initializationInProgress);
+        //获取最新的配置
+        let globalconfigdata = await this.globalModel.getconfig();
+        let globalconfig = JSON.parse(globalconfigdata.config);
+        // 如果已经初始化并且配置未变，直接返回实例
+        if (
+            openai &&
+            now - lastInitTime < INIT_INTERVAL &&
+            openai._options.apiKey === globalconfig.openAi.apiKey &&
+            openai._options.model === globalconfig.openAi.model &&
+            openai._options.baseURL === globalconfig.openAi.baseURL
+        ) {
+            return openai;
+        }
+
+        // 防止并发初始化
+        if (initializationInProgress) {
+            console.log('等待其他请求初始化完成');
+            // 等待初始化完成
+            while (initializationInProgress) {
+                await new Promise(resolve => setTimeout(resolve, 100));
+            }
+            return openai;
+        }
+
+        // 开始新的初始化
+        initializationInProgress = true;
+        await this.initAi();
+        initializationInProgress = false;
+        return openai;
+    }
+
+    async initAi() {
+        try {
+            let globalconfigdata = await this.globalModel.getconfig();
+            let globalconfig = JSON.parse(globalconfigdata.config);
+            
+            openai = new OpenAI({
+                apiKey: globalconfig.openAi.apiKey,
+                baseURL: globalconfig.openAi.baseURL,
+                model: globalconfig.openAi.model  // 修正拼写错误：moel -> model
+            });
+            
+            lastInitTime = Date.now();
+            console.log('OpenAI client initialized successfully');
+            return openai;
+        } catch (error) {
+            console.error('Failed to initialize OpenAI client:', error);
+            throw error;
+        }
     }
     /**
      * openai聊天
@@ -29,8 +82,9 @@ class openaiController extends baseController {
     async chat(ctx) {
         let message = ctx.request.body.message;
         try{
-            let result = await this.openai.chat.completions.create({
-                model: this.model,
+            const ai = await this.getAiInstance();
+            let result = await ai.chat.completions.create({
+                model: ai.model,
                 store: true,
                 messages: [
                     {"role": "user", "content": message},
@@ -61,8 +115,9 @@ class openaiController extends baseController {
             return ctx.body = yapi.commons.resReturn(null, 402, '请选择具体生成的需求id');
         }
         try{
-            let result = await this.openai.chat.completions.create({
-                model: this.openai.model,
+            const ai = await this.getAiInstance();
+            let result = await ai.chat.completions.create({
+                model: ai.model,
                 store: true,
                 temperature:0.3,//生成结果随机性
                 top_p:1,//随机性概率，前80%
@@ -201,8 +256,9 @@ class openaiController extends baseController {
             return (ctx.body = yapi.commons.resReturn(null, 400, '暂不支持该参数类型的生成'));
         }
         try{
-            let result = await this.openai.chat.completions.create({
-                model: this.openai.model,
+            const ai = await this.getAiInstance();
+            let result = await ai.chat.completions.create({
+                model: ai.model,
                 store: true,
                 temperature:0.3,//生成结果随机性
                 top_p:1,//随机性概率，前80%

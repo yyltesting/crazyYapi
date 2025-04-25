@@ -6,6 +6,7 @@ import { Route, BrowserRouter as Router } from 'react-router-dom';
 import { Home, Group, Project, Follows, AddProject, Login,Oauth2 } from './containers/index';
 import { Alert } from 'antd';
 import User from './containers/User/User.js';
+import Glob from './containers/GlobalConfig/Global.js';
 import Header from './components/Header/Header';
 // import Footer from './components/Footer/Footer';
 import Loading from './components/Loading/Loading';
@@ -65,6 +66,10 @@ let AppRoute = {
   Oauth2:{
     path:'/Oauth2',
     component: Oauth2
+  },
+  global:{
+    path:'/global',
+    component:Glob
   }
 };
 // 增加路由钩子

@@ -63,6 +63,12 @@ let HeaderMenu = {
     name: '用户管理',
     icon: 'solution',
     adminFlag: true
+  },
+  global:{
+    path: '/global/config',
+    name: '全局配置',
+    icon: 'fileText',
+    adminFlag: true
   }
 };
 

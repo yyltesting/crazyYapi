@@ -1,0 +1,15 @@
+.global-config{
+  background: #fff;
+  margin-top: 10px;
+  padding: 15px;
+  width: 100%; /* 宽度为屏幕的 80% */
+  height: 100%; /* 高度为屏幕的 80% */
+
+  .config-editor{
+    width: 80&; /* 宽度为屏幕的 80% */
+    height: 80%; /* 高度为屏幕的 80% */
+    min-height: 300px;
+    margin-top: 10px;
+    background-color: #eee;
+  }
+}

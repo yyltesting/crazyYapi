@@ -8,6 +8,7 @@ const demandController = require('./controllers/demand.js');
 const caselibController = require('./controllers/caselib.js');
 const utilsController = require('./controllers/utils.js');
 const openaiController = require('./controllers/openapi.js')
+const globalController = require('./controllers/globalconfig.js');
 
 const yapi = require('./yapi.js');
 const projectController = require('./controllers/project.js');
@@ -70,10 +71,26 @@ let INTERFACE_CONFIG = {
   openai:{
     prefix:'/openai/',
     controller:openaiController
+  },
+  global:{
+    prefix:'/global/',
+    controller:globalController
   }
 };
 
 let routerConfig = {
+  global:[
+    {
+      action: 'upconfig',
+      path: 'upconfig',
+      method: 'post'
+    },
+    {
+      action: 'getconfig',
+      path: 'getconfig',
+      method: 'get'
+    }
+  ],  
   openai:[
     {
       action:'chat',
