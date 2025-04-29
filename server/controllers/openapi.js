@@ -111,88 +111,229 @@ class openaiController extends baseController {
         let message = ctx.request.body.demandDesc;
         let prompt = ctx.request.body.promptDesc;
         let demandid = ctx.request.body.demandid;
-        if(demandid==0){
+        
+        if(demandid == 0){
             return ctx.body = yapi.commons.resReturn(null, 402, '请选择具体生成的需求id');
         }
-        try{
+        
+        try {
             const ai = await this.getAiInstance();
+
+            // 初始化变量
+            let allContent = "";
+            let isComplete = false;
+            let continuationCount = 0;
+            const MAX_ATTEMPTS = 5; // 最大尝试次数
+            
+            console.log('开始生成测试用例...');
+            
+            // 第一次生成
             let result = await ai.chat.completions.create({
                 model: ai.model,
                 store: true,
-                temperature:0.3,//生成结果随机性
-                top_p:1,//随机性概率，前80%
-                max_tokens:4000,
+                temperature: 0.3,
+                top_p: 1,
+                max_tokens: 4000,
                 response_format: { type: "json_object" },
                 messages: [
                     {"role": "system", "content": prompt},
                     {"role": "user", "content": message}
                 ],
             });
+            
             let rawContent = result.choices[0].message.content.trim();
-            let rawContentdata = yapi.commons.safeParse(rawContent);
-            if(!rawContentdata.success){
-                return ctx.body = yapi.commons.resReturn(null, 402, '请分批生成');
-            }
-            // let isEnd = false;
-            // while(!isEnd){
-            //     let rawContentdata = yapi.commons.safeParse(rawContent);
-            //     if(!rawContentdata.success){
-            //         let resultaddContent = await this.openai.chat.completions.create({
-            //             model: this.openai.model,
-            //             store: true,
-            //             temperature:0.3,//生成结果随机性
-            //             top_p:1,//随机性概率，前80%
-            //             max_tokens:4000,
-            //             response_format: { type: "json_object" },
-            //             messages: [
-            //                 {"role": "system", "content": prompt},
-            //                 {"role": "user", "content": "接着上一次的内容，继续生成测试用例。"}
-            //             ],
-            //         });
-            //         rawContent = rawContent + resultaddContent.choices[0].message.content.trim();
-            //         console.log(rawContent)
-            //     }else{
-            //         // let casedata = yapi.commons.safeParse(JSON.parse(rawContent).test_cases);
-            //         isEnd =true;
-            //         console.log('生成完成。。。')
-            //     }
-            // }
-            // 转换为JSON对象
-            let casedata = JSON.parse(rawContent).test_cases;
-            if(casedata&&casedata.length>0){
-                for(let i=0;i<casedata.length;i++){
-                    let item = casedata[i];
-                    let oldcase =await this.caseLibModel.info(demandid,item.title,item.model,item.submodel);
-                    if(oldcase){
-                      continue;
-                    }
-                    if(!item.submodel){
-                        item.submodel = '';
-                    }
-                    let data = {
-                      demandid: demandid,
-                      title: item.title,
-                      model: item.model,
-                      submodel: item.submodel,
-                      preconditions: item.preconditions,
-                      step: item.step,
-                      expect: item.expect,
-                      remarks: item.remarks,
-                      priority: item.priority,
-                      uid: this.getUid(),
-                      status: item.status,
-                      add_time: yapi.commons.time()
-                    };
+            allContent = rawContent;
+            
+            // 检查是否为有效的 JSON
+            let parsedContent = yapi.commons.safeParse(allContent);
+            // console.log("parsedContent",parsedContent);
+            // 如果不是有效 JSON 或者明显不完整，进行后续生成
+            while ((!parsedContent.success || !allContent.includes('"test_cases"')) && continuationCount < MAX_ATTEMPTS) {
+                continuationCount++;
+                console.log(`内容不完整，进行第 ${continuationCount} 次续写...`);
                 
-                    await this.caseLibModel.save(data);
+                // 构建续写提示
+                const continuationPrompt = `之前你正在生成测试用例，但内容似乎不完整。请继续生成完整的JSON格式测试用例。
+确保包含test_cases数组，并且所有JSON括号闭合正确。`;
+                
+                try {
+                    // 进行续写请求
+                    let continuationResult = await ai.chat.completions.create({
+                        model: ai.model,
+                        store: true,
+                        temperature: 0.2, // 降低随机性以保持一致性
+                        top_p: 1,
+                        max_tokens: 4000,
+                        response_format: { type: "json_object" },
+                        messages: [
+                            {"role": "system", "content": enhancedPrompt},
+                            {"role": "user", "content": message},
+                            {"role": "assistant", "content": allContent},
+                            {"role": "user", "content": continuationPrompt}
+                        ],
+                    });
+                    
+                    let continuationContent = continuationResult.choices[0].message.content.trim();
+                    
+                    // 尝试处理可能的部分内容问题
+                    if (continuationContent.startsWith('```json')) {
+                        continuationContent = continuationContent.substring(7);
+                    }
+                    if (continuationContent.endsWith('```')) {
+                        continuationContent = continuationContent.substring(0, continuationContent.length - 3);
+                    }
+                    
+                    // 合并内容
+                    // 如果前一个响应不完整（可能缺少结尾括号），尝试智能合并
+                    if (allContent.endsWith(',') || allContent.endsWith('{') || allContent.endsWith('[')) {
+                        allContent += continuationContent;
+                    } else if (continuationContent.startsWith(',') || continuationContent.startsWith('}') || continuationContent.startsWith(']')) {
+                        allContent += continuationContent;
+                    } else {
+                        // 尝试查找 JSON 边界
+                        const lastBraceIndex = Math.max(allContent.lastIndexOf('}'), allContent.lastIndexOf(']'));
+                        const firstBraceIndex = Math.min(
+                            continuationContent.indexOf('{') !== -1 ? continuationContent.indexOf('{') : Infinity,
+                            continuationContent.indexOf('[') !== -1 ? continuationContent.indexOf('[') : Infinity
+                        );
+                        
+                        if (lastBraceIndex !== -1 && firstBraceIndex !== Infinity) {
+                            allContent = allContent.substring(0, lastBraceIndex) + continuationContent.substring(firstBraceIndex);
+                        } else {
+                            // 无法智能合并，直接拼接
+                            allContent += " " + continuationContent;
+                        }
+                    }
+                    
+                    // 再次检查是否为有效 JSON
+                    parsedContent = yapi.commons.safeParse(allContent);
+                    
+                    // 检查是否包含所需的关键数据，如果包含且解析正确则结束循环
+                    if (parsedContent.success && allContent.includes('"test_cases"')) {
+                        isComplete = true;
+                        break;
+                    }
+                    
+                    // 如果已经合并了多段仍无法得到有效 JSON，尝试重新生成一个完整 JSON
+                    if (continuationCount >= 3 && !parsedContent.success) {
+                        console.log('多次续写仍未得到有效 JSON，尝试重新生成完整结构...');
+                        
+                        const fixPrompt = `之前生成的内容似乎有问题。请重新生成一个完整的、格式正确的 JSON 响应，包含 test_cases 数组。
+请确保响应格式如下：
+{
+  "test_cases": [
+    {
+      "title": "测试用例标题",
+      "model": "模块",
+      "submodel": "子模块",
+      "preconditions": "前置条件",
+      "step": "测试步骤",
+      "expect": "预期结果",
+      "remarks": "备注",
+      "priority": "优先级",
+      "status": "状态"
+    },
+    // 更多测试用例...
+  ]
+}`;
+                        
+                        let fixResult = await ai.chat.completions.create({
+                            model: ai.model,
+                            store: true,
+                            temperature: 0.1,
+                            top_p: 1,
+                            max_tokens: 4000,
+                            response_format: { type: "json_object" },
+                            messages: [
+                                {"role": "system", "content": prompt},
+                                {"role": "user", "content": message},
+                                {"role": "user", "content": fixPrompt}
+                            ],
+                        });
+                        
+                        allContent = fixResult.choices[0].message.content.trim();
+                        parsedContent = yapi.commons.safeParse(allContent);
+                        
+                        if (parsedContent.success) {
+                            isComplete = true;
+                            break;
+                        }
+                    }
+                } catch (continuationError) {
+                    console.error('续写生成过程出错:', continuationError);
+                    // 继续尝试下一次生成
                 }
             }
+            
+            console.log(`测试用例生成完成，共进行了 ${continuationCount} 次续写`);
+            
+            // 如果生成完成但仍不是有效 JSON，返回错误
+            if (!parsedContent.success) {
+                return ctx.body = yapi.commons.resReturn(null, 402, '生成内容格式有误，请重试或分批生成');
+            }
+            
+            // 解析测试用例内容
+            let testCasesData;
+            try {
+                const jsonData = JSON.parse(allContent);
+                testCasesData = jsonData.test_cases || [];
+                
+                if (!Array.isArray(testCasesData) || testCasesData.length === 0) {
+                    return ctx.body = yapi.commons.resReturn(null, 402, '生成的测试用例内容为空或格式不正确');
+                }
+            } catch (jsonError) {
+                return ctx.body = yapi.commons.resReturn(null, 402, '解析生成的内容失败: ' + jsonError.message);
+            }
+            
+            // 保存测试用例到数据库
+            let savedCount = 0;
+            for (let i = 0; i < testCasesData.length; i++) {
+                let item = testCasesData[i];
+                
+                // 检查是否已存在相同用例
+                let oldcase = await this.caseLibModel.info(demandid, item.title, item.model, item.submodel);
+                if (oldcase) {
+                    continue;
+                }
+                
+                // 处理可能的空值
+                if (!item.submodel) {
+                    item.submodel = '';
+                }
+                
+                // 确保所有必需字段都存在
+                const data = {
+                    demandid: demandid,
+                    title: item.title || '未命名用例',
+                    model: item.model || '未分类',
+                    submodel: item.submodel || '',
+                    preconditions: item.preconditions || '',
+                    step: item.step || '',
+                    expect: item.expect || '',
+                    remarks: item.remarks || '',
+                    priority: item.priority || 'P2',
+                    uid: this.getUid(),
+                    status: item.status || 'todo',
+                    add_time: yapi.commons.time()
+                };
+                
+                await this.caseLibModel.save(data);
+                savedCount++;
+            }
+            
+            console.log(`成功保存 ${savedCount} 个测试用例`);
+            isComplete = true;
             // 返回处理后的数据
-            return (ctx.body = yapi.commons.resReturn(casedata, 0, null));
-        }catch(e){
+            return (ctx.body = yapi.commons.resReturn({
+                test_cases: testCasesData,
+                total_generated: testCasesData.length,
+                total_saved: savedCount,
+                continuation_count: continuationCount
+            }, 0, isComplete ? '用例生成成功' : '用例已生成，但可能不完整'));
+        } catch (e) {
+            console.error('生成测试用例过程中发生错误:', e);
             return ctx.body = yapi.commons.resReturn(null, 402, e.message);
         }
-
     }
 
     /**

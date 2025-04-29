@@ -82,13 +82,14 @@ export class demandlib extends React.Component {
       aiCreateCaseid:number,
       aiCreateCaseModel:false,
       promptDesc:`你现在是一个专业的测试人员，可以按照需求文档来编写测试用例，下面我会给你需求文档后请输出测试用例,测试用例以json的方式给我。用例的要求：
-1. 生成的用例标题尽量详细一点
+1. 生成的用例标题尽量详细一点，全面的测试场景覆盖，考虑边界条件和异常情况
 2. 用例分为模块model、子模块submodel、标题title、预设条件preconditions、步骤step、预期结果expect、备注remarks、优先级priority、状态status 九个部分
 3. 用例需要包含通常的功能用例、非功能用例；功能用例，按需求点输出；非功能用例，需要考虑安全、异常、兼容等
 4. 用例的输出格式用json格式，在json格式中,每条用例为一个对象，以json数组对象的方式给到我所有的用例
 5. status的值都为undone,所有字段值类型都为string,所有字段值都不能为空
 6. 生成的主key名为test_cases
-7. 输出前请检查格式要求和内容要求是否满足。`
+7. 输出前请检查格式要求和内容要求是否满足
+8. 尽可能提供全面详尽的测试用例，不必担心内容过长`
     };
   }
   async componentWillMount() {

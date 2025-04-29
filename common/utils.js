@@ -107,16 +107,18 @@ function handleParamsValue(val, context = {}) {
   }
   // val = val.trim(); //需要保留空格进行一些测试
 
-  let match = val.match(/^\{\{([^\}]+)\}\}$/);
-  if (!match) {
-    // val ==> @name 或者 $.body
-    if (val[0] === '@' || val[0] === '$') {
-       return handleFilter(val, val, context);
-    }
-  } else {
+  // 检查是否完全匹配 {{...}}
+  const match = val.match(/^\{\{([^\}]+)\}\}$/);
+  if (match) {
     return handleFilter(val, match[1], context);
   }
 
+  // 检查是否以 @ 或 $ 开头
+  if (val[0] === '@' || val[0] === '$') {
+    return handleFilter(val, val, context);
+  }
+
+  // 替换所有 {{...}} 变量
   return val.replace(variableRegexp, (str, match) => {
     return handleFilter(str, match, context);
   });

@@ -186,11 +186,11 @@ const stringHandles = {
     var startDate;
     if(str.split('-')[1]>0){
       startDate = Math.round(new Date(str).getTime()/1000);
-      return startDate;
+      return startDate.toString();
     }else{
       var curTime = Math.round(new Date().getTime()/1000);
       startDate = curTime + (str * 3600 * 24);
-      return startDate;
+      return startDate.toString();
     }
   },
   //时间戳ms
@@ -198,11 +198,11 @@ const stringHandles = {
     var startDate;
     if(str.split('-')[1]>0){
       startDate = Math.round(new Date(str).getTime());
-      return startDate;
+      return startDate.toString();
     }else{
       var curTime = Math.round(new Date().getTime());
       startDate = curTime + (str * 3600 * 24);
-      return startDate;
+      return startDate.toString();
     }
   },
   //整除
@@ -417,7 +417,7 @@ class PowerString {
   }
 
   toString() {
-    return this._string;
+    return String(this._string);
   }
 }
 
@@ -442,6 +442,13 @@ function handleOriginStr(str, handleValueFn) {
   if (typeof handleValueFn === 'function') {
     handleValue = handleValueFn;
   }
+  let typeConversion = null;
+  // 检查是否包含 `>`，并解析类型转换
+  if (str.includes('>')) {
+    const parts = str.split('>');
+    str = parts[0].trim(); // 提取 `>` 前的部分
+    typeConversion = parts[1].trim(); // 提取 `>` 后的部分
+  }
   str = str
     .replace('\\' + segmentSeparateChar, aUniqueVerticalStringNotFoundInData)
     .replace('\\' + argsSeparateChar, aUniqueCommaStringNotFoundInData)
@@ -449,6 +456,14 @@ function handleOriginStr(str, handleValueFn) {
     .map(handleSegment)
     .reduce(execute, null)
     .toString();
+  if(typeConversion){
+    if(typeConversion=='number'){
+      str = +str;
+    }
+    if(typeConversion=='string'){
+      str = str.toString();
+    }
+  }
   return str;
 }
 
