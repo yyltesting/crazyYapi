@@ -251,7 +251,7 @@ class testResultController extends openController {
         let isSend = (triggers.includes("any")) // 任何情况下都发送
           || (triggers.includes("success") && failedNum === 0) // 成功才发送
           || (triggers.includes("fail") && successNum === 0) // 失败才发送
-          || (triggers.includes("part") && successNum < reportsResult.message.len && successNum > 0); // 部分成功才发送
+          || (triggers.includes("part") && successNum < reportsResult.message.len && successNum >= 0); // 部分成功才发送
         if (isSend && notifier && ctx.params.is_send) {
           let content = `测试结果：${plan.plan_name} 执行<font color="${failedNum === 0 ? 'info' : 'warning'}">${testData.status}</font>\n${reportsResult.message.msg}
             \n访问以下[链接查看](${originUrl}/api/open/plugin/test/result?id=${saveResult._id})测试结果详情

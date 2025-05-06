@@ -882,6 +882,11 @@ let routerConfig = {
       method: 'get'
     },
     {
+      action:'getTestResult',
+      path:'run_auto_test_result',
+      method:'get'
+    },
+    {
       action: 'importData',
       path: 'import_data',
       method: 'post'

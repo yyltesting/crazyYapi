@@ -1,4 +1,6 @@
 const baseModel = require('./base.js');
+var mongoose = require('mongoose');
+var Schema = mongoose.Schema;
 
 class coltestReport extends baseModel {
   getName() {
@@ -15,6 +17,7 @@ class coltestReport extends baseModel {
       status:Number,
       desc:String,
       test_report: { type: String, default: '{}' },
+      data:Schema.Types.Mixed //原始报告
     };
   }
 
@@ -37,6 +40,14 @@ class coltestReport extends baseModel {
       _id:id
     })
     .select('test_report')
+    .exec();
+  }
+  findOrgReportById(id){
+    return this.model
+    .findOne({
+      _id:id
+    })
+    .select('data')
     .exec();
   }
   up(id, data) {

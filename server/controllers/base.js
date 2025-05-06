@@ -34,7 +34,8 @@ class baseController {
       '/api/user/login_by_ldap',
       '/api/user/forget',
       '/api/user/vcodeuppassword',
-      '/api/open/plugin/test/result'
+      '/api/open/plugin/test/result',
+      '/api/open/run_auto_test_result'
     ];
     if (ignoreRouter.indexOf(ctx.path) > -1) {
       this.$auth = true;

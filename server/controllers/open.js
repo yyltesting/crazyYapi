@@ -24,7 +24,7 @@ const renderToHtml = require('../utils/reportHtml');
 const HanldeImportData = require('../../common/HandleImportData');
 const _ = require('underscore');
 const createContext = require('../../common/createContext')
-
+const tools = require('../utils/sendMsgTools.js');
 /**
  * {
  *    postman: require('./m')
@@ -87,6 +87,14 @@ class openController extends baseController {
         jobname: {
           type: 'string',
           default: ''
+        },
+        notifier:{
+          type:'string',
+          default:''
+        },
+        triggers:{
+          type:'string',
+          default:''
         },
         closeRemoveAdditional: true
       },
@@ -221,6 +229,7 @@ class openController extends baseController {
     let rootid = ctx.params.id;
     let curEnvList = this.handleEvnParams(ctx.params);
     var socketlist = [];
+    const originUrl = ctx.request.origin;
 
     let colids=[];
     let colData2;
@@ -348,9 +357,32 @@ class openController extends baseController {
       add_time : yapi.commons.time(),
       executor : executor,
       status: status,
-      test_report :JSON.stringify(reports)
+      test_report :JSON.stringify(reports),
+      data: reportsResult
     }
-    this.colReportModel.save(saveColReport);//保存报告记录
+
+    //是否通知webhook
+    let successNum = reportsResult.message.successNum;
+    let noticeTriggers = ctx.params.triggers ? ctx.params.triggers : '';
+    let notifier = ctx.params.notifier ? ctx.params.notifier : '';
+    // 是否发送通知
+    let isSend = (noticeTriggers.includes("any")) // 任何情况下都发送
+      || (noticeTriggers.includes("success") && failedNum === 0) // 成功才发送
+      || (noticeTriggers.includes("fail") && successNum === 0) // 失败才发送
+      || (noticeTriggers.includes("part") && successNum < reportsResult.message.len && successNum >= 0); // 部分成功才发送
+    // console.log('是否发送通知',isSend,'noticeTriggers',noticeTriggers,'failedNum',failedNum,'successNum',successNum, 'reportsResult',reportsResult.message.len);
+    //后续考虑失败重试机制
+    if (isSend&& notifier) {
+      let saveResult = await this.colReportModel.save(saveColReport);//保存报告记录,保存完后才发通知
+      let run_status = saveColReport.status == 0 ? '成功' : '失败';
+      let content = `测试结果：${colName} 执行<font color="${failedNum === 0 ? 'info' : 'warning'}">${run_status}</font>\n${reportsResult.message.msg}
+        \n访问以下[链接查看](${originUrl}/api/open/run_auto_test_result?id=${saveResult._id})测试结果详情
+        `;
+
+      tools.sendMessage(notifier, `服务端测试【${colName}】执行通知`, content);
+    }else{
+      this.colReportModel.save(saveColReport);//保存报告记录
+    }
 
     if (ctx.params.email === true && reportsResult.message.failedNum !== 0) {
       let autoTestUrl = `${
@@ -388,6 +420,20 @@ class openController extends baseController {
       }else{
         return (ctx.body = renderToHtml(reportsResult));
       }
+    }
+  }
+  /**
+   * 获取项目下的测试结果
+   * @param {*} ctx 
+   */
+  async getTestResult(ctx) {
+    try {
+      const id = ctx.params.id;
+      let results;
+      results = await this.colReportModel.findOrgReportById(id);
+      ctx.body = renderToHtml(results.data);
+    } catch (e) {
+      ctx.body = yapi.commons.resReturn(null, 401, e.message);
     }
   }
 

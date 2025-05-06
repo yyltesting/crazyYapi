@@ -172,6 +172,9 @@ class InterfaceColContent extends Component {
       subsetcol: false,
       Datadriven: false,
       isLoading: false,
+      webhookNotice: false,
+      webhookUrl: '',
+      triggers:'',
       showLogModal:false,
       showReportLogModal:false,
       reportLog:[],
@@ -180,7 +183,7 @@ class InterfaceColContent extends Component {
       log_url:'',
       log_jobNames:[],
       log_jobName:'',
-      serverlog:true,
+      serverlog:false,
       run_start:0,
       run_end:0,
       rows: [],
@@ -1438,10 +1441,13 @@ executeTestsloop = async () => {
       collapseKey: '',
       subset:false,
       failedinterrupt:false,
-      serverlog:true,
+      serverlog:false,
       log_url:'',
       log_jobName:'',
-      log_env:''
+      log_env:'',
+      webhookNotice:false,
+      triggers:'',
+      webhookUrl:'',
     });
   };
 
@@ -1467,6 +1473,21 @@ executeTestsloop = async () => {
   };
   changeServerlog = serverlog =>{
     this.setState({serverlog})
+    if(!serverlog){
+      this.setState({log_url:'',log_jobName:'',log_env:''});
+    }
+  }
+  changeWebhookNotice = webhookNotice => {
+    this.setState({webhookNotice})
+    if(!webhookNotice){
+      this.setState({webhookUrl:'',triggers:''});
+    }
+  }
+  selectTriggers = value => {
+    this.setState({ triggers:value });
+  };
+  changeWebhookUrl = e => {
+    this.setState({webhookUrl:e.target.value});
   }
   Failedinterrupt = failedinterrupt =>{
     this.setState({failedinterrupt})
@@ -1588,8 +1609,8 @@ executeTestsloop = async () => {
   closeReportLogModal=()=>{
     this.setState({showReportLogModal:false,reportLog:[],showReportLogId:0});
   }
-  selectDomain = async value => {
-    await this.setState({ log_env:value });
+  selectDomain = value => {
+    this.setState({ log_env:value });
     let jobName=[];
     this.props.currProject.env.forEach(item=>{
       if(item._id==value){
@@ -1903,6 +1924,14 @@ executeTestsloop = async () => {
     this.props.currProject.env.forEach(item=>{
       log_env.push(<Option key={item._id.toString()}>{item.name+' '+item.domain}</Option>);
     })
+    const triggers = [
+      <>
+      <Option key={'any'}>{'执行结束'}</Option>
+      <Option key={'success'}>{'全部成功'}</Option>
+      <Option key={'fail'}>{'全部失败'}</Option>
+      <Option key={'part'}>{'部分失败'}</Option>
+      </>
+    ]
     const jobNames = [];
     this.state.log_jobNames.forEach(item=>{
       jobNames.push(<Option key={item}>{item}</Option>);
@@ -2161,7 +2190,7 @@ executeTestsloop = async () => {
       this.props.token
     }${currColEnvObj ? currColEnvObj : ''}&mode=${this.state.mode}&email=${
       this.state.email
-    }&download=${this.state.download}&descendants=${this.state.descendants}&subset=${this.state.subset}&failedinterrupt=${this.state.failedinterrupt}&serverlog=${this.state.serverlog}&logurl=${this.state.log_url}&jobname=${this.state.log_jobName}`;
+    }&download=${this.state.download}&descendants=${this.state.descendants}&subset=${this.state.subset}&failedinterrupt=${this.state.failedinterrupt}&serverlog=${this.state.serverlog}&logurl=${this.state.log_url}&jobname=${this.state.log_jobName}&notifier=${this.state.webhookUrl}&triggers=${this.state.triggers}`;
 
     let col_name = '';
     let col_desc = '';
@@ -2836,7 +2865,7 @@ executeTestsloop = async () => {
             </Col>
             {this.state.serverlog && (
               <div>
-                <Col span={3} style={{ width: '120px',marginLeft:'20px' }}>
+                <Col span={2} style={{ width: '120px',marginLeft:'20px' }}>
                   服务端日志uri
                   <Tooltip title={'服务端日志关联env'}>
                     <QuestionCircleOutlined
@@ -2844,9 +2873,9 @@ executeTestsloop = async () => {
                         width: '15px'
                       }} />
                   </Tooltip>
-                  &nbsp;：
+                  &nbsp;
                 </Col>
-                <Col span={3} style={{ width: '200px' }}>
+                <Col span={6} style={{ width: '200px' }}>
                   <Select
                     value={this.state.log_env}
                     style={{ width: '100%' }}
@@ -2856,7 +2885,7 @@ executeTestsloop = async () => {
                     {log_env}
                   </Select>
                 </Col>
-                <Col span={3} style={{ width: '100px',marginLeft:'20px'  }}>
+                <Col span={2} style={{ width: '100px',marginLeft:'20px'  }}>
                   日志服务名
                   <Tooltip title={'服务端日志服务名'}>
                     <QuestionCircleOutlined
@@ -2864,9 +2893,9 @@ executeTestsloop = async () => {
                         width: '15px'
                       }} />
                   </Tooltip>
-                  &nbsp;：
+                  &nbsp;
                 </Col>
-                <Col span={3} style={{ width: '200px' }}>
+                <Col span={6} style={{ width: '200px' }}>
                   <Select
                     mode="multiple"
                     style={{ width: '100%' }}
@@ -2875,6 +2904,67 @@ executeTestsloop = async () => {
                   >
                     {jobNames}
                   </Select>
+                </Col>
+              </div>
+            )}
+          </Row>
+          <Row justify="start" className="row" align="middle" style={{ paddingTop: '16px' }}>
+            <Col span={3}>
+              webhook通知
+              <Tooltip title={'开启后，运行后会发送通知'}>
+                <QuestionCircleOutlined
+                  style={{
+                    width: '10px'
+                  }} />
+              </Tooltip>
+              &nbsp;:
+            </Col>
+            <Col span={3}>
+              <Switch
+                checked={this.state.webhookNotice}
+                checkedChildren="开"
+                unCheckedChildren="关"
+                onChange={this.changeWebhookNotice}
+              />
+            </Col>
+            {this.state.webhookNotice && (
+              <div>
+                <Col span={2} style={{ width: '120px',marginLeft:'20px' }}>
+                  触发通知类型
+                  <Tooltip title={'触发通知'}>
+                    <QuestionCircleOutlined
+                      style={{
+                        width: '15px'
+                      }} />
+                  </Tooltip>
+                  &nbsp;
+                </Col>
+                <Col span={6} style={{ width: '200px' }}>
+                  <Select
+                    value={this.state.triggers}
+                    style={{ width: '100%' }}
+                    placeholder="类型"
+                    onChange={this.selectTriggers}
+                  >
+                    {triggers}
+                  </Select>
+                </Col>
+                <Col span={2} style={{ width: '100px',marginLeft:'20px'  }}>
+                  webhook地址
+                  <Tooltip title={'通知地址'}>
+                    <QuestionCircleOutlined
+                      style={{
+                        width: '15px'
+                      }} />
+                  </Tooltip>
+                  &nbsp;
+                </Col>
+                <Col span={6} style={{ width: '200px' }}>
+                  <Input
+                    value={this.state.webhookUrl}
+                    onChange={this.changeWebhookUrl}
+                    placeholder="请输入通知地址"
+                  />
                 </Col>
               </div>
             )}
