@@ -138,7 +138,13 @@ class projectModel extends baseModel {
       .select(select)
       .exec().then(this.handleEnvNullData);
   }
-
+  getinfoList() {
+    let select ='_id name basepath desc';
+    return this.model
+      .find()
+      .select(select)
+      .exec()
+  }
   getByDomain(domain) {
     return this.model
       .find({

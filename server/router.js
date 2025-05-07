@@ -345,6 +345,11 @@ let routerConfig = {
   ],
   project: [
     {
+      action: 'getProjectListInfo',
+      path:'get_project_list_info',
+      method: 'get'
+    },
+    {
       action:'esconnection',
       path:'esconnection',
       method:'post'

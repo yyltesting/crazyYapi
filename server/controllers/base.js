@@ -16,7 +16,7 @@ class baseController {
     //网站上线后，role对象key是不能修改的，value可以修改
     this.roles = {
       admin: 'Admin',
-      member: '网站会员'
+      member: '网站成员'
     };
   }
 
@@ -35,7 +35,8 @@ class baseController {
       '/api/user/forget',
       '/api/user/vcodeuppassword',
       '/api/open/plugin/test/result',
-      '/api/open/run_auto_test_result'
+      '/api/open/run_auto_test_result',
+      '/api/project/get_project_list_info',
     ];
     if (ignoreRouter.indexOf(ctx.path) > -1) {
       this.$auth = true;
@@ -62,6 +63,7 @@ class baseController {
       '/api/project/get',
       '/api/plugin/export',
       '/api/col/add_col/',
+      '/api/col/list',
       '/api/project/up',
       '/api/utils/mysql',
       '/api/utils/redis',

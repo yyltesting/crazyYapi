@@ -46,7 +46,14 @@ class userModel extends baseModel {
       .select('_id username email role type  add_time up_time study')
       .exec(); //显示id name email role
   }
-
+  getAdmin() {
+    return this.model
+      .find({
+        role: 'admin'
+      })
+      .select('_id username email role type study')
+      .exec(); //显示id name email role
+  }
   findByUids(uids) {
     return this.model
       .find({

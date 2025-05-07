@@ -36,7 +36,8 @@ class projectController extends baseController {
     this.interfaceColModel = yapi.getInst(interfaceColModel);
     this.demandlibModel = yapi.getInst(demandlibModel);
     this.caselibModel = yapi.getInst(caselibModel);
-
+    this.userModel = yapi.getInst(userModel);
+    
     const id = 'number';
     const member_uid = ['number'];
     const name = {
@@ -1342,6 +1343,30 @@ class projectController extends baseController {
       ctx.body = yapi.commons.resReturn(data);
     } catch (err) {
       ctx.body = yapi.commons.resReturn(null, 402, String(err));
+    }
+  }
+
+  /**
+   * 对外接口，获取工程相关信息
+   * @interface /project/get_project_list_info
+   * @method GET
+   * @category project
+   * @foldnumber 10
+   * @return {Object}
+   */
+  async getProjectListInfo(ctx) {
+    try {
+      let projectResult = await this.Model.getinfoList(ctx.params.id);
+      let result = JSON.parse(JSON.stringify(projectResult));
+      //获取管理员uid
+      let userResult = await this.userModel.getAdmin();
+      for(let i = 0; i < result.length; i++) {
+        let tokenResult = await this.tokenModel.get(result[i]._id);
+        result[i].token = tokenResult.token ? getToken(tokenResult.token, userResult[0]._id) : null;
+      }
+      ctx.body = yapi.commons.resReturn(result);
+    } catch (err) {
+      ctx.body = yapi.commons.resReturn(null, 402, err.message);
     }
   }
 }
