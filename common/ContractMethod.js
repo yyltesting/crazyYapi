@@ -734,6 +734,61 @@ const ContractMethod = {
       return null;
     }
   },
+  //代发交易
+  signTransactionWithWeb3 :async function(neturl,params) {
+    try {
+      const web3 = new Web3(neturl); 
+      // 1. 从私钥创建账户对象
+      const account = web3.eth.accounts.privateKeyToAccount(params.privateKey);
+      const fromAddress = account.address; // 自动获取地址
+      console.log('操作地址:', fromAddress);
+  
+      // 动态获取 nonce 和 gasPrice
+      const [nonce, gasPrice] = await Promise.all([
+        web3.eth.getTransactionCount(fromAddress, 'pending'),
+        web3.eth.getGasPrice()
+      ]);
+      console.log('gasPrice',gasPrice);
+      // 编码合约函数调用数据
+      const functionAbi = params.contract_abi.find(
+        (item) => item.name === params.function && item.type === 'function'
+      );
+      console.log('functionAbi:', functionAbi);
+      const data = web3.eth.abi.encodeFunctionCall(
+        {
+          name: functionAbi.name,
+          type: functionAbi.type,
+          inputs: functionAbi.inputs
+        },
+        params.parameters
+      );
+
+      // 构造交易对象
+      const rawTx = {
+        from: fromAddress,
+        to: params.contract,     // 合约地址
+        value: web3.utils.toWei(params.value, 'ether'), // 转换为 wei
+        gas: params.gasLimit,
+        gasPrice: gasPrice,
+        nonce: nonce,
+        data: data,              // 编码后的合约调用数据
+        chainId: params.chainId  // 必须指定链 ID
+      };
+  
+      // 签名交易
+      const signedTx = await web3.eth.accounts.signTransaction(
+        rawTx,
+        params.privateKey
+      );
+      console.log('签名交易:', signedTx);
+      // 返回原始签名数据
+      return signedTx;
+      
+    } catch (error) {
+      console.error('签名错误:', error);
+      throw error;
+    }
+  },
   // 元数据
   contractMetadata: {
     ethsign: ['str'],
@@ -762,7 +817,8 @@ const ContractMethod = {
     claimRewardForkey: ['neturl', 'rewardSeason', 'amount', 'merkleProof', 'accountAddress', 'contractAddress', 'privateKey'],
     claimairdropReward: ['rewardSeason', 'amount', 'merkleProof', 'accountAddress', 'contractAddress'],
     claimairdropRewardForkey: ['neturl', 'rewardSeason', 'amount', 'merkleProof', 'accountAddress', 'contractAddress', 'privateKey'],
-    bscPayForkey:['neturl','accountAddress', 'contractAddress', 'privateKey']
+    bscPayForkey:['neturl','accountAddress', 'contractAddress', 'privateKey'],
+    signTransactionWithWeb3: ['neturl', 'params']
   }
 };
 module.exports = {
