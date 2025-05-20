@@ -4,6 +4,7 @@ const rewardAbi = require('./Abijson/rewardAbi.json');
 const airdropAbi = require('./Abijson/airdrop.json');
 const praiAbi = require('./Abijson/praiAbi.json');
 const PaymentReceiverAbi = require('./Abijson/PaymentReceiverAbi.json');
+const PraiPaymentReceiverAbi = require('./Abijson/PraiPaymentReceiverAbi.json');
 const Web3 = require('web3');
 
 const ContractMethod = {
@@ -734,6 +735,44 @@ const ContractMethod = {
       return null;
     }
   },
+    //bsc支付
+  praiPayForkey : async function(neturl,amount,accountAddress, contractAddress, privateKey) {
+    try {
+      const web3 = new Web3(neturl); 
+  
+      const contract = new web3.eth.Contract(PraiPaymentReceiverAbi.abi, contractAddress);
+      // 计算 0.05 BNB 的 wei 数量
+      const wei = Web3.utils.toWei(amount.toString(), 'ether');
+      // 估算 gas
+      const gasEstimate = await contract.methods.pay(wei).estimateGas({ from: accountAddress,value: value  });
+      console.log('estimategas==', gasEstimate);
+  
+      // 获取最新的 nonce
+      const nonce = await web3.eth.getTransactionCount(accountAddress, 'pending');
+  
+      // 交易对象
+      const txObject = {
+        from: accountAddress,
+        to: contractAddress,
+        gas: gasEstimate,
+        nonce: nonce,
+        value: value,
+        data: contract.methods.pay(wei).encodeABI(), // 编码合约调用
+      };
+  
+      // 签名交易
+      const signedTx = await web3.eth.accounts.signTransaction(txObject, privateKey);
+  
+      // 发送交易
+      const receipt = await web3.eth.sendSignedTransaction(signedTx.rawTransaction);
+      
+      console.log('Transaction stake Hash:', receipt.transactionHash);
+      return receipt.transactionHash;
+    } catch (error) {
+      console.error("createSpaceId error:", error);
+      return null;
+    }
+  },
   //代发交易
   signTransactionWithWeb3 :async function(neturl,params) {
     try {
@@ -818,6 +857,7 @@ const ContractMethod = {
     claimairdropReward: ['rewardSeason', 'amount', 'merkleProof', 'accountAddress', 'contractAddress'],
     claimairdropRewardForkey: ['neturl', 'rewardSeason', 'amount', 'merkleProof', 'accountAddress', 'contractAddress', 'privateKey'],
     bscPayForkey:['neturl','accountAddress', 'contractAddress', 'privateKey'],
+    praiPayForkey:['neturl','amount','accountAddress', 'contractAddress', 'privateKey'],
     signTransactionWithWeb3: ['neturl', 'params']
   }
 };

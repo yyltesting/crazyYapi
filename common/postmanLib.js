@@ -618,6 +618,7 @@ async function crossRequest(defaultOptions, preScript, afterScript,case_pre_scri
     claimairdropReward:utils.claimairdropReward,
     claimairdropRewardForkey:utils.claimairdropRewardForkey,
     bscPayForkey:utils.bscPayForkey,
+    praiPayForkey:utils.praiPayForkey,
     signTransactionWithWeb3:utils.signTransactionWithWeb3,
     encodeDES: utils.encodeDES,
     encodeAES: utils.encodeAES,
