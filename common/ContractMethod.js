@@ -735,7 +735,7 @@ const ContractMethod = {
       return null;
     }
   },
-    //bsc支付
+  //prai支付
   praiPayForkey : async function(neturl,amount,accountAddress, contractAddress, privateKey) {
     try {
       const web3 = new Web3(neturl); 
@@ -744,7 +744,7 @@ const ContractMethod = {
       // 计算 0.05 BNB 的 wei 数量
       const wei = Web3.utils.toWei(amount.toString(), 'ether');
       // 估算 gas
-      const gasEstimate = await contract.methods.pay(wei).estimateGas({ from: accountAddress,value: value  });
+      const gasEstimate = await contract.methods.pay(wei).estimateGas({ from: accountAddress });
       console.log('estimategas==', gasEstimate);
   
       // 获取最新的 nonce
@@ -756,7 +756,6 @@ const ContractMethod = {
         to: contractAddress,
         gas: gasEstimate,
         nonce: nonce,
-        value: value,
         data: contract.methods.pay(wei).encodeABI(), // 编码合约调用
       };
   
@@ -801,19 +800,21 @@ const ContractMethod = {
         },
         params.parameters
       );
-
+      console.log('encodeFunction:', data);
       // 构造交易对象
       const rawTx = {
         from: fromAddress,
         to: params.contract,     // 合约地址
-        value: web3.utils.toWei(params.value, 'ether'), // 转换为 wei
+        value: params.value?web3.utils.toWei(params.value, 'ether'):0, // 转换为 wei 主币
         gas: params.gasLimit,
         gasPrice: gasPrice,
         nonce: nonce,
         data: data,              // 编码后的合约调用数据
         chainId: params.chainId  // 必须指定链 ID
       };
-  
+      if(!params.value){
+        delete rawTx.value; // 如果没有 value 字段，则删除
+      }
       // 签名交易
       const signedTx = await web3.eth.accounts.signTransaction(
         rawTx,
