@@ -1238,8 +1238,7 @@ executeTestsloop = async () => {
     }
     this.setState({ visible: true, curCaseid: id });
   };
-  reTest = async(id,test_script,interface_id,rowIndex)=>{
-    rowIndex = rowIndex-1;
+  reTest = async(id,test_script,interface_id)=>{
     var options = this.reports[id];
     options.test_script = test_script?test_script:'';
     options.interface_id = interface_id;
@@ -1250,8 +1249,8 @@ executeTestsloop = async () => {
     };
     var ws;
     this.setState(prevState => {
-      const newRows = prevState.rows.map((row, j) => 
-        j === rowIndex ? { ...row, test_status: 'loading' } : row
+      const newRows = prevState.rows.map((row) => 
+        row._id === id ? { ...row, test_status: 'loading' } : row
       );
       return { rows: newRows };
     });
@@ -1363,8 +1362,8 @@ executeTestsloop = async () => {
         body: result.res_body
       };
       this.setState(prevState => {
-        const newRows = prevState.rows.map((row, j) => 
-          j === rowIndex ? { ...row, test_status: status } : row
+        const newRows = prevState.rows.map((row) => 
+          row._id === id ? { ...row, test_status: status } : row
         );
         return { rows: newRows };
       });
@@ -2158,7 +2157,7 @@ executeTestsloop = async () => {
                 }
                 return <div>
                   <Button onClick={() => this.openReport(rowData.id)}>测试报告</Button>
-                  <Button shape="circle" icon={<RedoOutlined  /> }onClick={() => this.reTest(rowData.id,rowData.test_script,rowData.interface_id,rowData.index)}></Button>
+                  <Button shape="circle" icon={<RedoOutlined  /> }onClick={() => this.reTest(rowData.id,rowData.test_script,rowData.interface_id)}></Button>
                 </div> ;
               };
               return <div className="interface-col-table-action">{reportFun()}</div>;
