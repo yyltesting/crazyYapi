@@ -1239,6 +1239,7 @@ executeTestsloop = async () => {
     this.setState({ visible: true, curCaseid: id });
   };
   reTest = async(id,test_script,interface_id,rowIndex)=>{
+    rowIndex = rowIndex-1;
     var options = this.reports[id];
     options.test_script = test_script?test_script:'';
     options.interface_id = interface_id;
