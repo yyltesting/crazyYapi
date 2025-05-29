@@ -622,6 +622,8 @@ async function crossRequest(defaultOptions, preScript, afterScript,case_pre_scri
     depositStake:utils.depositStake,
     depositAuthorizeUnlock:utils.depositAuthorizeUnlock,
     depositUnlock:utils.depositUnlock,
+    depositupdateWhitelist:utils.depositupdateWhitelist,
+    depositupdateStakingWhitelist:utils.depositupdateStakingWhitelist,
     signTransactionWithWeb3:utils.signTransactionWithWeb3,
     encodeDES: utils.encodeDES,
     encodeAES: utils.encodeAES,

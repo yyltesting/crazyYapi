@@ -883,6 +883,76 @@ const ContractMethod = {
       return null;
     }
   },
+  //Deposit updateStakingWhitelist
+  depositupdateStakingWhitelist : async function(neturl,address,status,accountAddress, contractAddress, privateKey) {
+    try {
+      const web3 = new Web3(neturl); 
+  
+      const contract = new web3.eth.Contract(DepositAbi.abi, contractAddress);
+      // 估算 gas
+      const gasEstimate = await contract.methods.updateStakingWhitelist(address,status).estimateGas({ from: accountAddress });
+      console.log('estimategas==', gasEstimate);
+  
+      // 获取最新的 nonce
+      const nonce = await web3.eth.getTransactionCount(accountAddress, 'pending');
+  
+      // 交易对象
+      const txObject = {
+        from: accountAddress,
+        to: contractAddress,
+        gas: gasEstimate,
+        nonce: nonce,
+        data: contract.methods.updateStakingWhitelist(address,status).encodeABI(), // 编码合约调用
+      };
+  
+      // 签名交易
+      const signedTx = await web3.eth.accounts.signTransaction(txObject, privateKey);
+  
+      // 发送交易
+      const receipt = await web3.eth.sendSignedTransaction(signedTx.rawTransaction);
+      
+      console.log('Transaction updateStakingWhitelist Hash:', receipt.transactionHash);
+      return receipt.transactionHash;
+    } catch (error) {
+      console.error("createSpaceId error:", error);
+      return null;
+    }
+  },
+  //Deposit updateWhitelist
+  depositupdateWhitelist : async function(neturl,address,status,accountAddress, contractAddress, privateKey) {
+    try {
+      const web3 = new Web3(neturl); 
+  
+      const contract = new web3.eth.Contract(DepositAbi.abi, contractAddress);
+      // 估算 gas
+      const gasEstimate = await contract.methods.updateWhitelist(address,status).estimateGas({ from: accountAddress });
+      console.log('estimategas==', gasEstimate);
+  
+      // 获取最新的 nonce
+      const nonce = await web3.eth.getTransactionCount(accountAddress, 'pending');
+  
+      // 交易对象
+      const txObject = {
+        from: accountAddress,
+        to: contractAddress,
+        gas: gasEstimate,
+        nonce: nonce,
+        data: contract.methods.updateWhitelist(address,status).encodeABI(), // 编码合约调用
+      };
+  
+      // 签名交易
+      const signedTx = await web3.eth.accounts.signTransaction(txObject, privateKey);
+  
+      // 发送交易
+      const receipt = await web3.eth.sendSignedTransaction(signedTx.rawTransaction);
+      
+      console.log('Transaction updateWhitelist Hash:', receipt.transactionHash);
+      return receipt.transactionHash;
+    } catch (error) {
+      console.error("createSpaceId error:", error);
+      return null;
+    }
+  },
   //代发交易
   signTransactionWithWeb3 :async function(neturl,params) {
     try {
@@ -973,6 +1043,8 @@ const ContractMethod = {
     depositStake:['neturl','amount','accountAddress', 'contractAddress', 'privateKey'],
     depositAuthorizeUnlock:['neturl','orderid','principal','interest','accountAddress', 'contractAddress', 'privateKey'],
     depositUnlock:['neturl','orderid','accountAddress', 'contractAddress', 'privateKey'],
+    depositupdateStakingWhitelist:['neturl','address','status','accountAddress', 'contractAddress', 'privateKey'],
+    depositupdateWhitelist:['neturl','address','status','accountAddress', 'contractAddress', 'privateKey'],
     signTransactionWithWeb3: ['neturl', 'params']
   }
 };
