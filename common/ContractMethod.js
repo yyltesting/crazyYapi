@@ -5,6 +5,7 @@ const airdropAbi = require('./Abijson/airdrop.json');
 const praiAbi = require('./Abijson/praiAbi.json');
 const PaymentReceiverAbi = require('./Abijson/PaymentReceiverAbi.json');
 const PraiPaymentReceiverAbi = require('./Abijson/PraiPaymentReceiverAbi.json');
+const DepositAbi = require('./Abijson/DepositAbi.json');
 const Web3 = require('web3');
 
 const ContractMethod = {
@@ -772,6 +773,116 @@ const ContractMethod = {
       return null;
     }
   },
+  //Deposit stake
+  depositStake : async function(neturl,amount,accountAddress, contractAddress, privateKey) {
+    try {
+      const web3 = new Web3(neturl); 
+  
+      const contract = new web3.eth.Contract(DepositAbi.abi, contractAddress);
+      // 计算 0.05 BNB 的 wei 数量
+      const wei = Web3.utils.toWei(amount.toString(), 'ether');
+      // 估算 gas
+      const gasEstimate = await contract.methods.stake(wei).estimateGas({ from: accountAddress });
+      console.log('estimategas==', gasEstimate);
+  
+      // 获取最新的 nonce
+      const nonce = await web3.eth.getTransactionCount(accountAddress, 'pending');
+  
+      // 交易对象
+      const txObject = {
+        from: accountAddress,
+        to: contractAddress,
+        gas: gasEstimate,
+        nonce: nonce,
+        data: contract.methods.stake(wei).encodeABI(), // 编码合约调用
+      };
+  
+      // 签名交易
+      const signedTx = await web3.eth.accounts.signTransaction(txObject, privateKey);
+  
+      // 发送交易
+      const receipt = await web3.eth.sendSignedTransaction(signedTx.rawTransaction);
+      
+      console.log('Transaction stake Hash:', receipt.transactionHash);
+      return receipt.transactionHash;
+    } catch (error) {
+      console.error("createSpaceId error:", error);
+      return null;
+    }
+  },
+  //Deposit authorizeUnlock
+  depositAuthorizeUnlock : async function(neturl,orderid,principal,interest,accountAddress, contractAddress, privateKey) {
+    try {
+      const web3 = new Web3(neturl); 
+  
+      const contract = new web3.eth.Contract(DepositAbi.abi, contractAddress);
+      // 计算 0.05 BNB 的 wei 数量
+      const principalwei = Web3.utils.toWei(principal.toString(), 'ether');
+      const interestwei = Web3.utils.toWei(interest.toString(), 'ether');
+      // 估算 gas
+      const gasEstimate = await contract.methods.authorizeUnlock(orderid,principalwei,interestwei).estimateGas({ from: accountAddress });
+      console.log('estimategas==', gasEstimate);
+  
+      // 获取最新的 nonce
+      const nonce = await web3.eth.getTransactionCount(accountAddress, 'pending');
+  
+      // 交易对象
+      const txObject = {
+        from: accountAddress,
+        to: contractAddress,
+        gas: gasEstimate,
+        nonce: nonce,
+        data: contract.methods.authorizeUnlock(orderid,principalwei,interestwei).encodeABI(), // 编码合约调用
+      };
+  
+      // 签名交易
+      const signedTx = await web3.eth.accounts.signTransaction(txObject, privateKey);
+  
+      // 发送交易
+      const receipt = await web3.eth.sendSignedTransaction(signedTx.rawTransaction);
+      
+      console.log('Transaction authorizeUnlock Hash:', receipt.transactionHash);
+      return receipt.transactionHash;
+    } catch (error) {
+      console.error("createSpaceId error:", error);
+      return null;
+    }
+  },
+  //Deposit Unlock
+  depositUnlock : async function(neturl,orderid,accountAddress, contractAddress, privateKey) {
+    try {
+      const web3 = new Web3(neturl); 
+  
+      const contract = new web3.eth.Contract(DepositAbi.abi, contractAddress);
+      // 估算 gas
+      const gasEstimate = await contract.methods.unlock(orderid).estimateGas({ from: accountAddress });
+      console.log('estimategas==', gasEstimate);
+  
+      // 获取最新的 nonce
+      const nonce = await web3.eth.getTransactionCount(accountAddress, 'pending');
+  
+      // 交易对象
+      const txObject = {
+        from: accountAddress,
+        to: contractAddress,
+        gas: gasEstimate,
+        nonce: nonce,
+        data: contract.methods.unlock(orderid).encodeABI(), // 编码合约调用
+      };
+  
+      // 签名交易
+      const signedTx = await web3.eth.accounts.signTransaction(txObject, privateKey);
+  
+      // 发送交易
+      const receipt = await web3.eth.sendSignedTransaction(signedTx.rawTransaction);
+      
+      console.log('Transaction unlock Hash:', receipt.transactionHash);
+      return receipt.transactionHash;
+    } catch (error) {
+      console.error("createSpaceId error:", error);
+      return null;
+    }
+  },
   //代发交易
   signTransactionWithWeb3 :async function(neturl,params) {
     try {
@@ -859,6 +970,9 @@ const ContractMethod = {
     claimairdropRewardForkey: ['neturl', 'rewardSeason', 'amount', 'merkleProof', 'accountAddress', 'contractAddress', 'privateKey'],
     bscPayForkey:['neturl','accountAddress', 'contractAddress', 'privateKey'],
     praiPayForkey:['neturl','amount','accountAddress', 'contractAddress', 'privateKey'],
+    depositStake:['neturl','amount','accountAddress', 'contractAddress', 'privateKey'],
+    depositAuthorizeUnlock:['neturl','orderid','principal','interest','accountAddress', 'contractAddress', 'privateKey'],
+    depositUnlock:['neturl','orderid','accountAddress', 'contractAddress', 'privateKey'],
     signTransactionWithWeb3: ['neturl', 'params']
   }
 };

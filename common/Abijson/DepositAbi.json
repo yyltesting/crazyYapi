@@ -1,0 +1,866 @@
+{
+  "abi":[
+    {
+            "inputs": [
+                    {
+                            "internalType": "address",
+                            "name": "_stakingToken",
+                            "type": "address"
+                    },
+                    {
+                            "internalType": "address",
+                            "name": "_initialWhitelister",
+                            "type": "address"
+                    },
+                    {
+                            "internalType": "address",
+                            "name": "_owner",
+                            "type": "address"
+                    }
+            ],
+            "stateMutability": "nonpayable",
+            "type": "constructor"
+    },
+    {
+            "inputs": [
+                    {
+                            "internalType": "address",
+                            "name": "owner",
+                            "type": "address"
+                    }
+            ],
+            "name": "OwnableInvalidOwner",
+            "type": "error"
+    },
+    {
+            "inputs": [
+                    {
+                            "internalType": "address",
+                            "name": "account",
+                            "type": "address"
+                    }
+            ],
+            "name": "OwnableUnauthorizedAccount",
+            "type": "error"
+    },
+    {
+            "anonymous": false,
+            "inputs": [
+                    {
+                            "indexed": true,
+                            "internalType": "address",
+                            "name": "depositor",
+                            "type": "address"
+                    },
+                    {
+                            "indexed": false,
+                            "internalType": "uint256",
+                            "name": "amount",
+                            "type": "uint256"
+                    },
+                    {
+                            "indexed": false,
+                            "internalType": "uint256",
+                            "name": "newBalance",
+                            "type": "uint256"
+                    }
+            ],
+            "name": "InterestPoolDeposited",
+            "type": "event"
+    },
+    {
+            "anonymous": false,
+            "inputs": [
+                    {
+                            "indexed": true,
+                            "internalType": "address",
+                            "name": "previousOwner",
+                            "type": "address"
+                    },
+                    {
+                            "indexed": true,
+                            "internalType": "address",
+                            "name": "newOwner",
+                            "type": "address"
+                    }
+            ],
+            "name": "OwnershipTransferred",
+            "type": "event"
+    },
+    {
+            "anonymous": false,
+            "inputs": [
+                    {
+                            "indexed": false,
+                            "internalType": "bool",
+                            "name": "paused",
+                            "type": "bool"
+                    }
+            ],
+            "name": "PausedStatusChanged",
+            "type": "event"
+    },
+    {
+            "anonymous": false,
+            "inputs": [
+                    {
+                            "indexed": true,
+                            "internalType": "address",
+                            "name": "user",
+                            "type": "address"
+                    },
+                    {
+                            "indexed": true,
+                            "internalType": "uint256",
+                            "name": "stakeId",
+                            "type": "uint256"
+                    },
+                    {
+                            "indexed": false,
+                            "internalType": "uint256",
+                            "name": "amount",
+                            "type": "uint256"
+                    },
+                    {
+                            "indexed": false,
+                            "internalType": "uint256",
+                            "name": "timestamp",
+                            "type": "uint256"
+                    }
+            ],
+            "name": "Staked",
+            "type": "event"
+    },
+    {
+            "anonymous": false,
+            "inputs": [
+                    {
+                            "indexed": true,
+                            "internalType": "address",
+                            "name": "account",
+                            "type": "address"
+                    },
+                    {
+                            "indexed": false,
+                            "internalType": "bool",
+                            "name": "status",
+                            "type": "bool"
+                    }
+            ],
+            "name": "StakingWhitelistUpdated",
+            "type": "event"
+    },
+    {
+            "anonymous": false,
+            "inputs": [
+                    {
+                            "indexed": true,
+                            "internalType": "address",
+                            "name": "user",
+                            "type": "address"
+                    },
+                    {
+                            "indexed": true,
+                            "internalType": "uint256",
+                            "name": "stakeId",
+                            "type": "uint256"
+                    },
+                    {
+                            "indexed": false,
+                            "internalType": "uint256",
+                            "name": "principal",
+                            "type": "uint256"
+                    },
+                    {
+                            "indexed": false,
+                            "internalType": "uint256",
+                            "name": "interest",
+                            "type": "uint256"
+                    },
+                    {
+                            "indexed": true,
+                            "internalType": "address",
+                            "name": "authorizer",
+                            "type": "address"
+                    },
+                    {
+                            "indexed": false,
+                            "internalType": "uint256",
+                            "name": "timestamp",
+                            "type": "uint256"
+                    }
+            ],
+            "name": "UnlockAuthorized",
+            "type": "event"
+    },
+    {
+            "anonymous": false,
+            "inputs": [
+                    {
+                            "indexed": true,
+                            "internalType": "address",
+                            "name": "user",
+                            "type": "address"
+                    },
+                    {
+                            "indexed": true,
+                            "internalType": "uint256",
+                            "name": "stakeId",
+                            "type": "uint256"
+                    },
+                    {
+                            "indexed": false,
+                            "internalType": "uint256",
+                            "name": "principal",
+                            "type": "uint256"
+                    },
+                    {
+                            "indexed": false,
+                            "internalType": "uint256",
+                            "name": "interest",
+                            "type": "uint256"
+                    },
+                    {
+                            "indexed": false,
+                            "internalType": "uint256",
+                            "name": "timestamp",
+                            "type": "uint256"
+                    }
+            ],
+            "name": "Unlocked",
+            "type": "event"
+    },
+    {
+            "anonymous": false,
+            "inputs": [
+                    {
+                            "indexed": true,
+                            "internalType": "address",
+                            "name": "account",
+                            "type": "address"
+                    },
+                    {
+                            "indexed": false,
+                            "internalType": "bool",
+                            "name": "status",
+                            "type": "bool"
+                    }
+            ],
+            "name": "WhitelistUpdated",
+            "type": "event"
+    },
+    {
+            "anonymous": false,
+            "inputs": [
+                    {
+                            "indexed": true,
+                            "internalType": "address",
+                            "name": "withdrawer",
+                            "type": "address"
+                    },
+                    {
+                            "indexed": false,
+                            "internalType": "uint256",
+                            "name": "amount",
+                            "type": "uint256"
+                    },
+                    {
+                            "indexed": false,
+                            "internalType": "uint256",
+                            "name": "timestamp",
+                            "type": "uint256"
+                    }
+            ],
+            "name": "Withdrawn",
+            "type": "event"
+    },
+    {
+            "inputs": [
+                    {
+                            "internalType": "uint256",
+                            "name": "orderId",
+                            "type": "uint256"
+                    },
+                    {
+                            "internalType": "uint256",
+                            "name": "principal",
+                            "type": "uint256"
+                    },
+                    {
+                            "internalType": "uint256",
+                            "name": "interest",
+                            "type": "uint256"
+                    }
+            ],
+            "name": "authorizeUnlock",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+    },
+    {
+            "inputs": [
+                    {
+                            "internalType": "uint256",
+                            "name": "amount",
+                            "type": "uint256"
+                    }
+            ],
+            "name": "depositToInterestPool",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+    },
+    {
+            "inputs": [],
+            "name": "getContractInfo",
+            "outputs": [
+                    {
+                            "internalType": "uint256",
+                            "name": "totalStakedAmount",
+                            "type": "uint256"
+                    },
+                    {
+                            "internalType": "address",
+                            "name": "tokenAddress",
+                            "type": "address"
+                    },
+                    {
+                            "internalType": "uint256",
+                            "name": "contractBalance",
+                            "type": "uint256"
+                    },
+                    {
+                            "internalType": "bool",
+                            "name": "isPaused",
+                            "type": "bool"
+                    },
+                    {
+                            "internalType": "uint256",
+                            "name": "currentOrderId",
+                            "type": "uint256"
+                    },
+                    {
+                            "internalType": "uint256",
+                            "name": "interestPoolBalance",
+                            "type": "uint256"
+                    }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+    },
+    {
+            "inputs": [],
+            "name": "getInterestPoolBalance",
+            "outputs": [
+                    {
+                            "internalType": "uint256",
+                            "name": "balance",
+                            "type": "uint256"
+                    }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+    },
+    {
+            "inputs": [
+                    {
+                            "internalType": "uint256",
+                            "name": "orderId",
+                            "type": "uint256"
+                    }
+            ],
+            "name": "getOrderInfo",
+            "outputs": [
+                    {
+                            "components": [
+                                    {
+                                            "internalType": "address",
+                                            "name": "user",
+                                            "type": "address"
+                                    },
+                                    {
+                                            "internalType": "uint256",
+                                            "name": "amount",
+                                            "type": "uint256"
+                                    },
+                                    {
+                                            "internalType": "uint256",
+                                            "name": "initialAmount",
+                                            "type": "uint256"
+                                    },
+                                    {
+                                            "internalType": "uint256",
+                                            "name": "timestamp",
+                                            "type": "uint256"
+                                    },
+                                    {
+                                            "internalType": "bool",
+                                            "name": "isAuthorized",
+                                            "type": "bool"
+                                    },
+                                    {
+                                            "internalType": "uint256",
+                                            "name": "authorizedPrincipal",
+                                            "type": "uint256"
+                                    },
+                                    {
+                                            "internalType": "uint256",
+                                            "name": "authorizedInterest",
+                                            "type": "uint256"
+                                    },
+                                    {
+                                            "internalType": "address",
+                                            "name": "authorizer",
+                                            "type": "address"
+                                    },
+                                    {
+                                            "internalType": "uint256",
+                                            "name": "authorizeTime",
+                                            "type": "uint256"
+                                    }
+                            ],
+                            "internalType": "struct Deposit.StakeOrder",
+                            "name": "order",
+                            "type": "tuple"
+                    }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+    },
+    {
+            "inputs": [],
+            "name": "getStakingWhitelistAddresses",
+            "outputs": [
+                    {
+                            "internalType": "address[]",
+                            "name": "addresses",
+                            "type": "address[]"
+                    }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+    },
+    {
+            "inputs": [
+                    {
+                            "internalType": "address",
+                            "name": "user",
+                            "type": "address"
+                    }
+            ],
+            "name": "getUserOrderIds",
+            "outputs": [
+                    {
+                            "internalType": "uint256[]",
+                            "name": "orderIds",
+                            "type": "uint256[]"
+                    }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+    },
+    {
+            "inputs": [],
+            "name": "getWhitelistAddresses",
+            "outputs": [
+                    {
+                            "internalType": "address[]",
+                            "name": "addresses",
+                            "type": "address[]"
+                    }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+    },
+    {
+            "inputs": [],
+            "name": "interestPool",
+            "outputs": [
+                    {
+                            "internalType": "uint256",
+                            "name": "",
+                            "type": "uint256"
+                    }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+    },
+    {
+            "inputs": [
+                    {
+                            "internalType": "address",
+                            "name": "account",
+                            "type": "address"
+                    }
+            ],
+            "name": "isStakingWhitelistAddress",
+            "outputs": [
+                    {
+                            "internalType": "bool",
+                            "name": "isWhitelisted",
+                            "type": "bool"
+                    }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+    },
+    {
+            "inputs": [
+                    {
+                            "internalType": "address",
+                            "name": "account",
+                            "type": "address"
+                    }
+            ],
+            "name": "isWhitelistAddress",
+            "outputs": [
+                    {
+                            "internalType": "bool",
+                            "name": "isWhitelisted",
+                            "type": "bool"
+                    }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+    },
+    {
+            "inputs": [],
+            "name": "nextOrderId",
+            "outputs": [
+                    {
+                            "internalType": "uint256",
+                            "name": "",
+                            "type": "uint256"
+                    }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+    },
+    {
+            "inputs": [],
+            "name": "owner",
+            "outputs": [
+                    {
+                            "internalType": "address",
+                            "name": "",
+                            "type": "address"
+                    }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+    },
+    {
+            "inputs": [],
+            "name": "paused",
+            "outputs": [
+                    {
+                            "internalType": "bool",
+                            "name": "",
+                            "type": "bool"
+                    }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+    },
+    {
+            "inputs": [],
+            "name": "renounceOwnership",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+    },
+    {
+            "inputs": [
+                    {
+                            "internalType": "bool",
+                            "name": "_paused",
+                            "type": "bool"
+                    }
+            ],
+            "name": "setPaused",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+    },
+    {
+            "inputs": [
+                    {
+                            "internalType": "uint256",
+                            "name": "amount",
+                            "type": "uint256"
+                    }
+            ],
+            "name": "stake",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+    },
+    {
+            "inputs": [
+                    {
+                            "internalType": "uint256",
+                            "name": "",
+                            "type": "uint256"
+                    }
+            ],
+            "name": "stakeOrders",
+            "outputs": [
+                    {
+                            "internalType": "address",
+                            "name": "user",
+                            "type": "address"
+                    },
+                    {
+                            "internalType": "uint256",
+                            "name": "amount",
+                            "type": "uint256"
+                    },
+                    {
+                            "internalType": "uint256",
+                            "name": "initialAmount",
+                            "type": "uint256"
+                    },
+                    {
+                            "internalType": "uint256",
+                            "name": "timestamp",
+                            "type": "uint256"
+                    },
+                    {
+                            "internalType": "bool",
+                            "name": "isAuthorized",
+                            "type": "bool"
+                    },
+                    {
+                            "internalType": "uint256",
+                            "name": "authorizedPrincipal",
+                            "type": "uint256"
+                    },
+                    {
+                            "internalType": "uint256",
+                            "name": "authorizedInterest",
+                            "type": "uint256"
+                    },
+                    {
+                            "internalType": "address",
+                            "name": "authorizer",
+                            "type": "address"
+                    },
+                    {
+                            "internalType": "uint256",
+                            "name": "authorizeTime",
+                            "type": "uint256"
+                    }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+    },
+    {
+            "inputs": [],
+            "name": "stakingToken",
+            "outputs": [
+                    {
+                            "internalType": "contract IERC20",
+                            "name": "",
+                            "type": "address"
+                    }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+    },
+    {
+            "inputs": [
+                    {
+                            "internalType": "address",
+                            "name": "",
+                            "type": "address"
+                    }
+            ],
+            "name": "stakingWhitelist",
+            "outputs": [
+                    {
+                            "internalType": "bool",
+                            "name": "",
+                            "type": "bool"
+                    }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+    },
+    {
+            "inputs": [
+                    {
+                            "internalType": "uint256",
+                            "name": "",
+                            "type": "uint256"
+                    }
+            ],
+            "name": "stakingWhitelistAddresses",
+            "outputs": [
+                    {
+                            "internalType": "address",
+                            "name": "",
+                            "type": "address"
+                    }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+    },
+    {
+            "inputs": [],
+            "name": "totalAuthorizedInterest",
+            "outputs": [
+                    {
+                            "internalType": "uint256",
+                            "name": "",
+                            "type": "uint256"
+                    }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+    },
+    {
+            "inputs": [],
+            "name": "totalStaked",
+            "outputs": [
+                    {
+                            "internalType": "uint256",
+                            "name": "",
+                            "type": "uint256"
+                    }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+    },
+    {
+            "inputs": [
+                    {
+                            "internalType": "address",
+                            "name": "newOwner",
+                            "type": "address"
+                    }
+            ],
+            "name": "transferOwnership",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+    },
+    {
+            "inputs": [
+                    {
+                            "internalType": "uint256",
+                            "name": "orderId",
+                            "type": "uint256"
+                    }
+            ],
+            "name": "unlock",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+    },
+    {
+            "inputs": [
+                    {
+                            "internalType": "address",
+                            "name": "account",
+                            "type": "address"
+                    },
+                    {
+                            "internalType": "bool",
+                            "name": "status",
+                            "type": "bool"
+                    }
+            ],
+            "name": "updateStakingWhitelist",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+    },
+    {
+            "inputs": [
+                    {
+                            "internalType": "address",
+                            "name": "account",
+                            "type": "address"
+                    },
+                    {
+                            "internalType": "bool",
+                            "name": "status",
+                            "type": "bool"
+                    }
+            ],
+            "name": "updateWhitelist",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+    },
+    {
+            "inputs": [
+                    {
+                            "internalType": "address",
+                            "name": "",
+                            "type": "address"
+                    },
+                    {
+                            "internalType": "uint256",
+                            "name": "",
+                            "type": "uint256"
+                    }
+            ],
+            "name": "userOrderIds",
+            "outputs": [
+                    {
+                            "internalType": "uint256",
+                            "name": "",
+                            "type": "uint256"
+                    }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+    },
+    {
+            "inputs": [
+                    {
+                            "internalType": "address",
+                            "name": "",
+                            "type": "address"
+                    }
+            ],
+            "name": "whitelist",
+            "outputs": [
+                    {
+                            "internalType": "bool",
+                            "name": "",
+                            "type": "bool"
+                    }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+    },
+    {
+            "inputs": [
+                    {
+                            "internalType": "uint256",
+                            "name": "",
+                            "type": "uint256"
+                    }
+            ],
+            "name": "whitelistAddresses",
+            "outputs": [
+                    {
+                            "internalType": "address",
+                            "name": "",
+                            "type": "address"
+                    }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+    },
+    {
+            "inputs": [],
+            "name": "withdraw",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+    }
+]
+}
