@@ -1,0 +1,810 @@
+{
+  "abi":[
+    {
+            "inputs": [
+                    {
+                            "internalType": "address",
+                            "name": "_praiToken",
+                            "type": "address"
+                    }
+            ],
+            "stateMutability": "nonpayable",
+            "type": "constructor"
+    },
+    {
+            "inputs": [
+                    {
+                            "internalType": "address",
+                            "name": "owner",
+                            "type": "address"
+                    }
+            ],
+            "name": "OwnableInvalidOwner",
+            "type": "error"
+    },
+    {
+            "inputs": [
+                    {
+                            "internalType": "address",
+                            "name": "account",
+                            "type": "address"
+                    }
+            ],
+            "name": "OwnableUnauthorizedAccount",
+            "type": "error"
+    },
+    {
+            "anonymous": false,
+            "inputs": [
+                    {
+                            "indexed": true,
+                            "internalType": "address",
+                            "name": "funder",
+                            "type": "address"
+                    },
+                    {
+                            "indexed": false,
+                            "internalType": "uint256",
+                            "name": "amount",
+                            "type": "uint256"
+                    }
+            ],
+            "name": "InterestPoolFunded",
+            "type": "event"
+    },
+    {
+            "anonymous": false,
+            "inputs": [
+                    {
+                            "indexed": false,
+                            "internalType": "uint256",
+                            "name": "oldMinimumStake",
+                            "type": "uint256"
+                    },
+                    {
+                            "indexed": false,
+                            "internalType": "uint256",
+                            "name": "newMinimumStake",
+                            "type": "uint256"
+                    }
+            ],
+            "name": "MinimumStakeUpdated",
+            "type": "event"
+    },
+    {
+            "anonymous": false,
+            "inputs": [
+                    {
+                            "indexed": true,
+                            "internalType": "address",
+                            "name": "previousOwner",
+                            "type": "address"
+                    },
+                    {
+                            "indexed": true,
+                            "internalType": "address",
+                            "name": "newOwner",
+                            "type": "address"
+                    }
+            ],
+            "name": "OwnershipTransferred",
+            "type": "event"
+    },
+    {
+            "anonymous": false,
+            "inputs": [
+                    {
+                            "indexed": true,
+                            "internalType": "address",
+                            "name": "staker",
+                            "type": "address"
+                    },
+                    {
+                            "indexed": true,
+                            "internalType": "address",
+                            "name": "withdrawalAddress",
+                            "type": "address"
+                    },
+                    {
+                            "indexed": true,
+                            "internalType": "uint256",
+                            "name": "stakeIndex",
+                            "type": "uint256"
+                    },
+                    {
+                            "indexed": false,
+                            "internalType": "uint256",
+                            "name": "amount",
+                            "type": "uint256"
+                    },
+                    {
+                            "indexed": false,
+                            "internalType": "uint256",
+                            "name": "timestamp",
+                            "type": "uint256"
+                    }
+            ],
+            "name": "Staked",
+            "type": "event"
+    },
+    {
+            "anonymous": false,
+            "inputs": [
+                    {
+                            "indexed": true,
+                            "internalType": "address",
+                            "name": "account",
+                            "type": "address"
+                    },
+                    {
+                            "indexed": false,
+                            "internalType": "bool",
+                            "name": "status",
+                            "type": "bool"
+                    }
+            ],
+            "name": "WhitelistUpdated",
+            "type": "event"
+    },
+    {
+            "anonymous": false,
+            "inputs": [
+                    {
+                            "indexed": true,
+                            "internalType": "address",
+                            "name": "withdrawalAddress",
+                            "type": "address"
+                    },
+                    {
+                            "indexed": false,
+                            "internalType": "uint256",
+                            "name": "principal",
+                            "type": "uint256"
+                    },
+                    {
+                            "indexed": false,
+                            "internalType": "uint256",
+                            "name": "interest",
+                            "type": "uint256"
+                    },
+                    {
+                            "indexed": false,
+                            "internalType": "uint256",
+                            "name": "total",
+                            "type": "uint256"
+                    },
+                    {
+                            "indexed": false,
+                            "internalType": "uint256[]",
+                            "name": "processedIndexes",
+                            "type": "uint256[]"
+                    }
+            ],
+            "name": "Withdrawn",
+            "type": "event"
+    },
+    {
+            "inputs": [],
+            "name": "APY_RATE",
+            "outputs": [
+                    {
+                            "internalType": "uint256",
+                            "name": "",
+                            "type": "uint256"
+                    }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+    },
+    {
+            "inputs": [],
+            "name": "DAILY_RELEASE_DENOMINATOR",
+            "outputs": [
+                    {
+                            "internalType": "uint256",
+                            "name": "",
+                            "type": "uint256"
+                    }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+    },
+    {
+            "inputs": [],
+            "name": "MAX_CONTRACT_BALANCE",
+            "outputs": [
+                    {
+                            "internalType": "uint256",
+                            "name": "",
+                            "type": "uint256"
+                    }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+    },
+    {
+            "inputs": [],
+            "name": "MAX_STAKES_PER_USER",
+            "outputs": [
+                    {
+                            "internalType": "uint256",
+                            "name": "",
+                            "type": "uint256"
+                    }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+    },
+    {
+            "inputs": [],
+            "name": "MINIMUM_STAKE",
+            "outputs": [
+                    {
+                            "internalType": "uint256",
+                            "name": "",
+                            "type": "uint256"
+                    }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+    },
+    {
+            "inputs": [],
+            "name": "STAKING_PERIOD",
+            "outputs": [
+                    {
+                            "internalType": "uint256",
+                            "name": "",
+                            "type": "uint256"
+                    }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+    },
+    {
+            "inputs": [
+                    {
+                            "internalType": "address",
+                            "name": "account",
+                            "type": "address"
+                    }
+            ],
+            "name": "addToWhitelist",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+    },
+    {
+            "inputs": [
+                    {
+                            "internalType": "uint256",
+                            "name": "amount",
+                            "type": "uint256"
+                    },
+                    {
+                            "internalType": "address",
+                            "name": "withdrawalAddress",
+                            "type": "address"
+                    }
+            ],
+            "name": "adminStake",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+    },
+    {
+            "inputs": [
+                    {
+                            "internalType": "address",
+                            "name": "withdrawalAddress",
+                            "type": "address"
+                    },
+                    {
+                            "internalType": "uint256",
+                            "name": "stakeIndex",
+                            "type": "uint256"
+                    }
+            ],
+            "name": "calculateAvailableInterest",
+            "outputs": [
+                    {
+                            "internalType": "uint256",
+                            "name": "",
+                            "type": "uint256"
+                    }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+    },
+    {
+            "inputs": [
+                    {
+                            "internalType": "address",
+                            "name": "withdrawalAddress",
+                            "type": "address"
+                    }
+            ],
+            "name": "calculateTotalAvailableInterest",
+            "outputs": [
+                    {
+                            "internalType": "uint256",
+                            "name": "",
+                            "type": "uint256"
+                    }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+    },
+    {
+            "inputs": [
+                    {
+                            "internalType": "uint256",
+                            "name": "amount",
+                            "type": "uint256"
+                    }
+            ],
+            "name": "fundInterestPool",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+    },
+    {
+            "inputs": [],
+            "name": "getAllWithdrawalAddresses",
+            "outputs": [
+                    {
+                            "internalType": "address[]",
+                            "name": "",
+                            "type": "address[]"
+                    }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+    },
+    {
+            "inputs": [],
+            "name": "getCompleteContractStats",
+            "outputs": [
+                    {
+                            "internalType": "uint256",
+                            "name": "_totalPoolAmount",
+                            "type": "uint256"
+                    },
+                    {
+                            "internalType": "uint256",
+                            "name": "_totalInterestPool",
+                            "type": "uint256"
+                    },
+                    {
+                            "internalType": "uint256",
+                            "name": "_totalStakeInterest",
+                            "type": "uint256"
+                    },
+                    {
+                            "internalType": "uint256",
+                            "name": "_contractBalance",
+                            "type": "uint256"
+                    },
+                    {
+                            "internalType": "uint256",
+                            "name": "_totalHistoricalDeposits",
+                            "type": "uint256"
+                    }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+    },
+    {
+            "inputs": [],
+            "name": "getMinimumStake",
+            "outputs": [
+                    {
+                            "internalType": "uint256",
+                            "name": "",
+                            "type": "uint256"
+                    }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+    },
+    {
+            "inputs": [],
+            "name": "getOperationWhitelistAddresses",
+            "outputs": [
+                    {
+                            "internalType": "address[]",
+                            "name": "",
+                            "type": "address[]"
+                    }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+    },
+    {
+            "inputs": [],
+            "name": "getOperationWhitelistCount",
+            "outputs": [
+                    {
+                            "internalType": "uint256",
+                            "name": "",
+                            "type": "uint256"
+                    }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+    },
+    {
+            "inputs": [
+                    {
+                            "internalType": "address",
+                            "name": "withdrawalAddress",
+                            "type": "address"
+                    }
+            ],
+            "name": "getTotalClaimedInterest",
+            "outputs": [
+                    {
+                            "internalType": "uint256",
+                            "name": "",
+                            "type": "uint256"
+                    }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+    },
+    {
+            "inputs": [],
+            "name": "getTotalHistoricalDeposits",
+            "outputs": [
+                    {
+                            "internalType": "uint256",
+                            "name": "",
+                            "type": "uint256"
+                    }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+    },
+    {
+            "inputs": [],
+            "name": "getTotalStakeInterest",
+            "outputs": [
+                    {
+                            "internalType": "uint256",
+                            "name": "",
+                            "type": "uint256"
+                    }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+    },
+    {
+            "inputs": [
+                    {
+                            "internalType": "address",
+                            "name": "withdrawalAddress",
+                            "type": "address"
+                    }
+            ],
+            "name": "getWithdrawalAddressStakeDetails",
+            "outputs": [
+                    {
+                            "internalType": "uint256[]",
+                            "name": "amounts",
+                            "type": "uint256[]"
+                    },
+                    {
+                            "internalType": "uint256[]",
+                            "name": "startTimes",
+                            "type": "uint256[]"
+                    },
+                    {
+                            "internalType": "uint256[]",
+                            "name": "availableInterests",
+                            "type": "uint256[]"
+                    },
+                    {
+                            "internalType": "uint256[]",
+                            "name": "claimedInterests",
+                            "type": "uint256[]"
+                    },
+                    {
+                            "internalType": "bool[]",
+                            "name": "isMatured",
+                            "type": "bool[]"
+                    },
+                    {
+                            "internalType": "bool[]",
+                            "name": "isActive",
+                            "type": "bool[]"
+                    },
+                    {
+                            "internalType": "bool[]",
+                            "name": "isAdminStakes",
+                            "type": "bool[]"
+                    }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+    },
+    {
+            "inputs": [
+                    {
+                            "internalType": "address",
+                            "name": "account",
+                            "type": "address"
+                    }
+            ],
+            "name": "isInOperationWhitelist",
+            "outputs": [
+                    {
+                            "internalType": "bool",
+                            "name": "",
+                            "type": "bool"
+                    }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+    },
+    {
+            "inputs": [
+                    {
+                            "internalType": "address",
+                            "name": "withdrawalAddress",
+                            "type": "address"
+                    },
+                    {
+                            "internalType": "uint256",
+                            "name": "stakeIndex",
+                            "type": "uint256"
+                    }
+            ],
+            "name": "isStakeMature",
+            "outputs": [
+                    {
+                            "internalType": "bool",
+                            "name": "",
+                            "type": "bool"
+                    }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+    },
+    {
+            "inputs": [],
+            "name": "owner",
+            "outputs": [
+                    {
+                            "internalType": "address",
+                            "name": "",
+                            "type": "address"
+                    }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+    },
+    {
+            "inputs": [],
+            "name": "praiToken",
+            "outputs": [
+                    {
+                            "internalType": "contract IERC20",
+                            "name": "",
+                            "type": "address"
+                    }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+    },
+    {
+            "inputs": [
+                    {
+                            "internalType": "address",
+                            "name": "account",
+                            "type": "address"
+                    }
+            ],
+            "name": "removeFromWhitelist",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+    },
+    {
+            "inputs": [],
+            "name": "renounceOwnership",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+    },
+    {
+            "inputs": [
+                    {
+                            "internalType": "uint256",
+                            "name": "_minimumStake",
+                            "type": "uint256"
+                    }
+            ],
+            "name": "setMinimumStake",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+    },
+    {
+            "inputs": [
+                    {
+                            "internalType": "uint256",
+                            "name": "amount",
+                            "type": "uint256"
+                    },
+                    {
+                            "internalType": "address",
+                            "name": "withdrawalAddress",
+                            "type": "address"
+                    }
+            ],
+            "name": "stake",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+    },
+    {
+            "inputs": [],
+            "name": "totalHistoricalDeposits",
+            "outputs": [
+                    {
+                            "internalType": "uint256",
+                            "name": "",
+                            "type": "uint256"
+                    }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+    },
+    {
+            "inputs": [],
+            "name": "totalInterestPool",
+            "outputs": [
+                    {
+                            "internalType": "uint256",
+                            "name": "",
+                            "type": "uint256"
+                    }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+    },
+    {
+            "inputs": [],
+            "name": "totalPoolAmount",
+            "outputs": [
+                    {
+                            "internalType": "uint256",
+                            "name": "",
+                            "type": "uint256"
+                    }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+    },
+    {
+            "inputs": [],
+            "name": "totalStakeInterest",
+            "outputs": [
+                    {
+                            "internalType": "uint256",
+                            "name": "",
+                            "type": "uint256"
+                    }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+    },
+    {
+            "inputs": [
+                    {
+                            "internalType": "address",
+                            "name": "newOwner",
+                            "type": "address"
+                    }
+            ],
+            "name": "transferOwnership",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+    },
+    {
+            "inputs": [],
+            "name": "withdraw",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+    },
+    {
+            "inputs": [
+                    {
+                            "internalType": "address",
+                            "name": "",
+                            "type": "address"
+                    }
+            ],
+            "name": "withdrawalAddressExists",
+            "outputs": [
+                    {
+                            "internalType": "bool",
+                            "name": "",
+                            "type": "bool"
+                    }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+    },
+    {
+            "inputs": [
+                    {
+                            "internalType": "uint256",
+                            "name": "",
+                            "type": "uint256"
+                    }
+            ],
+            "name": "withdrawalAddresses",
+            "outputs": [
+                    {
+                            "internalType": "address",
+                            "name": "",
+                            "type": "address"
+                    }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+    },
+    {
+            "inputs": [
+                    {
+                            "internalType": "address",
+                            "name": "",
+                            "type": "address"
+                    },
+                    {
+                            "internalType": "uint256",
+                            "name": "",
+                            "type": "uint256"
+                    }
+            ],
+            "name": "withdrawalStakes",
+            "outputs": [
+                    {
+                            "internalType": "uint256",
+                            "name": "amount",
+                            "type": "uint256"
+                    },
+                    {
+                            "internalType": "uint256",
+                            "name": "startTime",
+                            "type": "uint256"
+                    },
+                    {
+                            "internalType": "uint256",
+                            "name": "totalInterest",
+                            "type": "uint256"
+                    },
+                    {
+                            "internalType": "uint256",
+                            "name": "claimedInterest",
+                            "type": "uint256"
+                    },
+                    {
+                            "internalType": "bool",
+                            "name": "isActive",
+                            "type": "bool"
+                    },
+                    {
+                            "internalType": "bool",
+                            "name": "isAdminStake",
+                            "type": "bool"
+                    }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+    }
+]
+}
