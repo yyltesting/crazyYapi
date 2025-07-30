@@ -58,7 +58,7 @@ class openaiController extends baseController {
             openai = new OpenAI({
                 apiKey: globalconfig.openAi.apiKey,
                 baseURL: globalconfig.openAi.baseURL,
-                model: globalconfig.openAi.model  // 修正拼写错误：moel -> model
+                model: globalconfig.openAi.model
             });
             
             lastInitTime = Date.now();
@@ -84,7 +84,7 @@ class openaiController extends baseController {
         try{
             const ai = await this.getAiInstance();
             let result = await ai.chat.completions.create({
-                model: ai.model,
+                model: ai._options.model,
                 store: true,
                 messages: [
                     {"role": "user", "content": message},
@@ -129,7 +129,7 @@ class openaiController extends baseController {
             
             // 第一次生成
             let result = await ai.chat.completions.create({
-                model: ai.model,
+                model: ai._options.model,
                 store: true,
                 temperature: 0.3,
                 top_p: 1,
@@ -159,7 +159,7 @@ class openaiController extends baseController {
                 try {
                     // 进行续写请求
                     let continuationResult = await ai.chat.completions.create({
-                        model: ai.model,
+                        model: ai._options.model,
                         store: true,
                         temperature: 0.2, // 降低随机性以保持一致性
                         top_p: 1,
@@ -238,7 +238,7 @@ class openaiController extends baseController {
 }`;
                         
                         let fixResult = await ai.chat.completions.create({
-                            model: ai.model,
+                            model: ai._options.model,
                             store: true,
                             temperature: 0.1,
                             top_p: 1,
@@ -399,7 +399,7 @@ class openaiController extends baseController {
         try{
             const ai = await this.getAiInstance();
             let result = await ai.chat.completions.create({
-                model: ai.model,
+                model: ai._options.model,
                 store: true,
                 temperature:0.3,//生成结果随机性
                 top_p:1,//随机性概率，前80%

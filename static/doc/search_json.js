@@ -183,6 +183,11 @@ window.ydoc_plugin_search_json = {
           "content": "基本设置tag 信息：可自定义tag名称和tag描述，tag信息可用在接口tag标识中;\nmock 严格模式：开启后 mock 请求会对 query，body form 的必须字段和 json schema 进行校验;\n开启json5：开启后允许接口请求body 和返回值中写 json 字段。yapi建议用户关闭 json5， 因为json-schema 格式可以进行接口格式校验。\n"
         },
         {
+          "title": "全局配置",
+          "url": "\\documents\\project.html#全局配置",
+          "content": "全局配置此处可配置一些全局配置，目前仅支持openapi相关配置\n"
+        },
+        {
           "title": "新建项目",
           "url": "\\documents\\project.html#新建项目",
           "content": "新建项目点击右上角的 + 新建项目，进入新建项目页面。在新建项目页，填写项目信息：\n项目名称不允许重复，包括其他分组\n基本路径为接口统一添加了前缀\n新建项目页只列出了部分配置，其他详细配置(环境配置、项目图标等)需要进入项目页的“设置”面板进行配置。\n\n"
@@ -226,6 +231,11 @@ window.ydoc_plugin_search_json = {
           "title": "请求配置",
           "url": "\\documents\\project.html#请求配置",
           "content": "请求配置pre-script, 通过自定义 js 脚本方式改变请求的参数和返回的 response 数据"
+        },
+        {
+          "title": "全局公共方法",
+          "url": "\\documents\\project.html#请求配置-全局公共方法",
+          "content": "全局公共方法可在此处编辑一些公共的变量和函数以供后续脚本使用function generateSignature(){    const PRIVASEA_SECRET = 'V3X3nPmSfmFuZs1ByFn2Z7YcYtGyi0VfRZpmmraFPN5LRHPXeynghpEflBwsb0jv';\n    let bodyData = JSON.stringify(context.requestBody);\n    let signpath = context.pathname.replace('/deepsea-back','');\n    let signatureStr = context.method+signpath+\"?\"+bodyData;\n    console.log('signpath',signpath);\n    let signature = CryptoJS.HmacSHA256(signatureStr, PRIVASEA_SECRET).toString(CryptoJS.enc.Hex);\n    console.log(signature);\n    return signature;\n}\n\nvar stakingAddress = '0xFA6E1d164ed6C1E7df35C6FEEAf620eE47D66B60';\n"
         },
         {
           "title": "请求参数示例",
@@ -285,6 +295,11 @@ window.ydoc_plugin_search_json = {
           "content": "基本设置tag 信息：可自定义tag名称和tag描述，tag信息可用在接口tag标识中;\nmock 严格模式：开启后 mock 请求会对 query，body form 的必须字段和 json schema 进行校验;\n开启json5：开启后允许接口请求body 和返回值中写 json 字段。yapi建议用户关闭 json5， 因为json-schema 格式可以进行接口格式校验。\n"
         },
         {
+          "title": "全局配置",
+          "url": "\\documents\\project.html#全局配置",
+          "content": "全局配置此处可配置一些全局配置，目前仅支持openapi相关配置\n"
+        },
+        {
           "title": "新建项目",
           "url": "\\documents\\project.html#新建项目",
           "content": "新建项目点击右上角的 + 新建项目，进入新建项目页面。在新建项目页，填写项目信息：\n项目名称不允许重复，包括其他分组\n基本路径为接口统一添加了前缀\n新建项目页只列出了部分配置，其他详细配置(环境配置、项目图标等)需要进入项目页的“设置”面板进行配置。\n\n"
@@ -328,6 +343,11 @@ window.ydoc_plugin_search_json = {
           "title": "请求配置",
           "url": "\\documents\\project.html#请求配置",
           "content": "请求配置pre-script, 通过自定义 js 脚本方式改变请求的参数和返回的 response 数据"
+        },
+        {
+          "title": "全局公共方法",
+          "url": "\\documents\\project.html#请求配置-全局公共方法",
+          "content": "全局公共方法可在此处编辑一些公共的变量和函数以供后续脚本使用function generateSignature(){    const PRIVASEA_SECRET = 'V3X3nPmSfmFuZs1ByFn2Z7YcYtGyi0VfRZpmmraFPN5LRHPXeynghpEflBwsb0jv';\n    let bodyData = JSON.stringify(context.requestBody);\n    let signpath = context.pathname.replace('/deepsea-back','');\n    let signatureStr = context.method+signpath+\"?\"+bodyData;\n    console.log('signpath',signpath);\n    let signature = CryptoJS.HmacSHA256(signatureStr, PRIVASEA_SECRET).toString(CryptoJS.enc.Hex);\n    console.log(signature);\n    return signature;\n}\n\nvar stakingAddress = '0xFA6E1d164ed6C1E7df35C6FEEAf620eE47D66B60';\n"
         },
         {
           "title": "请求参数示例",

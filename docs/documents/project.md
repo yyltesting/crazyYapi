@@ -8,6 +8,12 @@
 
 <img src="./images/usage/project-message.png" />
 
+## 全局配置
+
+- 此处可配置一些全局配置，目前仅支持openapi相关配置
+
+<img src="./images/global_config.png" />
+
 ## 新建项目
 
 点击右上角的 `+` 新建项目，进入新建项目页面。
@@ -89,6 +95,24 @@ v1.3.21 新增全局变量，用户可以在环境列表中定义全局变量的
 ## 请求配置
 
 pre-script, 通过自定义 js 脚本方式改变请求的参数和返回的 response 数据
+
+### 全局公共方法
+
+可在此处编辑一些公共的变量和函数以供后续脚本使用
+```
+function generateSignature(){
+    const PRIVASEA_SECRET = 'V3X3nPmSfmFuZs1ByFn2Z7YcYtGyi0VfRZpmmraFPN5LRHPXeynghpEflBwsb0jv';
+    let bodyData = JSON.stringify(context.requestBody);
+    let signpath = context.pathname.replace('/deepsea-back','');
+    let signatureStr = context.method+signpath+"?"+bodyData;
+    console.log('signpath',signpath);
+    let signature = CryptoJS.HmacSHA256(signatureStr, PRIVASEA_SECRET).toString(CryptoJS.enc.Hex);
+    console.log(signature);
+    return signature;
+}
+
+var stakingAddress = '0xFA6E1d164ed6C1E7df35C6FEEAf620eE47D66B60';
+```
 
 ### 请求参数示例
 
